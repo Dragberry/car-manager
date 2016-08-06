@@ -1,35 +1,22 @@
 package net.dragberry.carmanager.domain;
 
-import java.io.Serializable;
-
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "ROLE")
-public class Role implements Serializable {
+@AttributeOverrides({
+	@AttributeOverride(column = @Column(name =  "ROLE_KEY"), name = "entityKey")
+})
+public class Role extends AbstractEntity {
 	
 	private static final long serialVersionUID = 2965399771263638041L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ROLE_KEY")
-	private Long roleKey;
-
 	@Column(name = "ROLE_NAME")
 	private String roleName;
-
-	public Long getRoleKey() {
-		return roleKey;
-	}
-
-	public void setRoleKey(Long roleKey) {
-		this.roleKey = roleKey;
-	}
 
 	public String getRoleName() {
 		return roleName;

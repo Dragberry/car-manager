@@ -45,6 +45,11 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate-version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
+			<version>${hibernate-version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.googlecode.flyway</groupId>
@@ -67,6 +72,6 @@
 	</dependencies>
 
 	<properties>
-		<hibernate-version>5.0.1.Final</hibernate-version>
+		<hibernate-version>5.2.1.Final</hibernate-version>
 	</properties>
 </project>
