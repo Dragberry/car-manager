@@ -9,11 +9,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import net.dragberry.carmanager.application.config.DataConfig;
 import net.dragberry.carmanager.domain.Car;
 import net.dragberry.carmanager.domain.Customer;
+import net.dragberry.carmanager.domain.Fuel;
 import net.dragberry.carmanager.domain.Role;
 import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
 import net.dragberry.carmanager.repository.CarRepo;
 import net.dragberry.carmanager.repository.CustomerRepo;
+import net.dragberry.carmanager.repository.FuelRepo;
 import net.dragberry.carmanager.repository.TransactionRepo;
 import net.dragberry.carmanager.repository.TransactionTypeRepo;
 
@@ -50,6 +52,16 @@ public class Launcher {
 //			car.setOwner(customer);
 //			car.setPurchaseDate(LocalDate.parse("2014-11-07"));
 //			carRepo.save(car);
+			
+			FuelRepo fuelRepo = context.getBean(FuelRepo.class);
+			Fuel ful = new Fuel();
+			ful.setCost(1.11);
+			ful.setQuantity(50);
+			ful.setType("E-92");
+			ful.setTransaction(t);
+			fuelRepo.save(ful);
+			
+			
 			
 			
 			Customer newCust = customerRepo.findOne(1L);
