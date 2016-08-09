@@ -8,4 +8,6 @@ import net.dragberry.carmanager.domain.TransactionType;
 @Repository
 public interface TransactionTypeRepo extends JpaRepository<TransactionType, Long> {
 
+	TransactionType findByName(String name);
+
 }
