@@ -29,7 +29,7 @@ public class Car extends AbstractEntity {
 	@Column(name = "BRAND")
 	private String brand;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "OWNER", referencedColumnName = "CUSTOMER_KEY")
+	@JoinColumn(name = "CUSTOMER_KEY", referencedColumnName = "CUSTOMER_KEY")
 	private Customer owner;
 	public String getModel() {
 		return model;
