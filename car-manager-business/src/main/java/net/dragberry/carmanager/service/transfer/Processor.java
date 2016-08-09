@@ -1,9 +1,9 @@
 package net.dragberry.carmanager.service.transfer;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ import net.dragberry.carmanager.transferobject.Record;
 
 @Component
 @Scope("prototype")
-class Processor implements Callable<Object> {
+class Processor implements Runnable {
 	
 	@Autowired
 	private CarRepo carRepo;
@@ -45,19 +45,18 @@ class Processor implements Callable<Object> {
 	}
 	
 	@Override
-	public Object call() throws Exception {
+	public void run() {
 		try {	
 			this.car = carRepo.findOne(1L);
 			this.customer = customerRepo.findOne(3L);
 		
 			Record record= null;
-			while ((record = recordQueue.poll(1, TimeUnit.SECONDS)) != null) {
+			while ((record = recordQueue.poll()) != null) {
 				processRecord(record);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
 	}
 
 	/**
@@ -69,7 +68,7 @@ class Processor implements Callable<Object> {
 	private TransactionType resolveType(Record record) {
 		String type = record.getType();
 		TransactionType tType = transactionTypeRepo.findByName(type);
-		if (tType == null) {
+		if (tType == null && StringUtils.isNotBlank(type)) {
 			tType = new TransactionType();
 			tType.setName(type);
 			tType = transactionTypeRepo.save(tType);

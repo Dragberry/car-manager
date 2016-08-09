@@ -1,35 +1,46 @@
 package net.dragberry.carmanager.service.transfer;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.ZoneId;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Component;
 
 import net.dragberry.carmanager.transferobject.Record;
 
-class Reader implements Callable<Object> {
+@Component
+class Reader implements Runnable {
 	
-	private final InputStream is;
+	private InputStream is;
 	
-	private StringBuilder sb;
-	
-	private final BlockingQueue<Record> transactionQueue;
-	
-	private DataImportContext context;
-	
-	public Reader(DataImportContext context, InputStream is, BlockingQueue<Record> transactionQueue) {
-		this.context = context;
+	public InputStream getIs() {
+		return is;
+	}
+
+	public void setIs(InputStream is) {
 		this.is = is;
+	}
+
+	public BlockingQueue<Record> getTransactionQueue() {
+		return transactionQueue;
+	}
+
+	public void setTransactionQueue(BlockingQueue<Record> transactionQueue) {
 		this.transactionQueue = transactionQueue;
 	}
 
+	private StringBuilder sb;
+	
+	private BlockingQueue<Record> transactionQueue;
+	
+	
 	@Override
-	public Object call() throws Exception {
+	public void run() {
 		try (XSSFWorkbook wb = new XSSFWorkbook(is)) {
 			Sheet sheet = wb.getSheetAt(0);
 			sheet.forEach((row) -> {
@@ -44,8 +55,9 @@ class Reader implements Callable<Object> {
 				}
 				System.out.println(sb);
 			});
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
-		return null;
 	}
 
 	/**

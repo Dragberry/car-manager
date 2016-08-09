@@ -13,7 +13,7 @@ public class Launcher {
 	public static void main(String[] args) throws Exception {
 		try(ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(BusinessConfig.class)) {
 			DataImporter importer = context.getBean(DataImporter.class);
-			InputStream is = new FileInputStream("y:\\OneDrive\\Р Р°СЃС…РѕРґС‹ РЅР° РјР°С€РёРЅСѓ.xlsx");
+			InputStream is = new FileInputStream("c:\\Users\\Maksi\\OneDrive\\Расходы на машину.xlsx");
 			importer.doImport(is);
 		}
 	}
