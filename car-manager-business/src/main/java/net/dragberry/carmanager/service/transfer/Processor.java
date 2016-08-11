@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.dragberry.carmanager.domain.Car;
 import net.dragberry.carmanager.domain.Customer;
@@ -44,6 +46,11 @@ class Processor implements Runnable {
 		this.recordQueue = recordQueue;
 	}
 	
+	public Processor(String name) {
+		Thread.currentThread().setName(name);
+		System.out.println(name);
+	}
+	
 	@Override
 	public void run() {
 		try {	
@@ -65,6 +72,7 @@ class Processor implements Runnable {
 	 * @param record
 	 * @return
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	private TransactionType resolveType(Record record) {
 		String type = record.getType();
 		TransactionType tType = transactionTypeRepo.findByName(type);
@@ -82,6 +90,7 @@ class Processor implements Runnable {
 	 * @param record
 	 * @return
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	private Transaction processRecord(Record record) {
 		Transaction transaction = new Transaction();
 		transaction.setCar(car);

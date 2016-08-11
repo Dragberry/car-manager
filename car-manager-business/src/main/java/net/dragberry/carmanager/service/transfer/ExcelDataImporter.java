@@ -36,17 +36,26 @@ public class ExcelDataImporter implements DataImporter {
 		BlockingQueue<Record> recordQueue = new ArrayBlockingQueue<>(500);
 		int availableProcessors = Runtime.getRuntime().availableProcessors();
 		
-		Reader reader = appContext.getBean(Reader.class);
-		reader.setTransactionQueue(recordQueue);
-		reader.setIs(is);
-		taskExecutor.execute(reader);
 		
-		Thread.sleep(5000);
-		
-		for (int i = 0; i < availableProcessors / 4; i++) {
-			Processor processor = appContext.getBean(Processor.class);
-			processor.setQueue(recordQueue);
-			taskExecutor.execute(processor);
+		Producer producer = appContext.getBean(Producer.class, "Producer");
+		taskExecutor.execute(producer);
+		for (int i = 0; i < 7; i++) {
+			Consumer consumer = appContext.getBean(Consumer.class, "Consumer" + i);
+			taskExecutor.execute(consumer);
 		}
+		
+		
+//		Reader reader = appContext.getBean(Reader.class);
+//		reader.setTransactionQueue(recordQueue);
+//		reader.setIs(is);
+//		taskExecutor.execute(reader);
+//		
+//		Thread.sleep(5000);
+//		
+//		for (int i = 0; i < availableProcessors / 4; i++) {
+//			Processor processor = appContext.getBean(Processor.class, "name" + i);
+//			processor.setQueue(recordQueue);
+//			taskExecutor.execute(processor);
+//		}
 	}
 }
