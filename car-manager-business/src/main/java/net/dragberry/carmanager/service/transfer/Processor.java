@@ -14,90 +14,91 @@ import net.dragberry.carmanager.domain.Car;
 import net.dragberry.carmanager.domain.Customer;
 import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
-import net.dragberry.carmanager.repository.CarRepo;
-import net.dragberry.carmanager.repository.CustomerRepo;
-import net.dragberry.carmanager.repository.FuelRepo;
-import net.dragberry.carmanager.repository.TransactionRepo;
-import net.dragberry.carmanager.repository.TransactionTypeRepo;
 import net.dragberry.carmanager.transferobject.Record;
 
 @Component
 @Scope("prototype")
 class Processor implements Runnable {
-	
-	@Autowired
-	private CarRepo carRepo;
-	@Autowired
-	private TransactionTypeRepo transactionTypeRepo;
-	@Autowired
-	private CustomerRepo customerRepo;
-	@Autowired
-	private TransactionRepo transactionRepo;
-	@Autowired
-	private FuelRepo fuelRepo;
-	
-	private Car car;
-	
-	private Customer customer;
 
-	private BlockingQueue<Record> recordQueue;
-	
-	public void setQueue(BlockingQueue<Record> recordQueue) {
-		this.recordQueue = recordQueue;
-	}
-	
-	public Processor(String name) {
-		Thread.currentThread().setName(name);
-		System.out.println(name);
-	}
-	
 	@Override
 	public void run() {
-		try {	
-			this.car = carRepo.findOne(1L);
-			this.customer = customerRepo.findOne(3L);
+		// TODO Auto-generated method stub
 		
-			Record record= null;
-			while ((record = recordQueue.poll()) != null) {
-				processRecord(record);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
-
-	/**
-	 * Resolves a transaction type
-	 * 
-	 * @param record
-	 * @return
-	 */
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	private TransactionType resolveType(Record record) {
-		String type = record.getType();
-		TransactionType tType = transactionTypeRepo.findByName(type);
-		if (tType == null && StringUtils.isNotBlank(type)) {
-			tType = new TransactionType();
-			tType.setName(type);
-			tType = transactionTypeRepo.save(tType);
-		}
-		return tType;
-	}
-
-	/**
-	 * Process record
-	 * 
-	 * @param record
-	 * @return
-	 */
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	private Transaction processRecord(Record record) {
-		Transaction transaction = new Transaction();
-		transaction.setCar(car);
-		TransactionType tType = resolveType(record);
-		transaction.setTransactionType(tType);
-		
-		return transaction;
-	}
+	
+//	@Autowired
+//	private CarRepo carRepo;
+//	@Autowired
+//	private TransactionTypeRepo transactionTypeRepo;
+//	@Autowired
+//	private CustomerRepo customerRepo;
+//	@Autowired
+//	private TransactionRepo transactionRepo;
+//	@Autowired
+//	private FuelRepo fuelRepo;
+//	
+//	private Car car;
+//	
+//	private Customer customer;
+//
+//	private BlockingQueue<Record> recordQueue;
+//	
+//	public void setQueue(BlockingQueue<Record> recordQueue) {
+//		this.recordQueue = recordQueue;
+//	}
+//	
+//	public Processor(String name) {
+//		Thread.currentThread().setName(name);
+//		System.out.println(name);
+//	}
+//	
+//	@Override
+//	public void run() {
+//		try {	
+//			this.car = carRepo.findOne(1L);
+//			this.customer = customerRepo.findOne(3L);
+//		
+//			Record record= null;
+//			while ((record = recordQueue.poll()) != null) {
+//				processRecord(record);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+//
+//	/**
+//	 * Resolves a transaction type
+//	 * 
+//	 * @param record
+//	 * @return
+//	 */
+//	@Transactional(propagation = Propagation.REQUIRES_NEW)
+//	private TransactionType resolveType(Record record) {
+//		String type = record.getType();
+//		TransactionType tType = transactionTypeRepo.findByName(type);
+//		if (tType == null && StringUtils.isNotBlank(type)) {
+//			tType = new TransactionType();
+//			tType.setName(type);
+//			tType = transactionTypeRepo.save(tType);
+//		}
+//		return tType;
+//	}
+//
+//	/**
+//	 * Process record
+//	 * 
+//	 * @param record
+//	 * @return
+//	 */
+//	@Transactional(propagation = Propagation.REQUIRES_NEW)
+//	private Transaction processRecord(Record record) {
+//		Transaction transaction = new Transaction();
+//		transaction.setCar(car);
+//		TransactionType tType = resolveType(record);
+//		transaction.setTransactionType(tType);
+//		
+//		return transaction;
+//	}
 	
 }

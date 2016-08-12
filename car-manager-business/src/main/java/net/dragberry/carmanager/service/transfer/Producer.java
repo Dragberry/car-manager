@@ -5,13 +5,16 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import net.dragberry.carmanager.repository.CustomerRepo;
+import net.dragberry.carmanager.dao.CustomerDao;
 import net.dragberry.carmanager.transferobject.Record;
 
 @Component
-@Scope("prototype")
+@Scope(scopeName = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Producer extends Thread {
 	
 	private String name;
@@ -19,22 +22,22 @@ public class Producer extends Thread {
 	@Autowired
 	private BlockingQueue<Record> queue;
 	@Autowired
-	private CustomerRepo customerRepo;
+	private CustomerDao customerDao;
 	
-	public Producer(String name) {
-		this.name = name;
+	public Producer() {
 	}
 	
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public void run() {
 		for (int i = 0; i < 8000; i++) {
-			try {
-				queue.put(new Record());
+//			try {
+//				queue.put(new Record());
 				System.out.println(Thread.currentThread().getName()+ ": " + i + " " + name);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			customerRepo.findOne(1L);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+			customerDao.findOne(1L);
 		}
 	}
 
