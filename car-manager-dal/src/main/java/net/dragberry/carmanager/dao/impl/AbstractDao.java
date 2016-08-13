@@ -5,9 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.dragberry.carmanager.dao.DataAccessObject;
@@ -15,41 +12,40 @@ import net.dragberry.carmanager.domain.AbstractEntity;
 
 public abstract class AbstractDao<E extends AbstractEntity> implements DataAccessObject<E, Long> {
 	
+	@PersistenceContext
+	private EntityManager entityManager;
+	
 	private final Class<E> entityType;
 	
 	public AbstractDao(Class<E> entityType) {
 		this.entityType = entityType;
 	}
 	
-	@PersistenceContext
-	private EntityManager entityManager;
-	
-	@Autowired
-    private SessionFactory sessionFactory;
-	
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public E findOne(Long entityKey) {
-		return sessionFactory.getCurrentSession().find(entityType, entityKey);
+		return entityManager.find(entityType, entityKey);
 	}
 	
 	@Override
 	public List<E> fetchList() {
-		return entityManager.createQuery("FROM " + getEntityName(), entityType).getResultList();
+		return getEntityManager().createQuery("FROM " + getEntityName(), entityType).getResultList();
 	}
 	
 	@Override
+	@Transactional
 	public E create(E entity) {
 		entityManager.persist(entity);
 		return entity; 
 	}
 	
 	@Override
+	@Transactional
 	public E update(E entity) {
 		return entityManager.merge(entity);
 	}
 	
 	@Override
+	@Transactional
 	public E delete(Long entityKey) {
 		E entity = entityManager.find(entityType, entityKey);
 		entityManager.remove(entity);

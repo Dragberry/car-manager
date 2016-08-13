@@ -2,7 +2,9 @@ package net.dragberry.carmanager.application.config;
 
 import java.util.Properties;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import javax.transaction.TransactionManager;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.googlecode.flyway.core.Flyway;
@@ -68,14 +71,12 @@ public class DataConfig {
 		dataSource.setPassword(env.getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
 		return dataSource;
 	}
-
-	@Bean
-	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
-		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-		transactionManager.setSessionFactory(sessionFactory);
-		return transactionManager;
-	}
 	
+	@Bean
+	public JpaTransactionManager TransactionManager(EntityManagerFactory emf) {
+		return new JpaTransactionManager(emf);
+	}
+
 	@Bean(initMethod = "migrate")
 	public Flyway flyway() {
 		Flyway flyway = new Flyway();

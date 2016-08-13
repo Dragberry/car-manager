@@ -3,6 +3,10 @@ package net.dragberry.carmanager.service.transfer;
 import java.io.InputStream;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,27 +27,22 @@ public class ExcelDataImporter implements DataImporter {
 	
 	private static final Logger LOG = LogManager.getLogger(ExcelDataImporter.class);
 	
-	private static final int QUEUE_LIMIT = 20;
-	
 	@Autowired
 	private ApplicationContext appContext;
 	
-	@Autowired
-	private TaskExecutor taskExecutor;
-	
 	@Override
 	public void doImport(InputStream is) throws Exception {
-		BlockingQueue<Record> recordQueue = new ArrayBlockingQueue<>(500);
 		int availableProcessors = Runtime.getRuntime().availableProcessors();
+		ExecutorService executor = Executors.newFixedThreadPool(availableProcessors);
+		Producer producer = appContext.getBean(Producer.class);
+		producer.setInputStream(is);
+		executor.submit(producer);
 		
-		
-		Producer producer = appContext.getBean(Producer.class, "Producer");
-		taskExecutor.execute(producer);
-		for (int i = 0; i < 7; i++) {
-			Consumer consumer = appContext.getBean(Consumer.class, "Consumer" + i);
-			taskExecutor.execute(consumer);
+		for (int i = 0; i < availableProcessors - 1; i++) {
+			Consumer consumer = appContext.getBean(Consumer.class);
+			executor.submit(consumer);
 		}
-		
+//		
 		
 //		Reader reader = appContext.getBean(Reader.class);
 //		reader.setTransactionQueue(recordQueue);
