@@ -15,6 +15,8 @@ public class TransactionType extends AbstractEntity {
 
 	private static final long serialVersionUID = 8181044143628392301L;
 	
+	public static final String FUEL = "Fuel";
+	
 	private String name;
 
 	public String getName() {

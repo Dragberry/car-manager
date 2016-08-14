@@ -20,6 +20,8 @@ public class Transaction extends AbstractEntity {
 	private static final long serialVersionUID = -1124381093271131117L;
 	@Column(name = "AMOUNT")
 	private BigDecimal amount;
+	@Column(name = "DESCRIPTION")
+	private String description;
 	@Column(name = "CURRENCY", columnDefinition = "char")
 	private String currency;
 	@Column(name = "EXCHANGE_RATE")
@@ -36,6 +38,19 @@ public class Transaction extends AbstractEntity {
 	@JoinColumn(name = "CUSTOMER_KEY", referencedColumnName = "CUSTOMER_KEY")
 	private Customer customer;
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder(getClass().getSimpleName());
+		sb.append("[").append(getEntityKey()).append("]\n");
+		sb.append("\t[Description=").append(description).append("]\n");
+		sb.append("\t[Type=").append(transactionType == null ? null : transactionType.getName()).append("]\n");
+		sb.append("\t[Amount=").append(amount).append(currency).append("]\n");
+		sb.append("\t[ExchangeRate=").append(exchangeRate).append("]\n");
+		sb.append("\t[ExecutionDate=").append(executionDate).append("]\n");
+		sb.append("\t[Customer=").append(customer == null ? null : customer.getCustomerName()).append("]\n");
+		return sb.toString();
+	}
+	
 	public BigDecimal getAmount() {
 		return amount;
 	}
@@ -90,6 +105,14 @@ public class Transaction extends AbstractEntity {
 
 	public void setTransactionType(TransactionType transactionType) {
 		this.transactionType = transactionType;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

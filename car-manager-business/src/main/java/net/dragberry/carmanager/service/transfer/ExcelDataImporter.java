@@ -1,20 +1,15 @@
 package net.dragberry.carmanager.service.transfer;
 
 import java.io.InputStream;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
-
-import net.dragberry.carmanager.transferobject.Record;
 
 /**
  * Excel data importer
@@ -42,19 +37,8 @@ public class ExcelDataImporter implements DataImporter {
 			Consumer consumer = appContext.getBean(Consumer.class);
 			executor.submit(consumer);
 		}
-//		
-		
-//		Reader reader = appContext.getBean(Reader.class);
-//		reader.setTransactionQueue(recordQueue);
-//		reader.setIs(is);
-//		taskExecutor.execute(reader);
-//		
-//		Thread.sleep(5000);
-//		
-//		for (int i = 0; i < availableProcessors / 4; i++) {
-//			Processor processor = appContext.getBean(Processor.class, "name" + i);
-//			processor.setQueue(recordQueue);
-//			taskExecutor.execute(processor);
-//		}
+		executor.shutdown();
+		executor.awaitTermination(10, TimeUnit.MINUTES);
+		System.out.println("Main thread has been finished!");
 	}
 }

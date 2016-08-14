@@ -2,6 +2,7 @@ package net.dragberry.carmanager.service.transfer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.time.ZoneId;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
@@ -48,6 +49,7 @@ public class Producer implements Callable<Integer> {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		System.out.println(MessageFormat.format("Thread [{0}] has been finished!", Thread.currentThread().getName()));
 		return 1;
 	}
 

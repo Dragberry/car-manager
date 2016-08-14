@@ -1,5 +1,7 @@
 package net.dragberry.carmanager.domain;
 
+import java.math.BigDecimal;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -22,10 +24,20 @@ public class Fuel extends AbstractEntity {
 	@Column(name = "TYPE", columnDefinition = "char")
 	private String type;
 	@Column(name = "COST")
-	private double cost;
+	private BigDecimal cost;
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "TRANSACTION_KEY", referencedColumnName = "TRANSACTION_KEY")
 	private Transaction transaction;
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("Fuel[").append(getEntityKey()).append("]\n");
+		sb.append("\t[Type=").append(type).append("]\n");
+		sb.append("\t[Cost=").append(cost).append("]\n");
+		sb.append("\t[Quantity=").append(quantity).append("]\n");
+		return sb.toString();
+	}
+	
 	public double getQuantity() {
 		return quantity;
 	}
@@ -38,10 +50,10 @@ public class Fuel extends AbstractEntity {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public double getCost() {
+	public BigDecimal getCost() {
 		return cost;
 	}
-	public void setCost(double cost) {
+	public void setCost(BigDecimal cost) {
 		this.cost = cost;
 	}
 	public Transaction getTransaction() {
