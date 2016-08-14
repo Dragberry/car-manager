@@ -2,7 +2,12 @@ package net.dragberry.carmanager.service.transfer;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.MessageFormat;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +24,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import net.dragberry.carmanager.dao.CarDao;
 import net.dragberry.carmanager.dao.CustomerDao;
@@ -31,12 +37,18 @@ import net.dragberry.carmanager.domain.Fuel;
 import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
 import net.dragberry.carmanager.transferobject.Record;
+import net.dragberry.carmanager.ws.json.CurrencyExRate;
 
 @Component
 @Scope(value = "prototype")
 public class Consumer implements Callable<Integer>{
 	
 	private static final String FUEL_REGEXP = "^([0-9]+([,.][0-9]+)*)";
+	
+	private static final String EX_RATE_TEMPLATE_URL = "http://www.nbrb.by/API/ExRates/Rates/{0}?onDate={1}";
+	
+	private static final Long USD_CODE = 145L;
+	
 	@Autowired
 	private BlockingQueue<Record> queue;
 	@Autowired
@@ -94,7 +106,7 @@ public class Consumer implements Callable<Integer>{
 				transaction.setDescription(record.getDescription());
 				transaction.setCurrency(currencyCustomer.getCurrency());
 				transaction.setAmount(resolveAmount(record, currencyCustomer));
-				transaction.setExchangeRate(record.getExchangeRate());
+				transaction.setExchangeRate(getExchangeRate(record));
 				TransactionType tType = resolveType(record);
 				transaction.setTransactionType(tType);
 				transaction.setCustomer(getCustomer(record, currencyCustomer));
@@ -115,11 +127,25 @@ public class Consumer implements Callable<Integer>{
 		return list;
 	}
 	
+	private double getExchangeRate(Record record) {
+		URI uri;
+		try {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			uri = new URI(MessageFormat.format(EX_RATE_TEMPLATE_URL, USD_CODE, formatter.format(record.getDate())));
+			RestTemplate restTemplate =  new RestTemplate();
+		    CurrencyExRate result = restTemplate.getForObject(uri, CurrencyExRate.class);
+		    return record.getDate().isBefore(LocalDate.of(2016, Month.JULY, 1)) ? denominate(result.getRate()) : result.getRate();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
 	private Customer getCustomer(Record record, CurrencyCustomer currencyCustomer) {
 		switch (currencyCustomer) {
 		case BYR:
 		case USD:
-			return context.getCustomer(record.getDescription().endsWith("получено") ? 5L : 3L);
+			return context.getCustomer(record.getDescription().endsWith("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ") ? 5L : 3L);
 		case BYR_DAD:
 		case USD_DAD:
 			return context.getCustomer(4L);
