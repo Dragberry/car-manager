@@ -1,13 +1,14 @@
 package net.dragberry.carmanager.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.dragberry.carmanager.domain.Car;
-import net.dragberry.carmanager.domain.Customer;
-import net.dragberry.carmanager.domain.Fuel;
+import net.dragberry.carmanager.dao.TransactionDao;
 import net.dragberry.carmanager.domain.Transaction;
-import net.dragberry.carmanager.domain.TransactionType;
+import net.dragberry.carmanager.transferobject.QueryListTO;
+import net.dragberry.carmanager.transferobject.ResultList;
 import net.dragberry.carmanager.transferobject.TransactionTO;
 
 /**
@@ -19,17 +20,28 @@ import net.dragberry.carmanager.transferobject.TransactionTO;
 @Service
 public class TransactionServiceBean implements TransactionService {
 	
-//	@Autowired
-//	private CarRepo carRepo;
-//	@Autowired
-//	private TransactionTypeRepo transactionTypeRepo;
-//	@Autowired
-//	private CustomerRepo customerRepo;
-//	@Autowired
-//	private TransactionRepo transactionRepo;
-//	@Autowired
-//	private FuelRepo fuelRepo;
-
+	@Autowired
+	private TransactionDao transactionDao;
+	
+	@Override
+	public ResultList<TransactionTO> fetchList(QueryListTO query) {
+		ResultList<TransactionTO> result = new ResultList<>();
+		Long count = transactionDao.count();
+		result.setTotalCount(count);
+		if (count > 0L) {
+			List<Transaction> list = transactionDao.fetchList();
+			list.forEach(tnx -> {
+				TransactionTO to = new TransactionTO();
+				to.setAmount(tnx.getAmount());
+				to.setTransactionKey(tnx.getEntityKey());
+				to.setExecutionDate(tnx.getExecutionDate());
+				to.setDescription(tnx.getDescription());
+				result.addItem(to);
+			});
+		}
+		return result;
+	}
+	
 	@Override
 	public TransactionTO createTransaction(TransactionTO to) {
 //		Transaction transaction = new Transaction();

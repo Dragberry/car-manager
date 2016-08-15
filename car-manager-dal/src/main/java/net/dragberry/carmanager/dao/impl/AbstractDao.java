@@ -32,6 +32,11 @@ public abstract class AbstractDao<E extends AbstractEntity> implements DataAcces
 	}
 	
 	@Override
+	public Long count() {
+		return getEntityManager().createQuery("SELECT COUNT(e) FROM " + getEntityName() + " e", Long.class).getSingleResult();
+	}
+	
+	@Override
 	@Transactional
 	public E create(E entity) {
 		entityManager.persist(entity);

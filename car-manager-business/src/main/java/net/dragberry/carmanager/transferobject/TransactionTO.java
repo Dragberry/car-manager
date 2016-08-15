@@ -15,6 +15,8 @@ public class TransactionTO implements TransferObject {
 	
 	private Long transactionKey;
 	
+	private String description;
+	
 	private BigDecimal amount;
 	
 	private String currency;
@@ -30,6 +32,14 @@ public class TransactionTO implements TransferObject {
 	private Long transactionTypeKey;
 	
 	private FuelTO fuel;
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	public Long getTransactionKey() {
 		return transactionKey;

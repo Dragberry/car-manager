@@ -25,7 +25,7 @@ public class Fuel extends AbstractEntity {
 	private String type;
 	@Column(name = "COST")
 	private BigDecimal cost;
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TRANSACTION_KEY", referencedColumnName = "TRANSACTION_KEY")
 	private Transaction transaction;
 	

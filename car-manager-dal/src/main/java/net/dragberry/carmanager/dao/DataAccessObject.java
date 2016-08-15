@@ -16,6 +16,8 @@ public interface DataAccessObject<E extends AbstractEntity, ID extends Serializa
 	
 	List<E> fetchList();
 	
+	Long count();
+	
 	E create(E entity);
 	
 	E update(E entity);

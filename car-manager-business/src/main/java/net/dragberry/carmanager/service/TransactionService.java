@@ -1,5 +1,7 @@
 package net.dragberry.carmanager.service;
 
+import net.dragberry.carmanager.transferobject.QueryListTO;
+import net.dragberry.carmanager.transferobject.ResultList;
 import net.dragberry.carmanager.transferobject.TransactionTO;
 
 /**
@@ -11,6 +13,8 @@ import net.dragberry.carmanager.transferobject.TransactionTO;
 public interface TransactionService {
 
 	TransactionTO createTransaction(TransactionTO transaction);
+	
+	ResultList<TransactionTO> fetchList(QueryListTO query);
 	
 	
 }
