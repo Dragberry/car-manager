@@ -28,7 +28,7 @@ public class Launcher {
 			ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(BusinessConfig.class);
 			TransactionService transactionService = context.getBean(TransactionService.class);
 			ResultList<TransactionTO> list = transactionService.fetchList(new QueryListTO());
-//			list.getResult().forEach(tnx -> System.out.println(tnx.getTransactionKey() + " " + tnx.getDescription()));
+			list.getResult().forEach(tnx -> System.out.println(tnx.getTransactionKey() + " " + tnx.getDescription() + " " + (tnx.getFuel() != null ? tnx.getFuel().getQuantity() : null)));
 			
 			
 //			DataImporter importer = context.getBean(DataImporter.class);

@@ -38,8 +38,8 @@ public class Transaction extends AbstractEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CUSTOMER_KEY", referencedColumnName = "CUSTOMER_KEY")
 	private Customer customer;
-//	@OneToOne(mappedBy = "transaction", fetch = FetchType.LAZY)
-//	private Fuel fuel;
+	@OneToOne(mappedBy = "transaction", fetch = FetchType.EAGER)
+	private Fuel fuel;
 
 	@Override
 	public String toString() {
@@ -118,12 +118,12 @@ public class Transaction extends AbstractEntity {
 		this.description = description;
 	}
 
-//	public Fuel getFuel() {
-//		return fuel;
-//	}
-//
-//	public void setFuel(Fuel fuel) {
-//		this.fuel = fuel;
-//	}
+	public Fuel getFuel() {
+		return fuel;
+	}
+
+	public void setFuel(Fuel fuel) {
+		this.fuel = fuel;
+	}
 	
 }
