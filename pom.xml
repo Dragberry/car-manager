@@ -12,6 +12,7 @@
 	<modules>
 		<module>car-manager-dal</module>
 		<module>car-manager-business</module>
+		<module>car-manager-ws</module>
 		<module>car-manager-web</module>
 	</modules>
 	<dependencies>

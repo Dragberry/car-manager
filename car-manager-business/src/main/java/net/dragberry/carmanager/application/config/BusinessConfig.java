@@ -12,7 +12,7 @@ import net.dragberry.carmanager.transferobject.Record;
 
 @Configuration
 @Import(DataConfig.class)
-@ComponentScan(basePackageClasses = BusinessServices.class)
+@ComponentScan(basePackageClasses = { BusinessServices.class, WSConfig.class })
 public class BusinessConfig {
 
 	@Bean

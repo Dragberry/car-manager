@@ -11,6 +11,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.web.client.RestTemplate;
 
 import net.dragberry.carmanager.application.config.BusinessConfig;
+import net.dragberry.carmanager.application.config.WSConfig;
 import net.dragberry.carmanager.service.transfer.DataImporter;
 import net.dragberry.carmanager.ws.json.CurrencyExRate;
 
@@ -21,7 +22,7 @@ public class Launcher {
 		/**/
 			ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(BusinessConfig.class);
 			DataImporter importer = context.getBean(DataImporter.class);
-			InputStream is = new FileInputStream("c:\\Users\\Maksi\\OneDrive\\Расходы на машину.xlsx");
+			InputStream is = new FileInputStream("y:\\OneDrive\\Расходы на машину.xlsx");
 			importer.doImport(is);
 		/**
 		String regexp = "^([0-9]+[,.]?[0-9]+).+(��������)$";
