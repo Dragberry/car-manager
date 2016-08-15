@@ -19,7 +19,6 @@ import net.dragberry.carmanager.ws.json.CurrencyExRate;
 public class CurrencyServiceBean implements CurrencyService {
 	
 	private static final LocalDate DENOMINATION_DATE = LocalDate.of(2016, Month.JULY, 1);
-	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private static final String EX_RATE_TEMPLATE_URL = "http://www.nbrb.by/API/ExRates/Rates/{0}?onDate={1}";
 	
 	private static final Map<String, Long> CURRENCY_MAP;
@@ -38,7 +37,7 @@ public class CurrencyServiceBean implements CurrencyService {
 	public double getCurrency(String currecnyCode, LocalDate date) {
 		URI uri = null;
 		try {
-			uri = new URI(MessageFormat.format(EX_RATE_TEMPLATE_URL, CURRENCY_MAP.get(currecnyCode), formatter.format(date)));
+			uri = new URI(MessageFormat.format(EX_RATE_TEMPLATE_URL, CURRENCY_MAP.get(currecnyCode), DateTimeFormatter.ISO_LOCAL_DATE.format(date)));
 		    CurrencyExRate result = restTemplate.getForObject(uri, CurrencyExRate.class);
 		    return date.isBefore(DENOMINATION_DATE) ? denominate(result.getRate()) : result.getRate();
 		} catch (Exception exc) {
