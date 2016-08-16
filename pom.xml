@@ -10,6 +10,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>car-manager-common</module>
 		<module>car-manager-dal</module>
 		<module>car-manager-business</module>
 		<module>car-manager-ws</module>

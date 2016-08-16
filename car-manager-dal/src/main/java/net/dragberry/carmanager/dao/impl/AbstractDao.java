@@ -1,14 +1,17 @@
 package net.dragberry.carmanager.dao.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import net.dragberry.carmanager.dao.DataAccessObject;
 import net.dragberry.carmanager.domain.AbstractEntity;
+import net.dragberry.carmanager.transferobject.QueryListTO;
 
 public abstract class AbstractDao<E extends AbstractEntity> implements DataAccessObject<E, Long> {
 	
@@ -69,11 +72,19 @@ public abstract class AbstractDao<E extends AbstractEntity> implements DataAcces
 		return entityManager;
 	}
 	
-//	CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-//	CriteriaQuery<E> cq = cb.createQuery(entityType);
-//	Root<E> root = cq.from(entityType);
-//	cq.select(root);
-//	TypedQuery<E> typedQuery = entityManager.createQuery(cq);
-//	return typedQuery.getResultList();
+	protected <T> TypedQuery<T> prepateFetchQuery(String hql, Map<String, Object> params, Class<T> entityType) {
+		TypedQuery<T> typedQuery = getEntityManager().createQuery(hql, entityType);
+		params.entrySet().forEach(entry -> {
+			typedQuery.setParameter(entry.getKey(), entry.getValue());
+		});
+		return typedQuery;
+	}
+	
+	protected <T> TypedQuery<T> preparePageableQuery(String hql, QueryListTO query, Map<String, Object> params, Class<T> entityType) {
+		return prepateFetchQuery(hql, params, entityType)
+				.setFirstResult(query.getPageNumber() * query.getPageSize())
+				.setMaxResults(query.getPageSize());
+	}
+	
 	
 }

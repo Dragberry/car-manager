@@ -15,7 +15,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "TRANSACTION")
-@AttributeOverrides({ @AttributeOverride(column = @Column(name = "TRANSACTION_KEY") , name = "entityKey") })
+@AttributeOverrides({ 
+	@AttributeOverride(column = @Column(name = "TRANSACTION_KEY") , name = "entityKey") 
+})
 public class Transaction extends AbstractEntity {
 
 	private static final long serialVersionUID = -1124381093271131117L;

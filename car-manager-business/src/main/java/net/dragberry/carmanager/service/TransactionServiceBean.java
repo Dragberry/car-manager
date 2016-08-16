@@ -1,5 +1,7 @@
 package net.dragberry.carmanager.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +9,9 @@ import org.springframework.stereotype.Service;
 
 import net.dragberry.carmanager.dao.TransactionDao;
 import net.dragberry.carmanager.domain.Transaction;
-import net.dragberry.carmanager.transferobject.QueryListTO;
+import net.dragberry.carmanager.transferobject.Currency;
 import net.dragberry.carmanager.transferobject.ResultList;
+import net.dragberry.carmanager.transferobject.TransactionQueryListTO;
 import net.dragberry.carmanager.transferobject.TransactionTO;
 
 /**
@@ -24,21 +27,34 @@ public class TransactionServiceBean implements TransactionService {
 	private TransactionDao transactionDao;
 	
 	@Override
-	public ResultList<TransactionTO> fetchList(QueryListTO query) {
+	public ResultList<TransactionTO> fetchList(TransactionQueryListTO query) {
 		ResultList<TransactionTO> result = new ResultList<>();
-		Long count = transactionDao.count();
+		Long count = transactionDao.count(query);
 		result.setTotalCount(count);
+		System.out.println("Count: " + count);
 		if (count > 0L) {
-			List<Transaction> list = transactionDao.fetchList();
+			List<Transaction> list = transactionDao.fetchList(query);
 			list.forEach(tnx -> {
 				TransactionTO to = new TransactionTO();
-				to.setAmount(tnx.getAmount());
 				to.setTransactionKey(tnx.getEntityKey());
 				to.setExecutionDate(tnx.getExecutionDate());
 				to.setDescription(tnx.getDescription());
+				
+				Currency currency = Currency.valueOf(tnx.getCurrency());
+				if (query.getDisplayCurrency() !=  currency) {
+					BigDecimal newAmount = tnx.getAmount().divide(new BigDecimal(tnx.getExchangeRate()), 2, RoundingMode.HALF_UP);
+					to.setAmount(newAmount);
+					to.setCurrency(query.getDisplayCurrency());
+				} else {
+					to.setAmount(tnx.getAmount());
+					to.setCurrency(currency);
+				}
 				result.addItem(to);
 			});
 		}
+		result.setTotalCount(count);
+		result.setPageNumber(query.getPageNumber());
+		result.setPageSize(query.getPageSize());
 		return result;
 	}
 	

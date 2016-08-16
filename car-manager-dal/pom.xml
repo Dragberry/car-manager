@@ -15,6 +15,12 @@
 
 
 	<dependencies>
+		<dependency>
+			<artifactId>car-manager-common</artifactId>
+			<groupId>net.dragberry.carmanager</groupId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- Spring and Transactions -->
 		<dependency>
 			<groupId>org.springframework</groupId>

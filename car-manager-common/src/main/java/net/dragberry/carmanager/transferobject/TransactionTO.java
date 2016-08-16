@@ -19,7 +19,7 @@ public class TransactionTO implements TransferObject {
 	
 	private BigDecimal amount;
 	
-	private String currency;
+	private Currency currency;
 	
 	private Double exchangeRate;
 	
@@ -57,11 +57,11 @@ public class TransactionTO implements TransferObject {
 		this.amount = amount;
 	}
 
-	public String getCurrency() {
+	public Currency getCurrency() {
 		return currency;
 	}
 
-	public void setCurrency(String currency) {
+	public void setCurrency(Currency currency) {
 		this.currency = currency;
 	}
 
