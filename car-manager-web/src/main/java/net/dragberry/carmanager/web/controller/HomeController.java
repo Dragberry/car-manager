@@ -22,7 +22,6 @@ public class HomeController {
 		ModelAndView mv = new ModelAndView("home/index");
 		TransactionQueryListTO query = new TransactionQueryListTO();
 		query.setCarKey(1L);
-		query.setCustomerKey(3L);
 		query.setDisplayCurrency(Currency.USD);
 		query.setPageSize(200);
 		ResultList<TransactionTO> list = transactionService.fetchList(query);

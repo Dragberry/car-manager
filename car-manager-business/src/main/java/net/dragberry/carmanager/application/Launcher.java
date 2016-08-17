@@ -33,12 +33,12 @@ public class Launcher {
 			ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(BusinessConfig.class);
 			TransactionService transactionService = context.getBean(TransactionService.class);
 			TransactionQueryListTO query = new TransactionQueryListTO();
-//			query.setDateFrom(LocalDate.of(2015, 1, 1));
-//			query.setDateTo(LocalDate.of(2016, 1, 1));
+			query.setDateFrom(LocalDate.of(2015, 1, 1));
+			query.setDateTo(LocalDate.of(2016, 1, 1));
 //			query.setFuelQuantityFrom(30.0);
-//			query.setAmountFrom(new BigDecimal("40"));
+			query.setAmountFrom(new BigDecimal("40"));
 //			query.setCustomerKey(3L);
-//			query.setCarKey(1L);
+			query.setCarKey(1L);
 			query.setDisplayCurrency(Currency.USD);
 			query.setTransactionTypeKeyList(Arrays.asList(1L, 2L, 3L, 4L));
 			ResultList<TransactionTO> list = transactionService.fetchList(query);

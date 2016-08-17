@@ -1,12 +1,26 @@
 package net.dragberry.carmanager.dao.impl;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Fetch;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
+import net.dragberry.carmanager.criteria.Criteria;
 import net.dragberry.carmanager.dao.TransactionDao;
 import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.transferobject.TransactionQueryListTO;
@@ -25,10 +39,56 @@ public class TransactionDaoImpl extends AbstractDao<Transaction> implements Tran
 
 	@Override
 	public List<Transaction> fetchList(TransactionQueryListTO query) {
-		StringBuilder hql = new StringBuilder(FETCH_HQL);
-		Map<String, Object> params = new HashMap<>();
-		buildFetchQuery(hql, params, query);
-		return preparePageableQuery(hql.toString(), query, params, getEntityType()).getResultList();
+		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+		CriteriaQuery<Transaction> cq = cb.createQuery(Transaction.class);
+		Root<Transaction> tRoot = cq.from(Transaction.class);
+		Fetch<Object, Object> fetchF = tRoot.fetch("fuel", JoinType.LEFT);
+		Predicate where = null;
+		if (query.getDateFrom() != null) {
+			where = cb.greaterThan(tRoot.<LocalDate>get("executionDate"), query.getDateFrom());
+		}
+		if (query.getDateTo() != null) {
+			if (where == null) {
+				where = cb.lessThanOrEqualTo(tRoot.<LocalDate>get("executionDate"), query.getDateTo());
+			} else {
+				where = cb.and(where ,cb.lessThanOrEqualTo(tRoot.<LocalDate>get("executionDate"), query.getDateTo()));
+			}
+		}
+		if (query.getCarKey() != null) {
+			if (where == null) {
+				where = cb.equal(tRoot.get("executionDate"), query.getCarKey());
+			} else {
+				where = cb.and(where, cb.equal(tRoot.get("car"), query.getCarKey()));
+			}
+		}
+		if (query.getAmountFrom() != null) {
+			if (where == null) {
+				where = cb.lessThan(tRoot.<BigDecimal>get("amount"), query.getAmountFrom());
+			} else {
+				where = cb.and(where, cb.lessThan(tRoot.<BigDecimal>get("amount"), query.getAmountFrom()));
+			}
+		}
+		if (query.getAmountTo() != null) {
+			if (where == null) {
+				where = cb.greaterThanOrEqualTo(tRoot.<BigDecimal>get("amount"), query.getAmountTo());
+			} else {
+				where = cb.and(where, cb.greaterThanOrEqualTo(tRoot.<BigDecimal>get("amount"), query.getAmountTo()));
+			}
+		}
+		if (where != null) {
+			cq.where(where);
+		}
+		cq.select(tRoot);
+		
+		
+		TypedQuery<Transaction> tq = getEntityManager().createQuery(cq);
+		return tq.getResultList();
+		
+//		
+//		StringBuilder hql = new StringBuilder(FETCH_HQL);
+//		Map<String, Object> params = new HashMap<>();
+//		buildFetchQuery(hql, params, query);
+//		return preparePageableQuery(hql.toString(), query, params, getEntityType()).getResultList();
 	}
 
 	@Override
@@ -40,6 +100,8 @@ public class TransactionDaoImpl extends AbstractDao<Transaction> implements Tran
 	}
 	
 	private static final void buildFetchQuery(StringBuilder hql, Map<String, Object> params, TransactionQueryListTO query) {
+		Criteria<Transaction> criteria = new Criteria<>("");
+		
 		if (query.getCarKey() != null) {
 			hql.append(params.isEmpty() ? WHERE : AND);
 			hql.append("t.car.entityKey = :carKey");
