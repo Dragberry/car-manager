@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import net.dragberry.carmanager.dao.TransactionDao;
@@ -71,6 +72,12 @@ public class TransactionDaoImpl extends AbstractDao<Transaction> implements Tran
 		}
 		if (query.getFuelQuantityTo() != null) {
 			predicates.add(cb.ge(tRoot.get("quantity").<Double>get("quantity"), query.getFuelQuantityTo()));
+		}
+		if (CollectionUtils.isNotEmpty(query.getTransactionTypeKeyList())) {
+			predicates.add(tRoot.get("transactionType").in(query.getTransactionTypeKeyList()));
+		}
+		if (CollectionUtils.isNotEmpty(query.getCurrencyList())) {
+			predicates.add(tRoot.get("currency").in(query.getCurrencyList()));
 		}
 		return predicates.toArray(new Predicate[]{});
 	}

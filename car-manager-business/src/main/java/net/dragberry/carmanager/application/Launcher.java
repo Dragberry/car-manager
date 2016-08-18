@@ -54,6 +54,7 @@ public class Launcher {
 			query.setCarKey(1L);
 			query.setDisplayCurrency(Currency.USD);
 			query.setTransactionTypeKeyList(Arrays.asList(1L, 2L, 3L, 4L));
+			query.setCurrencyList(Arrays.asList(Currency.USD, Currency.BYN));
 			ResultList<TransactionTO> list = transactionService.fetchList(query);
 			list.getResult().forEach(tnx -> {
 				System.out.println(tnx.getTransactionKey() + " " + tnx.getDescription() + " за " + tnx.getAmount() + tnx.getCurrency() );

@@ -8,11 +8,14 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import net.dragberry.carmanager.common.Currency;
 
 @Entity
 @Table(name = "TRANSACTION")
@@ -26,8 +29,9 @@ public class Transaction extends AbstractEntity {
 	private BigDecimal amount;
 	@Column(name = "DESCRIPTION")
 	private String description;
-	@Column(name = "CURRENCY", columnDefinition = "char")
-	private String currency;
+	@Column(name = "CURRENCY")
+	@Enumerated(EnumType.STRING)
+	private Currency currency;
 	@Column(name = "EXCHANGE_RATE")
 	private Double exchangeRate;
 	@Column(name = "EXECUTION_DATE")
@@ -65,11 +69,11 @@ public class Transaction extends AbstractEntity {
 		this.amount = amount;
 	}
 
-	public String getCurrency() {
+	public Currency getCurrency() {
 		return currency;
 	}
 
-	public void setCurrency(String currency) {
+	public void setCurrency(Currency currency) {
 		this.currency = currency;
 	}
 

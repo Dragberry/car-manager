@@ -58,7 +58,7 @@ public class TransactionServiceBean implements TransactionService {
 				to.setExecutionDate(tnx.getExecutionDate());
 				to.setDescription(tnx.getDescription());
 				
-				Currency currency = Currency.valueOf(tnx.getCurrency());
+				Currency currency = tnx.getCurrency();
 				if (query.getDisplayCurrency() !=  currency) {
 					BigDecimal newAmount = tnx.getAmount().divide(new BigDecimal(tnx.getExchangeRate()), 2, RoundingMode.HALF_UP);
 					to.setAmount(newAmount);
@@ -82,7 +82,7 @@ public class TransactionServiceBean implements TransactionService {
 		Transaction transaction = new Transaction();
 		transaction.setAmount(to.getAmount());
 		transaction.setDescription(to.getDescription());
-		transaction.setCurrency(to.getCurrency().name());
+		transaction.setCurrency(to.getCurrency());
 		transaction.setExchangeRate(to.getExchangeRate());
 		transaction.setExecutionDate(to.getExecutionDate());
 		

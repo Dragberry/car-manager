@@ -226,15 +226,15 @@ public class Consumer implements Callable<Integer>{
 	}
 	
 	private static enum CurrencyCustomer {
-		BYR("BYN"), BYR_DAD("BYN"), USD("USD"), USD_DAD("USD");
+		BYR(Currency.BYN), BYR_DAD(Currency.BYN), USD(Currency.USD), USD_DAD(Currency.USD);
 		
-		private String currency;
+		private Currency currency;
 		
-		private CurrencyCustomer(String currency) {
+		private CurrencyCustomer(Currency currency) {
 			this.currency = currency;
 		}
 		
-		public String getCurrency() {
+		public Currency getCurrency() {
 			return currency;
 		}
 	}
