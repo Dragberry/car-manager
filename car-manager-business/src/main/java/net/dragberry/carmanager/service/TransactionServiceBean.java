@@ -59,7 +59,7 @@ public class TransactionServiceBean implements TransactionService {
 				to.setDescription(tnx.getDescription());
 				
 				Currency currency = tnx.getCurrency();
-				if (query.getDisplayCurrency() !=  currency) {
+				if (query.getDisplayCurrency() != null && query.getDisplayCurrency() !=  currency) {
 					BigDecimal newAmount = tnx.getAmount().divide(new BigDecimal(tnx.getExchangeRate()), 2, RoundingMode.HALF_UP);
 					to.setAmount(newAmount);
 					to.setCurrency(query.getDisplayCurrency());
