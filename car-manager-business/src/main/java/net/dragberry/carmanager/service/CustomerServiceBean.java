@@ -25,24 +25,24 @@ public class CustomerServiceBean implements CustomerService {
 	
 	@Override
 	public CustomerTO findByCustomerName(String customerName) {
-//		Customer customer = customerDao.findByCustomerName(customerName);
+		Customer customer = customerDao.findByCustomerName(customerName);
 		CustomerTO to = null;
-//		if (customer != null) {
-//			to = new CustomerTO();
-//			to.setCustomerKey(customer.getEntityKey());
-//			to.setBirtdate(customer.getBirthDate());
-//			to.setCustomerName(customer.getCustomerName());
-//			to.setEmail(customer.getEmail());
-//			to.setEnabled(true);
-//			to.setFirstName(customer.getFirstName());
-//			to.setLastName(customer.getLastName());
-//			to.setPassword(customer.getPassword());
-//			Set<String> roles = new HashSet<>();
-//			for (Role role : customer.getRoles()) {
-//				roles.add(role.getRoleName());
-//			}
-//			to.setRoles(roles);
-//		}
+		if (customer != null) {
+			to = new CustomerTO();
+			to.setCustomerKey(customer.getEntityKey());
+			to.setBirtdate(customer.getBirthDate());
+			to.setCustomerName(customer.getCustomerName());
+			to.setEmail(customer.getEmail());
+			to.setEnabled(true);
+			to.setFirstName(customer.getFirstName());
+			to.setLastName(customer.getLastName());
+			to.setPassword(customer.getPassword());
+			Set<String> roles = new HashSet<>();
+			for (Role role : customer.getRoles()) {
+				roles.add(role.getRoleName());
+			}
+			to.setRoles(roles);
+		}
 		return to;
 	}
 

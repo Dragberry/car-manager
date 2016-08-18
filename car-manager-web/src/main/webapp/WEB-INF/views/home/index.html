@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorator="template/template">
+<head>
+	<title th:text="#{messages.homePage}">Home page</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<table class="table">
+			<tr>
+				<th th:text="Index">Index</th>
+				<th th:text="Date">Date</th>
+				<th th:text="Description">Description</th>
+				<th th:text="Amount">Amount</th>
+				<th th:text="Currency">Currency</th>
+			</tr>
+			<tr th:each="transaction : ${transactionList}">
+				<td th:text="${transaction.transactionKey}">Index</td>
+				<td th:text="${transaction.executionDate}">Date</td>
+				<td th:text="${transaction.description}">Description</td>
+				<td th:text="${transaction.amount}">Amount</td>
+				<td th:text="${transaction.currency}">Currency</td>
+			</tr>
+		</table>	
+	</div>
+</body>
+
+</html>
