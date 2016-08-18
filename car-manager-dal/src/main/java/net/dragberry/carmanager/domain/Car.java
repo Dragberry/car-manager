@@ -28,7 +28,7 @@ public class Car extends AbstractEntity {
 	private LocalDate saleDate;
 	@Column(name = "BRAND")
 	private String brand;
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CUSTOMER_KEY", referencedColumnName = "CUSTOMER_KEY")
 	private Customer owner;
 	public String getModel() {

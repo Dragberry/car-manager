@@ -2,7 +2,9 @@ package net.dragberry.carmanager.ws.client;
 
 import java.time.LocalDate;
 
+import net.dragberry.carmanager.common.Currency;
+
 public interface CurrencyService {
 
-	double getCurrency(String currecnyCode, LocalDate date);
+	double getExchangeRate(Currency currency, LocalDate date);
 }

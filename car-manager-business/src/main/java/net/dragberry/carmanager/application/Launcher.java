@@ -18,7 +18,8 @@ import net.dragberry.carmanager.application.config.BusinessConfig;
 import net.dragberry.carmanager.application.config.WSConfig;
 import net.dragberry.carmanager.service.TransactionService;
 import net.dragberry.carmanager.service.transfer.DataImporter;
-import net.dragberry.carmanager.transferobject.Currency;
+import net.dragberry.carmanager.common.Currency;
+import net.dragberry.carmanager.transferobject.FuelTO;
 import net.dragberry.carmanager.transferobject.QueryListTO;
 import net.dragberry.carmanager.transferobject.ResultList;
 import net.dragberry.carmanager.transferobject.TransactionQueryListTO;
@@ -32,12 +33,24 @@ public class Launcher {
 		/**/
 			ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(BusinessConfig.class);
 			TransactionService transactionService = context.getBean(TransactionService.class);
+			
+			TransactionTO to = new TransactionTO();
+			to.setAmount(new BigDecimal("55.5"));
+			to.setCarKey(1L);
+			to.setCurrency(Currency.BYN);
+			to.setCustomerKey(3L);
+			to.setDescription("50 литров бензина");
+			to.setExecutionDate(LocalDate.now());
+			to.setTransactionTypeKey(1L);
+			to.setFuel(new FuelTO(new BigDecimal("11.1"), 50.0, "92"));
+			transactionService.createTransaction(to);
+			
 			TransactionQueryListTO query = new TransactionQueryListTO();
 			query.setDateFrom(LocalDate.of(2015, 1, 1));
 			query.setDateTo(LocalDate.of(2016, 1, 1));
 //			query.setFuelQuantityFrom(30.0);
 			query.setAmountFrom(new BigDecimal("40"));
-//			query.setCustomerKey(3L);
+			query.setCustomerKey(3L);
 			query.setCarKey(1L);
 			query.setDisplayCurrency(Currency.USD);
 			query.setTransactionTypeKeyList(Arrays.asList(1L, 2L, 3L, 4L));

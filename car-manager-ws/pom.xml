@@ -18,6 +18,12 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
+		<dependency>
+			<artifactId>car-manager-common</artifactId>
+			<groupId>net.dragberry.carmanager</groupId>
+			<version>${project.version}</version>
+		</dependency>
+	
 		<!-- Spring web -->
 		<dependency>
 			<groupId>org.springframework</groupId>

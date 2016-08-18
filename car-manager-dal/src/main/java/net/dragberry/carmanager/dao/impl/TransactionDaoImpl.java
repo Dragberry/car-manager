@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -28,7 +27,6 @@ public class TransactionDaoImpl extends AbstractDao<Transaction> implements Tran
 		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<Transaction> cq = cb.createQuery(Transaction.class);
 		Root<Transaction> tRoot = cq.from(Transaction.class);
-		tRoot.fetch("fuel", JoinType.LEFT);
 		
 		cq.where(buildConditions(cb, tRoot, query));
 		cq.select(tRoot);

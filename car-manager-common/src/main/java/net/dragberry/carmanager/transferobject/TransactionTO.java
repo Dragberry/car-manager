@@ -3,6 +3,8 @@ package net.dragberry.carmanager.transferobject;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import net.dragberry.carmanager.common.Currency;
+
 /**
  * The transfer object that represents a single transaction
  * 

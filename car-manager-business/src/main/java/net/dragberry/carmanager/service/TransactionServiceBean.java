@@ -6,13 +6,22 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import net.dragberry.carmanager.dao.CarDao;
+import net.dragberry.carmanager.dao.CustomerDao;
 import net.dragberry.carmanager.dao.TransactionDao;
+import net.dragberry.carmanager.dao.TransactionTypeDao;
+import net.dragberry.carmanager.domain.Car;
+import net.dragberry.carmanager.domain.Customer;
+import net.dragberry.carmanager.domain.Fuel;
 import net.dragberry.carmanager.domain.Transaction;
-import net.dragberry.carmanager.transferobject.Currency;
+import net.dragberry.carmanager.domain.TransactionType;
+import net.dragberry.carmanager.common.Currency;
 import net.dragberry.carmanager.transferobject.ResultList;
 import net.dragberry.carmanager.transferobject.TransactionQueryListTO;
 import net.dragberry.carmanager.transferobject.TransactionTO;
+import net.dragberry.carmanager.ws.client.CurrencyService;
 
 /**
  * Transaction service bean
@@ -25,6 +34,15 @@ public class TransactionServiceBean implements TransactionService {
 	
 	@Autowired
 	private TransactionDao transactionDao;
+	@Autowired
+	private CarDao carDao;
+	@Autowired
+	private CustomerDao customerDao;
+	@Autowired
+	private TransactionTypeDao transactionTypeDao;
+	
+	@Autowired
+	private CurrencyService currencyService;
 	
 	@Override
 	public ResultList<TransactionTO> fetchList(TransactionQueryListTO query) {
@@ -59,32 +77,34 @@ public class TransactionServiceBean implements TransactionService {
 	}
 	
 	@Override
+	@Transactional
 	public TransactionTO createTransaction(TransactionTO to) {
-//		Transaction transaction = new Transaction();
-//		transaction.setAmount(to.getAmount());
-//		transaction.setCurrency(to.getCurrency());
-//		transaction.setExchangeRate(to.getExchangeRate());
-//		transaction.setExecutionDate(to.getExecutionDate());
-//		
-//		Car car = carRepo.findOne(to.getCarKey());
-//		transaction.setCar(car);
-//		TransactionType tType = transactionTypeRepo.findOne(to.getTransactionTypeKey());
-//		transaction.setTransactionType(tType);
-//		Customer customer = customerRepo.findOne(to.getCustomerKey());
-//		transaction.setCustomer(customer);
-//		
-//		transaction = transactionRepo.save(transaction);
-//		if (to.getFuel() != null) {
-//			Fuel fuel = new Fuel();
-//			fuel.setCost(to.getFuel().getCost());
-//			fuel.setTransaction(transaction);
-//			fuel.setQuantity(to.getFuel().getQuantity());
-//			fuel.setType(to.getFuel().getType());
-//			fuel = fuelRepo.save(fuel);
-//			to.getFuel().setFuelKey(fuel.getEntityKey());
-//		}
-//
-//		to.setTransactionKey(transaction.getEntityKey());
+		Transaction transaction = new Transaction();
+		transaction.setAmount(to.getAmount());
+		transaction.setDescription(to.getDescription());
+		transaction.setCurrency(to.getCurrency().name());
+		transaction.setExchangeRate(to.getExchangeRate());
+		transaction.setExecutionDate(to.getExecutionDate());
+		
+		transaction.setExchangeRate(currencyService.getExchangeRate(Currency.USD, to.getExecutionDate()));
+		
+		Car car = carDao.findOne(to.getCarKey());
+		transaction.setCar(car);
+		TransactionType tType = transactionTypeDao.findOne(to.getTransactionTypeKey());
+		transaction.setTransactionType(tType);
+		Customer customer = customerDao.findOne(to.getCustomerKey());
+		transaction.setCustomer(customer);
+		
+		if (to.getFuel() != null) {
+			Fuel fuel = new Fuel();
+			fuel.setCost(to.getFuel().getCost());
+			fuel.setQuantity(to.getFuel().getQuantity());
+			fuel.setType(to.getFuel().getType());
+			transaction.setFuel(fuel);
+		}
+		transaction = transactionDao.create(transaction);
+
+		to.setTransactionKey(transaction.getEntityKey());
 		return to;
 	}
 

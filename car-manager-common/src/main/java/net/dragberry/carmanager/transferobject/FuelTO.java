@@ -1,22 +1,30 @@
 package net.dragberry.carmanager.transferobject;
 
+import java.math.BigDecimal;
+
 public class FuelTO implements TransferObject {
 
 	private static final long serialVersionUID = -3211556035025074390L;
 	
-	private Long fuelKey;
-	
-	private Double cost;
+	private BigDecimal cost;
 	
 	private Double quantity;
 	
 	private String type;
+	
+	public FuelTO() {}
+	
+	public FuelTO(BigDecimal cost, Double quantity, String type) {
+		this.cost = cost;
+		this.quantity = quantity;
+		this.type = type;
+	}
 
-	public Double getCost() {
+	public BigDecimal getCost() {
 		return cost;
 	}
 
-	public void setCost(Double cost) {
+	public void setCost(BigDecimal cost) {
 		this.cost = cost;
 	}
 
@@ -36,12 +44,4 @@ public class FuelTO implements TransferObject {
 		this.type = type;
 	}
 
-	public Long getFuelKey() {
-		return fuelKey;
-	}
-
-	public void setFuelKey(Long fuelKey) {
-		this.fuelKey = fuelKey;
-	}
-	
 }

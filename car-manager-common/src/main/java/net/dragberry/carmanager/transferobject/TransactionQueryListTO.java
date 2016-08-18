@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import net.dragberry.carmanager.common.Currency;
+
 public class TransactionQueryListTO extends QueryListTO {
 
 	private static final long serialVersionUID = -8216960599009522169L;

@@ -19,9 +19,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import net.dragberry.carmanager.common.Currency;
 import net.dragberry.carmanager.dao.CarDao;
 import net.dragberry.carmanager.dao.CustomerDao;
-import net.dragberry.carmanager.dao.FuelDao;
 import net.dragberry.carmanager.dao.TransactionDao;
 import net.dragberry.carmanager.dao.TransactionTypeDao;
 import net.dragberry.carmanager.domain.Car;
@@ -30,6 +31,7 @@ import net.dragberry.carmanager.domain.Fuel;
 import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
 import net.dragberry.carmanager.transferobject.Record;
+import net.dragberry.carmanager.util.Denominator;
 import net.dragberry.carmanager.ws.client.CurrencyService;
 
 @Component
@@ -48,8 +50,6 @@ public class Consumer implements Callable<Integer>{
 	private CarDao carDao;
 	@Autowired
 	private TransactionDao transactionDao;
-	@Autowired
-	private FuelDao fuelDao;
 	
 	@Autowired
 	private CurrencyService currencyService;
@@ -98,15 +98,16 @@ public class Consumer implements Callable<Integer>{
 				transaction.setDescription(record.getDescription());
 				transaction.setCurrency(currencyCustomer.getCurrency());
 				transaction.setAmount(resolveAmount(record, currencyCustomer));
-				transaction.setExchangeRate(currencyService.getCurrency("USD", record.getDate()));
+				transaction.setExchangeRate(currencyService.getExchangeRate(Currency.USD, record.getDate()));
 				TransactionType tType = resolveType(record);
 				transaction.setTransactionType(tType);
 				transaction.setCustomer(getCustomer(record, currencyCustomer));
-				transactionDao.create(transaction);
+				
 				if (TransactionType.FUEL.equals(tType.getName())) {
-					Fuel fuel = createFuel(record, transaction);
+					transaction.setFuel(createFuel(record, transaction));
 //					System.out.println(fuel);
 				}
+				transactionDao.create(transaction);
 //				System.out.println(transaction);
 				list.add(transaction);
 
@@ -141,8 +142,6 @@ public class Consumer implements Callable<Integer>{
 			fuel.setQuantity(quantity);
 			fuel.setCost(transaction.getAmount().divide(new BigDecimal(quantity), 2, RoundingMode.HALF_UP));
 			fuel.setType("92");
-			fuel.setTransaction(transaction);
-			fuelDao.create(fuel);
 		} else {
 			throw new RuntimeException(MessageFormat.format("Cannot parse fueld for record [{0}]!", record.getIndex()));
 		}
@@ -166,16 +165,12 @@ public class Consumer implements Callable<Integer>{
 		return list;
 	}
 
-	private double denominate(double byr) {
-		return byr / 10000;
-	}
-	
 	private BigDecimal resolveAmount(Record record, CurrencyCustomer currencyCustomer) {
 		switch (currencyCustomer) {
 		case BYR:
-			return new BigDecimal(denominate(record.getCostBYR())).setScale(2, RoundingMode.HALF_UP);
+			return new BigDecimal(Denominator.denominate(record.getCostBYR())).setScale(2, RoundingMode.HALF_UP);
 		case BYR_DAD:
-			return new BigDecimal(denominate(record.getCostBYRDad())).setScale(2, RoundingMode.HALF_UP);
+			return new BigDecimal(Denominator.denominate(record.getCostBYRDad())).setScale(2, RoundingMode.HALF_UP);
 		case USD:
 			return new BigDecimal(record.getCostUSD()).setScale(2, RoundingMode.HALF_UP);
 		case USD_DAD:

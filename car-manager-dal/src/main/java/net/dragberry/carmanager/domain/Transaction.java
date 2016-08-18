@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -40,7 +41,7 @@ public class Transaction extends AbstractEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CUSTOMER_KEY", referencedColumnName = "CUSTOMER_KEY")
 	private Customer customer;
-	@OneToOne(mappedBy = "transaction", fetch = FetchType.EAGER)
+	@Embedded
 	private Fuel fuel;
 
 	@Override

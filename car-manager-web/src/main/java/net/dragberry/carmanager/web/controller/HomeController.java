@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.dragberry.carmanager.service.TransactionService;
-import net.dragberry.carmanager.transferobject.Currency;
+import net.dragberry.carmanager.common.Currency;
 import net.dragberry.carmanager.transferobject.ResultList;
 import net.dragberry.carmanager.transferobject.TransactionQueryListTO;
 import net.dragberry.carmanager.transferobject.TransactionTO;
