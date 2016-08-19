@@ -22,12 +22,14 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
 import net.dragberry.carmanager.web.controller.Controllers;
+import net.dragberry.carmanager.web.menu.MainMenuBean;
+import net.dragberry.carmanager.web.menu.MenuInterceptor;
 import net.dragberry.carmanager.web.security.SecurityInterceptor;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackageClasses = { Controllers.class })
+@ComponentScan(basePackageClasses = { Controllers.class, MainMenuBean.class })
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Override
@@ -85,11 +87,17 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(securityInterceptor());
+		registry.addInterceptor(menuInterceptor());
 	}
 
 	@Bean
 	public SecurityInterceptor securityInterceptor() {
 		return new SecurityInterceptor();
+	}
+	
+	@Bean
+	public MenuInterceptor menuInterceptor() {
+		return new MenuInterceptor();
 	}
 
 }

@@ -1,4 +1,4 @@
-package net.dragberry.carmanager.common;
+package net.dragberry.carmanager.web.common;
 
 public interface Constants {
 	

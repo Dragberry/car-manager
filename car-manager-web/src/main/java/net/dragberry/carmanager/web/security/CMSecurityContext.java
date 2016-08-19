@@ -6,7 +6,7 @@ import java.util.Set;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-public class ExpmanSecurityContext {
+public class CMSecurityContext {
 
 	private static final long ANONYMOUS_CUSTOMER_KEY = 2L;
 	

@@ -21,7 +21,21 @@
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					
+					<li th:if="${item.visibled}"
+						th:each="item : ${menuBean.mainMenu.items}" 
+						th:id="${item.id}"
+						th:classappend="${item.header} ? 'dropdown' : ''">
+						<a th:if="${not item.header}" th:text="#{${item.key}}" th:href="@{${item.action}}">Link</a>
+						<a th:if="${item.header}" th:href="@{#}" th:text="#{${item.key}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menu item<span class="caret"></span></a>
+						<ul th:if="${item.header}" class="dropdown-menu">
+							<th:block th:if="${item.visibled}" th:each="subItem : ${item.items}">
+								<p th:if="${subItem.header}" class="navbar-text" th:text="#{${subItem.key}}"></p>
+							 	<li th:if="${not subItem.header}">
+					            	<a th:href="@{${subItem.action}}" th:text="#{${subItem.key}}">Sub item</a>
+					            </li>
+							</th:block>
+				    	</ul>
+					</li>
 				</ul>
 				
 				<ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">

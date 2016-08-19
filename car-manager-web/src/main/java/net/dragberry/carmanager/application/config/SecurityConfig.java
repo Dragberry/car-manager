@@ -10,8 +10,8 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import net.dragberry.carmanager.common.Constants;
 import net.dragberry.carmanager.service.CustomerService;
+import net.dragberry.carmanager.web.common.Constants;
 import net.dragberry.carmanager.web.security.CustomerSecurityService;
 
 @Configuration
