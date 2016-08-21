@@ -1,6 +1,6 @@
 package net.dragberry.carmanager.service;
 
-import net.dragberry.carmanager.transferobject.CustomerTO;
+import net.dragberry.carmanager.to.CustomerTO;
 
 /**
  * Customer service

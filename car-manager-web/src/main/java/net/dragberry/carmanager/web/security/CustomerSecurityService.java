@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import net.dragberry.carmanager.service.CustomerService;
-import net.dragberry.carmanager.transferobject.CustomerTO;
+import net.dragberry.carmanager.to.CustomerTO;
 
 public class CustomerSecurityService implements UserDetailsService {
 	

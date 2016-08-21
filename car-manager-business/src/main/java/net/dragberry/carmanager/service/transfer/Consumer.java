@@ -30,7 +30,7 @@ import net.dragberry.carmanager.domain.Customer;
 import net.dragberry.carmanager.domain.Fuel;
 import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
-import net.dragberry.carmanager.transferobject.Record;
+import net.dragberry.carmanager.to.Record;
 import net.dragberry.carmanager.util.Denominator;
 import net.dragberry.carmanager.ws.client.CurrencyService;
 

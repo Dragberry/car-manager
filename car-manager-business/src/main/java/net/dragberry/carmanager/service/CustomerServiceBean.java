@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import net.dragberry.carmanager.dao.CustomerDao;
 import net.dragberry.carmanager.domain.Customer;
 import net.dragberry.carmanager.domain.Role;
-import net.dragberry.carmanager.transferobject.CustomerTO;
+import net.dragberry.carmanager.to.CustomerTO;
 
 /**
  * Customer service bean

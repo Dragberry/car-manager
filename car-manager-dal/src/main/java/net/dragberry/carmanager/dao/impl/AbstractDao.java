@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.dragberry.carmanager.dao.DataAccessObject;
 import net.dragberry.carmanager.domain.AbstractEntity;
-import net.dragberry.carmanager.transferobject.QueryListTO;
+import net.dragberry.carmanager.to.QueryListTO;
 
 public abstract class AbstractDao<E extends AbstractEntity> implements DataAccessObject<E, Long> {
 	

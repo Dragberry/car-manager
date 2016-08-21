@@ -3,7 +3,7 @@ package net.dragberry.carmanager.dao;
 import java.util.List;
 
 import net.dragberry.carmanager.domain.Transaction;
-import net.dragberry.carmanager.transferobject.TransactionQueryListTO;
+import net.dragberry.carmanager.to.TransactionQueryListTO;
 
 public interface TransactionDao extends DataAccessObject<Transaction, Long> {
 

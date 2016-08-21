@@ -14,7 +14,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import net.dragberry.carmanager.transferobject.Record;
+
+import net.dragberry.carmanager.to.Record;
 
 @Component
 @Scope(scopeName = "prototype")

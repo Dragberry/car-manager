@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import net.dragberry.carmanager.dao.TransactionDao;
 import net.dragberry.carmanager.domain.Transaction;
-import net.dragberry.carmanager.transferobject.TransactionQueryListTO;
+import net.dragberry.carmanager.to.TransactionQueryListTO;
 
 @Repository
 public class TransactionDaoImpl extends AbstractDao<Transaction> implements TransactionDao {
@@ -30,6 +31,7 @@ public class TransactionDaoImpl extends AbstractDao<Transaction> implements Tran
 		Root<Transaction> tRoot = cq.from(Transaction.class);
 		
 		cq.where(buildConditions(cb, tRoot, query));
+		cq.orderBy(cb.asc(tRoot.get("executionDate")));
 		cq.select(tRoot);
 		
 		return getEntityManager().createQuery(cq).getResultList();

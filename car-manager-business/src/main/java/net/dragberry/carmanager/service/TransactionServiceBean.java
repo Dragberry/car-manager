@@ -2,9 +2,11 @@ package net.dragberry.carmanager.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,10 +19,12 @@ import net.dragberry.carmanager.domain.Customer;
 import net.dragberry.carmanager.domain.Fuel;
 import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
+import net.dragberry.carmanager.service.validation.ValidationService;
+import net.dragberry.carmanager.to.ResultList;
+import net.dragberry.carmanager.to.ResultTO;
+import net.dragberry.carmanager.to.TransactionQueryListTO;
+import net.dragberry.carmanager.to.TransactionTO;
 import net.dragberry.carmanager.common.Currency;
-import net.dragberry.carmanager.transferobject.ResultList;
-import net.dragberry.carmanager.transferobject.TransactionQueryListTO;
-import net.dragberry.carmanager.transferobject.TransactionTO;
 import net.dragberry.carmanager.ws.client.CurrencyService;
 
 /**
@@ -43,6 +47,9 @@ public class TransactionServiceBean implements TransactionService {
 	
 	@Autowired
 	private CurrencyService currencyService;
+	@Autowired
+	@Qualifier("TransactionValidationService")
+	private ValidationService<Transaction> validationService;
 	
 	@Override
 	public ResultList<TransactionTO> fetchList(TransactionQueryListTO query) {
@@ -78,7 +85,7 @@ public class TransactionServiceBean implements TransactionService {
 	
 	@Override
 	@Transactional
-	public TransactionTO createTransaction(TransactionTO to) {
+	public ResultTO<TransactionTO> createTransaction(TransactionTO to) {
 		Transaction transaction = new Transaction();
 		transaction.setAmount(to.getAmount());
 		transaction.setDescription(to.getDescription());
@@ -102,10 +109,13 @@ public class TransactionServiceBean implements TransactionService {
 			fuel.setType(to.getFuel().getType());
 			transaction.setFuel(fuel);
 		}
+		
+		validationService.validate(Arrays.asList(transaction));
+		
 		transaction = transactionDao.create(transaction);
 
 		to.setTransactionKey(transaction.getEntityKey());
-		return to;
+		return new ResultTO<TransactionTO>(to);
 	}
 
 }

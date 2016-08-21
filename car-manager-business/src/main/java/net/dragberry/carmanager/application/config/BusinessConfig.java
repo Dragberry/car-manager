@@ -8,10 +8,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import net.dragberry.carmanager.service.BusinessServices;
-import net.dragberry.carmanager.transferobject.Record;
+import net.dragberry.carmanager.to.Record;
 
 @Configuration
-@Import(DataConfig.class)
+@Import({ DataConfig.class, ValidationConfig.class })
 @ComponentScan(basePackageClasses = { BusinessServices.class, WSConfig.class })
 public class BusinessConfig {
 
