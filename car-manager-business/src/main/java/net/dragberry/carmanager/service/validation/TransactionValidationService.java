@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.dragberry.carmanager.domain.Transaction;
-import net.dragberry.carmanager.to.ValidationIssue;
 
 @Service("TransactionValidationService")
 public class TransactionValidationService implements ValidationService<Transaction> {

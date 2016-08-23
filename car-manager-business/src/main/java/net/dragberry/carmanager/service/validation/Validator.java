@@ -5,14 +5,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
-import net.dragberry.carmanager.to.GenericIssue;
-import net.dragberry.carmanager.to.ValidationIssue;
-
 public interface Validator<E> {
 	
 	Collection<ValidationIssue<E>> validate(E entity);
 	
-	default ValidationIssue<E> issue(E entity, int msgCode, Serializable... params) {
+	default ValidationIssue<E> issue(E entity, String msgCode, Serializable... params) {
 		return new GenericIssue<E>(entity, msgCode, params);
 	}
 	

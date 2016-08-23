@@ -3,7 +3,10 @@ package net.dragberry.carmanager.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,7 +22,9 @@ import net.dragberry.carmanager.domain.Customer;
 import net.dragberry.carmanager.domain.Fuel;
 import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
+import net.dragberry.carmanager.service.validation.ValidationIssue;
 import net.dragberry.carmanager.service.validation.ValidationService;
+import net.dragberry.carmanager.to.IssueTO;
 import net.dragberry.carmanager.to.ResultList;
 import net.dragberry.carmanager.to.ResultTO;
 import net.dragberry.carmanager.to.TransactionQueryListTO;
@@ -110,7 +115,14 @@ public class TransactionServiceBean implements TransactionService {
 			transaction.setFuel(fuel);
 		}
 		
-		validationService.validate(Arrays.asList(transaction));
+		Collection<ValidationIssue<Transaction>> issues = validationService.validate(Arrays.asList(transaction));
+		Set<IssueTO> issuesTO = new HashSet<>();
+		issues.forEach(issue -> {
+			IssueTO issueTO = new IssueTO();
+			issueTO.setMsgCode(issue.getMsgNumber());
+			issueTO.setParams(issue.getParams());
+			issuesTO.add(issueTO);
+		});
 		
 		transaction = transactionDao.create(transaction);
 
