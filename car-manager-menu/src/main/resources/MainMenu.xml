@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MainMenuXML>
 
-	<MenuItemXML id="registration" key="messages.menu.registration" action="/registration">
+	<MenuItemXML id="registration" key="msg.menu.registration" action="/registration">
 		<Role>ANONYMOUS</Role>
 	</MenuItemXML>
 	
-	<MenuItemXML id="transactions" key="messages.menu.transaction" header="true">
+	<MenuItemXML id="transactions" key="msg.menu.transaction" header="true">
 		<Role>ADMIN</Role>
 		<Role>CUSTOMER</Role>
-		<MenuItemXML id="transactions.create" key="messages.menu.transactionCreate" action="/transaction/create">
+		<MenuItemXML id="transactions.create" key="msg.menu.transactionCreate" action="/transaction/create">
 			<Role>ADMIN</Role>
 			<Role>CUSTOMER</Role>
 		</MenuItemXML>
-		<MenuItemXML id="transactions.list" key="messages.menu.transactionList" action="/transaction/list">
+		<MenuItemXML id="transactions.list" key="msg.menu.transactionList" action="/transaction/list">
 			<Role>ADMIN</Role>
 			<Role>CUSTOMER</Role>
 		</MenuItemXML>

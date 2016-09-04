@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorator="template/content-template">
+<head>
+	<title th:text="#{msg.transaction.list}">Transaction list</title>
+</head>
+<body>
+	<div layout:fragment="headerPanel">
+		<h4 th:text="#{msg.transaction.list}">Transaction list</h4>
+	</div>
+	
+	<div layout:fragment="leftMenu">
+		<span>Menu</span>
+	</div>
+	
+	<div layout:fragment="data">
+		<div id="summaryPanel" class="col-md-12">
+			<fieldset>
+				<legend th:text="#{msg.transaction.summary}">Summary</legend>
+				<div class="col-md-4">
+					<label th:text="#{msg.transaction.totalAmount}">
+				  		Total
+				  	</label>
+					<div th:text="${transactionSummary.totalAmount} + ' ' + ${transactionSummary.displayCurrency}">0.0 USD</div>
+				</div>
+				<div class="col-md-4">
+					<label th:text="#{msg.transaction.totalAmountByCustomer}">
+				  		Total by customer
+				  	</label>
+					<div th:text="${transactionSummary.totalAmountByCustomer} + ' ' + ${transactionSummary.displayCurrency}">0.0 USD</div>
+				</div>
+				<div class="col-md-4">
+					<label th:text="#{msg.transaction.totalAmountForFuel}">
+				  		Total fuel
+				  	</label>
+					<div th:text="${transactionSummary.totalFuelAmount} + ' ' + ${transactionSummary.displayCurrency}">0.0 USD</div>
+				</div>
+			</fieldset>
+		</div>
+		<div id="dataTablePanel" class="col-md-12">
+			<table class="table">
+				<tr>
+					<th th:text="Index">Index</th>
+					<th th:text="Date">Date</th>
+					<th th:text="Description">Description</th>
+					<th th:text="Amount">Amount</th>
+					<th th:text="Currency">Currency</th>
+				</tr>
+				<tr th:each="transaction : ${transactionList}">
+					<td th:text="${transaction.transactionKey}">Index</td>
+					<td th:text="${transaction.executionDate}">Date</td>
+					<td th:text="${transaction.description}">Description</td>
+					<td th:text="${transaction.amount}">Amount</td>
+					<td th:text="${transaction.currency}">Currency</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+
+</html>

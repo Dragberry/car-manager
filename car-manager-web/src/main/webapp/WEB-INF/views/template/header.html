@@ -39,19 +39,19 @@
 				</ul>
 				
 				<ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
-					<li><a th:href="@{/logout}" th:text="#{messages.logout}">Logout</a></li>
+					<li><a th:href="@{/logout}" th:text="#{msg.logout}">Logout</a></li>
 				</ul>
 				<form th:action="@{/login}" method="post"
 					sec:authorize="!isAuthenticated()" class="navbar-form navbar-right" role="search">
 					<div class="form-group">
-			        	<input type="text" id="username" name="username" class="form-control" th:placeholder="#{messages.customerName}"></input>
+			        	<input type="text" id="username" name="username" class="form-control" th:placeholder="#{msg.customerName}"></input>
 			        </div>
 			        <div class="form-group">
-			        	<input type="password" id="password" name="password" class="form-control" th:placeholder="#{messages.password}"></input>
+			        	<input type="password" id="password" name="password" class="form-control" th:placeholder="#{msg.password}"></input>
 			        </div>
-			        <button type="submit" class="btn btn-default" th:text="#{messages.login}">Login</button>
+			        <button type="submit" class="btn btn-default" th:text="#{msg.login}">Login</button>
 				</form>
-				<p sec:authorize="isAuthenticated()" class="navbar-text navbar-right" th:text="#{messages.welcome(${loggedCustomer})}">You are logged as</p>
+				<p sec:authorize="isAuthenticated()" class="navbar-text navbar-right" th:text="#{msg.welcome(${loggedCustomer})}">You are logged as</p>
 			</div>
 		</div>
 	</nav>

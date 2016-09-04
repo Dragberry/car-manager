@@ -23,6 +23,7 @@ import net.dragberry.carmanager.service.validation.ValidationService;
 import net.dragberry.carmanager.to.ResultList;
 import net.dragberry.carmanager.to.ResultTO;
 import net.dragberry.carmanager.to.TransactionQueryListTO;
+import net.dragberry.carmanager.to.TransactionSummaryTO;
 import net.dragberry.carmanager.to.TransactionTO;
 import net.dragberry.carmanager.common.Currency;
 import net.dragberry.carmanager.ws.client.CurrencyService;
@@ -116,6 +117,17 @@ public class TransactionServiceBean implements TransactionService {
 
 		to.setTransactionKey(transaction.getEntityKey());
 		return new ResultTO<TransactionTO>(to);
+	}
+
+	@Override
+	public ResultTO<TransactionSummaryTO> fetchSummary(TransactionQueryListTO query) {
+		TransactionSummaryTO summary = new TransactionSummaryTO();
+		Object[] total = transactionDao.summary(query);
+		summary.setTotalAmount(((BigDecimal) total[0]).setScale(2, RoundingMode.HALF_UP));
+		summary.setTotalAmountByCustomer(((BigDecimal) total[1]).setScale(2, RoundingMode.HALF_UP));
+		summary.setTotalFuelAmount(((BigDecimal) total[2]).setScale(2, RoundingMode.HALF_UP));
+		summary.setDisplayCurrency(Currency.USD);
+		return new ResultTO<TransactionSummaryTO>(summary);
 	}
 
 }

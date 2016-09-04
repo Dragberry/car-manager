@@ -26,12 +26,22 @@ public class TransactionQueryListTO extends QueryListTO {
 	
 	private Long carKey;
 	
+	private Long carOwnerKey;
+	
 	private Long customerKey;
 	
 	private Double fuelQuantityTo;
 
 	private Double fuelQuantityFrom;
 	
+	public Long getCarOwnerKey() {
+		return carOwnerKey;
+	}
+
+	public void setCarOwnerKey(Long carOwnerKey) {
+		this.carOwnerKey = carOwnerKey;
+	}
+
 	public BigDecimal getAmountTo() {
 		return amountTo;
 	}
