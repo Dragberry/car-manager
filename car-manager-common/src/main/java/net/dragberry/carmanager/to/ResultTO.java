@@ -9,13 +9,13 @@ public class ResultTO<T extends TransferObject> implements TransferObject {
 	
 	private T object;
 	
-	private Collection<ValidationIssue<T>> issues = new ArrayList<>();
+	private Collection<IssueTO> issues = new ArrayList<>();
 	
 	public ResultTO(T object) {
 		this.object = object;
 	}
 	
-	public ResultTO(T object, Collection<ValidationIssue<T>> issues) {
+	public ResultTO(T object, Collection<IssueTO> issues) {
 		this.object = object;
 		this.issues = issues;
 	}
@@ -24,7 +24,7 @@ public class ResultTO<T extends TransferObject> implements TransferObject {
 		return object;
 	}
 
-	public Collection<ValidationIssue<T>> getIssues() {
+	public Collection<IssueTO> getIssues() {
 		return issues;
 	}
 
