@@ -17,7 +17,7 @@
 	</div>
 	
 	<div layout:fragment="data">
-		<div id="summaryPanel" class="col-md-12">
+		<div id="summaryPanel" class="row">
 			<fieldset>
 				<legend th:text="#{msg.transaction.summary}">Summary</legend>
 				<div class="col-md-4">
@@ -40,7 +40,10 @@
 				</div>
 			</fieldset>
 		</div>
-		<div id="dataTablePanel" class="col-md-12">
+		<div class="row">
+			<br/>
+		</div>
+		<div id="dataTablePanel" class="row">
 			<table class="table">
 				<tr>
 					<th th:text="Index">Index</th>
