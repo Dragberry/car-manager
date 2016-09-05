@@ -1,5 +1,6 @@
 package net.dragberry.carmanager.web.controller.transaction;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import net.dragberry.carmanager.service.CarService;
 import net.dragberry.carmanager.service.TransactionService;
 import net.dragberry.carmanager.service.TransactionTypeService;
 import net.dragberry.carmanager.to.CarTO;
+import net.dragberry.carmanager.to.FuelTO;
 import net.dragberry.carmanager.to.ResultList;
 import net.dragberry.carmanager.to.ResultTO;
 import net.dragberry.carmanager.to.TransactionQueryListTO;
@@ -62,7 +64,10 @@ public class TransactionController {
 	
 	@RequestMapping(value = Constants.Path.TRANSACTION_CREATE, method = RequestMethod.GET)
 	public ModelAndView createTransaction() {
-		return prepareCreateTransactionScreen(new TransactionTO());
+		TransactionTO to = new TransactionTO();
+		to.setExecutionDate(LocalDate.now());
+		to.setFuel(new FuelTO());
+		return prepareCreateTransactionScreen(to);
 	}
 
 	private ModelAndView prepareCreateTransactionScreen(TransactionTO transaction) {

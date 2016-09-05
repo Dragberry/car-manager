@@ -29,6 +29,10 @@
 	<script th:src="@{/resources/js/bootstrap.min.js}"></script>
 	<script th:src="@{/resources/js/moment-with-locales.min.js}"></script>
 	<script th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
+	<script th:src="@{/resources/js/jquery.mask.min.js}"></script>
+	<script>
+		$('.amount').mask("000000.00", {reverse: true});
+	</script>
 	<th:block layout:fragment="script"></th:block>
 </body>
 </html>
