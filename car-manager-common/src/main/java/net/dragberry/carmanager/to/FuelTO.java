@@ -44,4 +44,8 @@ public class FuelTO implements TransferObject {
 		this.type = type;
 	}
 
+	public boolean isValid() {
+		return cost != null && quantity != null && type != null;
+	}
+
 }

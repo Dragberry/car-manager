@@ -24,6 +24,7 @@ import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
 import net.dragberry.carmanager.service.validation.ValidationIssue;
 import net.dragberry.carmanager.service.validation.ValidationService;
+import net.dragberry.carmanager.to.FuelTO;
 import net.dragberry.carmanager.to.IssueTO;
 import net.dragberry.carmanager.to.ResultList;
 import net.dragberry.carmanager.to.ResultTO;
@@ -109,7 +110,7 @@ public class TransactionServiceBean implements TransactionService {
 		Customer customer = customerDao.findOne(to.getCustomerKey());
 		transaction.setCustomer(customer);
 		
-		if (to.getFuel() != null) {
+		if (to.getFuel() != null && to.getFuel().isValid()) {
 			Fuel fuel = new Fuel();
 			fuel.setCost(to.getFuel().getCost());
 			fuel.setQuantity(to.getFuel().getQuantity());

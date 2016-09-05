@@ -72,7 +72,7 @@
 				  	<input id="description" type="text" class="form-control" th:field="*{description}"/>
 				</div>
 				
-				<fieldset class="form-group col-md-12">
+				<fieldset id="fuelPanel" class="form-group col-md-12" hidden="true">
 					<legend th:text="#{msg.fuel}">Fuel</legend>
 					<div class="form-group col-md-4">
 						<label th:for="*{fuel.quantity}" th:text="#{msg.quantity}">Quantity</label>
@@ -158,9 +158,10 @@
 				function enableFuelPanel(enabled) {
 					$("#amount").prop("readonly", enabled);
 					$("#description").prop("readonly", enabled);
-					$("#fuelQuantity").prop("readonly", !enabled);
-					$("#fuelType").prop("readonly", !enabled);
-					$("#fuelCost").prop("readonly", !enabled);
+					$("#fuelQuantity").prop("disabled", !enabled);
+					$("#fuelType").prop("disabled", !enabled);
+					$("#fuelCost").prop("disabled", !enabled);
+					$("#fuelPanel").prop("hidden", !enabled);
 				}
 	       	});
     	</script>
