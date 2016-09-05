@@ -103,20 +103,35 @@
 	            	locale: 'ru',
 	            	format: 'YYYY-MM-DD'
 	            });
-	            $('#fuelQuantity').mask("000.000", {reverse: true});
-	            $('#fuelType').mask("AAAA", {reverse: true});
+	            $('#fuelQuantity').mask("##0.00", {reverse: true});
+	            $('#fuelType').mask("AAAA", {
+	            	reverse: true,
+	            	translation: {
+	            		'A' : {
+	            			pattern: /.{1,4}/
+	            		}
+	            	}
+	            	});
 	            
 	            $("#transactionType").change(function() {
 	            	switchFuelPanel();
 				});
+	            
+	            $("#fuelCost, #fuelQuantity").keyup(function() {
+	            	var cost = $("#fuelCost").val();
+	            	var quantity = $("#fuelQuantity").val();
+	            	$("#amount").val((cost * quantity).toFixed(2));
+	            });
 				
 				$("#fuelType, #fuelQuantity").keyup(function() {
 					var quantity = $("#fuelQuantity").val();
-					var lt = "литра ";
-					if (quantity.match(/[056789]$/)) {
-						lt = "литров ";
-					} else if (quantity.match(/[1]$/)) {
-						lt = "литр ";
+					var lt = " литра ";
+					if (quantity.match(/[\.,]/)) {
+						lt = " литра ";
+					} else if (quantity.match(/([056789]|(1[1-9]))$/)) {
+						lt = " литров ";
+					} else if (quantity.match(/\d*[1]$/)) {
+						lt = " литр ";
 					}
 					var desc = quantity + lt + $("#fuelType").val() + " бензина";
 					$("#description").val(desc);
@@ -132,11 +147,11 @@
 				}
 				
 				function enableFuelPanel(enabled) {
-					$("#amount").prop("disabled", enabled);
-					$("#description").prop("disabled", enabled);
-					$("#fuelQuantity").prop("disabled", !enabled);
-					$("#fuelType").prop("disabled", !enabled);
-					$("#fuelCost").prop("disabled", !enabled);
+					$("#amount").prop("readonly", enabled);
+					$("#description").prop("readonly", enabled);
+					$("#fuelQuantity").prop("readonly", !enabled);
+					$("#fuelType").prop("readonly", !enabled);
+					$("#fuelCost").prop("readonly", !enabled);
 				}
 	       	});
     	</script>

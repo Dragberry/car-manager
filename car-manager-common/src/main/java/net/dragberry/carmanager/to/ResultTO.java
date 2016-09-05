@@ -27,5 +27,9 @@ public class ResultTO<T extends TransferObject> implements TransferObject {
 	public Collection<IssueTO> getIssues() {
 		return issues;
 	}
+	
+	public boolean hasIssues() {
+		return true;
+	}
 
 }

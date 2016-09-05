@@ -3,6 +3,10 @@ package net.dragberry.carmanager.web.common;
 public interface Constants {
 	
 	interface Path {
+		static String redirect(String path) {
+			return REDIRECT + path;
+		}
+		String REDIRECT = "redirect:";
 		// home
 		String HOME = "/";
 		String LOGIN = "/login";
@@ -18,7 +22,6 @@ public interface Constants {
 		// home
 		String HOME = "home/index";
 		String LOGIN = "home/login";
-		String HOME_REDIRECT = "redirect:" + Path.HOME;
 		String REGISTRATION = "home/registration";
 		
 		String TRANSACTION_LIST = "transaction/transaction-list";

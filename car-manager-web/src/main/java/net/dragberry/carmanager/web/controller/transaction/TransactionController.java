@@ -59,7 +59,12 @@ public class TransactionController {
 	
 	@RequestMapping(value = Constants.Path.TRANSACTION_CREATE, method = RequestMethod.POST)
 	public ModelAndView submitTransaction(TransactionTO transaction) {
-		return prepareCreateTransactionScreen(transaction);
+		ResultTO<TransactionTO> result = transactionService.createTransaction(transaction);
+		if (result.hasIssues()) {
+			return new ModelAndView(Constants.Path.redirect(Constants.Path.TRANSACTION_LIST));
+		} else {
+			return prepareCreateTransactionScreen(transaction);
+		}
 	}
 	
 	@RequestMapping(value = Constants.Path.TRANSACTION_CREATE, method = RequestMethod.GET)
