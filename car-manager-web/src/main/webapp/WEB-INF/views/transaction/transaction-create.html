@@ -47,7 +47,7 @@
 				  		th:text="#{msg.transactionType}">
 				  		Transaction type
 				  	</label>
-				  	<select class="form-control" th:field="*{transactionTypeKey}">
+				  	<select id="transactionType" class="form-control" th:field="*{transactionTypeKey}">
 				  		<option th:each="type : ${transactionTypeList}" 
 				        	th:value="${type.transactionTypeKey}" 
 				        	th:text="${type.name}"/>
@@ -57,7 +57,7 @@
 			<div class="col-md-6" >
 				<div class="form-group col-md-8">
 					<label th:for="*{amount}" th:text="#{msg.amount}">Amount</label>
-				  	<input type="text" class="form-control amount" th:field="*{amount}"/>
+				  	<input id="amount" type="text" class="form-control amount" th:field="*{amount}"/>
 				</div>
 				<div class="form-group col-md-4">
 					<label th:for="*{currency}" th:text="#{msg.currency}">Currency</label>
@@ -69,7 +69,7 @@
 				</div>
 				<div class="form-group col-md-12">
 					<label th:for="*{description}" th:text="#{msg.description}">Description</label>
-				  	<input type="text" class="form-control" th:field="*{description}"/>
+				  	<input id="description" type="text" class="form-control" th:field="*{description}"/>
 				</div>
 				
 				<fieldset class="form-group col-md-12">
@@ -84,7 +84,7 @@
 					</div>
 					<div class="form-group col-md-4">
 						<label th:for="*{fuel.cost}" th:text="#{msg.cost}">Cost</label>
-					  	<input type="text" class="form-control amount" th:field="*{fuel.cost}"/>
+					  	<input id="fuelCost" type="text" class="form-control amount" th:field="*{fuel.cost}"/>
 					</div>
 				</fieldset>
 			</div>
@@ -97,12 +97,47 @@
 	<th:block layout:fragment="script">
 		<script>
 	    	$(document).ready(function() {
+	    		switchFuelPanel();
+	    	
 	        	$('#transactionExecutionDate').datetimepicker({
 	            	locale: 'ru',
 	            	format: 'YYYY-MM-DD'
 	            });
 	            $('#fuelQuantity').mask("000.000", {reverse: true});
 	            $('#fuelType').mask("AAAA", {reverse: true});
+	            
+	            $("#transactionType").change(function() {
+	            	switchFuelPanel();
+				});
+				
+				$("#fuelType, #fuelQuantity").keyup(function() {
+					var quantity = $("#fuelQuantity").val();
+					var lt = "литра ";
+					if (quantity.match(/[056789]$/)) {
+						lt = "литров ";
+					} else if (quantity.match(/[1]$/)) {
+						lt = "литр ";
+					}
+					var desc = quantity + lt + $("#fuelType").val() + " бензина";
+					$("#description").val(desc);
+				});
+				
+				function switchFuelPanel() {
+					var selectedType = $("#transactionType").find(":selected").attr("value");
+	            	if (selectedType == 1) {
+	            		enableFuelPanel(true);
+	            	} else {
+	            		enableFuelPanel(false);
+	            	}
+				}
+				
+				function enableFuelPanel(enabled) {
+					$("#amount").prop("disabled", enabled);
+					$("#description").prop("disabled", enabled);
+					$("#fuelQuantity").prop("disabled", !enabled);
+					$("#fuelType").prop("disabled", !enabled);
+					$("#fuelCost").prop("disabled", !enabled);
+				}
 	       	});
     	</script>
 	</th:block>
