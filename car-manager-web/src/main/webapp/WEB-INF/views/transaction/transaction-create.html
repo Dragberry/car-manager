@@ -50,7 +50,7 @@
 				  	<select id="transactionType" class="form-control" th:field="*{transactionTypeKey}">
 				  		<option th:each="type : ${transactionTypeList}" 
 				        	th:value="${type.transactionTypeKey}" 
-				        	th:text="${type.name}"/>
+				        	th:text="#{msg.transactionType. + ${type.name}}"/>
 				  	</select>
 				</div>
 			</div>
@@ -133,7 +133,7 @@
 					} else if (quantity.match(/\d*[1]$/)) {
 						lt = " литр ";
 					}
-					var desc = quantity + lt + $("#fuelType").val() + " бензина";
+					var desc = quantity + lt + "бензина '" + $("#fuelType").val() + "'";
 					$("#description").val(desc);
 				});
 				
@@ -143,7 +143,16 @@
 	            		enableFuelPanel(true);
 	            	} else {
 	            		enableFuelPanel(false);
+	            		resetFuelPanel();
 	            	}
+				}
+				
+				function resetFuelPanel() {
+					$("#fuelQuantity").val("");
+					$("#fuelType").val("");
+					$("#fuelCost").val("");
+					$("#amount").val("");
+					$("#description").val("");
 				}
 				
 				function enableFuelPanel(enabled) {
