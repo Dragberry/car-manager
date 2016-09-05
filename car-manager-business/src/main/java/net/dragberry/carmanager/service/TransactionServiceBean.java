@@ -137,9 +137,9 @@ public class TransactionServiceBean implements TransactionService {
 	public ResultTO<TransactionSummaryTO> fetchSummary(TransactionQueryListTO query) {
 		TransactionSummaryTO summary = new TransactionSummaryTO();
 		Object[] total = transactionDao.summary(query);
-		summary.setTotalAmount(((BigDecimal) total[0]).setScale(2, RoundingMode.HALF_UP));
-		summary.setTotalAmountByCustomer(((BigDecimal) total[1]).setScale(2, RoundingMode.HALF_UP));
-		summary.setTotalFuelAmount(((BigDecimal) total[2]).setScale(2, RoundingMode.HALF_UP));
+		summary.setTotalAmount(total[0] == null ? BigDecimal.ZERO : ((BigDecimal) total[0]).setScale(2, RoundingMode.HALF_UP));
+		summary.setTotalAmountByCustomer(total[1] == null ? BigDecimal.ZERO : ((BigDecimal) total[1]).setScale(2, RoundingMode.HALF_UP));
+		summary.setTotalFuelAmount(total[2] == null ? BigDecimal.ZERO : ((BigDecimal) total[2]).setScale(2, RoundingMode.HALF_UP));
 		summary.setDisplayCurrency(Currency.USD);
 		return new ResultTO<TransactionSummaryTO>(summary);
 	}

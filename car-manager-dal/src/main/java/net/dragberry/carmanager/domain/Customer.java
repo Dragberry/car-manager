@@ -2,17 +2,23 @@ package net.dragberry.carmanager.domain;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.MapKeyEnumerated;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -53,6 +59,13 @@ public class Customer extends AbstractEntity {
         joinColumns = @JoinColumn(name = "CUSTOMER_KEY", referencedColumnName = "CUSTOMER_KEY"), 
         inverseJoinColumns = @JoinColumn(name = "ROLE_KEY", referencedColumnName = "ROLE_KEY"))
 	private Set<Role> roles = new HashSet<Role>();
+	
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "CUSTOMER_SETTING", joinColumns = @JoinColumn(name = "CUSTOMER_KEY", referencedColumnName = "CUSTOMER_KEY"))
+	@MapKeyColumn(name = "NAME")
+	@Column(name = "VALUE")
+	@MapKeyEnumerated(EnumType.STRING)
+	private Map<CustomerSetting, String> settings;
 
 	public String getCustomerName() {
 		return customerName;
@@ -116,6 +129,14 @@ public class Customer extends AbstractEntity {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Map<CustomerSetting, String> getSettings() {
+		return settings;
+	}
+
+	public void setSettings(Map<CustomerSetting, String> settings) {
+		this.settings = settings;
 	}
 	
 }
