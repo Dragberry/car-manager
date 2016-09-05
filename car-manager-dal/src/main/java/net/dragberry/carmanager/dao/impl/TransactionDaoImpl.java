@@ -30,6 +30,7 @@ public class TransactionDaoImpl extends AbstractDao<Transaction> implements Tran
 		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<Transaction> cq = cb.createQuery(Transaction.class);
 		Root<Transaction> tRoot = cq.from(Transaction.class);
+		tRoot.fetch("transactionType");
 		
 		cq.where(buildConditions(cb, tRoot, query));
 		cq.orderBy(cb.asc(tRoot.get("executionDate")));

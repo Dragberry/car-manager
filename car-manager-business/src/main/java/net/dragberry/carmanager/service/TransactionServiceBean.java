@@ -70,6 +70,7 @@ public class TransactionServiceBean implements TransactionService {
 				to.setTransactionKey(tnx.getEntityKey());
 				to.setExecutionDate(tnx.getExecutionDate());
 				to.setDescription(tnx.getDescription());
+				to.setTransactionTypeName(tnx.getTransactionType().getName());
 				
 				Currency currency = tnx.getCurrency();
 				if (query.getDisplayCurrency() != null && query.getDisplayCurrency() !=  currency) {

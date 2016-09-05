@@ -46,18 +46,16 @@
 		<div id="dataTablePanel" class="row">
 			<table class="table">
 				<tr>
-					<th th:text="Index">Index</th>
-					<th th:text="Date">Date</th>
-					<th th:text="Description">Description</th>
-					<th th:text="Amount">Amount</th>
-					<th th:text="Currency">Currency</th>
+					<th th:text="#{msg.date}">Date</th>
+					<th th:text="#{msg.description}">Description</th>
+					<th th:text="#{msg.transactionType}">Transaction type</th>
+					<th th:text="#{msg.amount}">Amount</th>
 				</tr>
 				<tr th:each="transaction : ${transactionList}">
-					<td th:text="${transaction.transactionKey}">Index</td>
 					<td th:text="${transaction.executionDate}">Date</td>
 					<td th:text="${transaction.description}">Description</td>
-					<td th:text="${transaction.amount}">Amount</td>
-					<td th:text="${transaction.currency}">Currency</td>
+					<td th:text="${transaction.transactionTypeName}">Transaction type</td>
+					<td th:text="${transaction.amount} + ' ' + ${transaction.currency}" class="text-right">Amount</td>
 				</tr>
 			</table>
 		</div>
