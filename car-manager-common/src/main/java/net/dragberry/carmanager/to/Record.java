@@ -34,6 +34,10 @@ public class Record implements TransferObject {
 	
 	private double exchangeRateReal;
 	
+	private double loanPaymentBYR;
+	
+	private double loanPaymentUSD;
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -48,6 +52,8 @@ public class Record implements TransferObject {
 		sb.append("][tax=").append(tax);
 		sb.append("][exchangeRate=").append(exchangeRate);
 		sb.append("][exchangeRateReal=").append(exchangeRateReal);
+		sb.append("][loanPaymentBYR=").append(loanPaymentBYR);
+		sb.append("][loanPaymentUSD=").append(loanPaymentUSD);
 		sb.append("]");
 		return sb.toString();
 	}
@@ -138,6 +144,22 @@ public class Record implements TransferObject {
 
 	public void setExchangeRateReal(double exchangeRateReal) {
 		this.exchangeRateReal = exchangeRateReal;
+	}
+
+	public double getLoanPaymentBYR() {
+		return loanPaymentBYR;
+	}
+
+	public void setLoanPaymentBYR(double loanPaymentBYR) {
+		this.loanPaymentBYR = loanPaymentBYR;
+	}
+
+	public double getLoanPaymentUSD() {
+		return loanPaymentUSD;
+	}
+
+	public void setLoanPaymentUSD(double loanPaymentUSD) {
+		this.loanPaymentUSD = loanPaymentUSD;
 	}
 	
 }

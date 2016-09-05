@@ -45,6 +45,9 @@ public class Transaction extends AbstractEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CUSTOMER_KEY", referencedColumnName = "CUSTOMER_KEY")
 	private Customer customer;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CREDITOR_KEY", referencedColumnName = "CUSTOMER_KEY")
+	private Customer creditor;
 	@Embedded
 	private Fuel fuel;
 
@@ -131,6 +134,14 @@ public class Transaction extends AbstractEntity {
 
 	public void setFuel(Fuel fuel) {
 		this.fuel = fuel;
+	}
+
+	public Customer getCreditor() {
+		return creditor;
+	}
+
+	public void setCreditor(Customer creditor) {
+		this.creditor = creditor;
 	}
 	
 }

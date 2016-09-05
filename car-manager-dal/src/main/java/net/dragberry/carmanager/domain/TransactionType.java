@@ -18,6 +18,9 @@ public class TransactionType extends AbstractEntity {
 	public static final String FUEL = "Fuel";
 	public static final Long FUEL_KEY = 1L;
 	
+	public static final String LOAN_PAYMENT = "LoanPayment";
+	public static final Long LOAN_PAYMENT_KEY = 2L;
+	
 	private String name;
 
 	public String getName() {

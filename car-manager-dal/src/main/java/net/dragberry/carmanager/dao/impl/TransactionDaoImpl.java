@@ -59,8 +59,10 @@ public class TransactionDaoImpl extends AbstractDao<Transaction> implements Tran
 		cq.where(buildConditions(cb, tRoot, query));
 		cq.multiselect(
 				cb.sum(
-						cb.<Number>selectCase().when(cb.equal(tRoot.get("currency"), Currency.USD), 
-								tRoot.<Number>get("amount")).otherwise(cb.quot(tRoot.<BigDecimal>get("amount"), tRoot.<Double>get("exchangeRate")))
+						cb.<Number>selectCase().when(cb.notEqual(tRoot.<Long>get("transactionType"), TransactionType.LOAN_PAYMENT_KEY), 
+								cb.<Number>selectCase().when(cb.equal(tRoot.get("currency"), Currency.USD), 
+										tRoot.<Number>get("amount")).otherwise(cb.quot(tRoot.<BigDecimal>get("amount"), tRoot.<Double>get("exchangeRate")))
+								).otherwise(BigDecimal.ZERO)
 						),
 				cb.sum(
 						cb.<Number>selectCase().when(cb.equal(tRoot.<Long>get("customer"), query.getCarOwnerKey()), 

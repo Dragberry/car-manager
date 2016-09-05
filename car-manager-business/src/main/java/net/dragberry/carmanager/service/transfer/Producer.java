@@ -114,6 +114,12 @@ public class Producer implements Callable<Integer> {
 		case 11:
 			record.setExchangeRateReal(cell.getNumericCellValue());
 			break;
+		case 14:
+			record.setLoanPaymentBYR(cell.getNumericCellValue());
+			break;
+		case 15:
+			record.setLoanPaymentUSD(cell.getNumericCellValue());
+			break;
 		}
 	}
 

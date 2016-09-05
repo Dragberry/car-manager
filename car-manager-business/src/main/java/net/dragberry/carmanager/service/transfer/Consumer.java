@@ -66,7 +66,6 @@ public class Consumer implements Callable<Integer>{
 			
 			Record record= null;
 			while ((record = queue.poll(3, TimeUnit.SECONDS)) != null) {
-//				System.out.println(Thread.currentThread().getName() + " " + record);
 				if (isRecordValid(record)) {
 					processRecord(record);
 				} else {
@@ -102,6 +101,10 @@ public class Consumer implements Callable<Integer>{
 				TransactionType tType = resolveType(record);
 				transaction.setTransactionType(tType);
 				transaction.setCustomer(getCustomer(record, currencyCustomer));
+				
+				if (TransactionType.LOAN_PAYMENT.equals(tType.getName())) {
+					transaction.setCreditor(context.getCustomer(4L));
+				}
 				
 				if (TransactionType.FUEL.equals(tType.getName())) {
 					transaction.setFuel(createFuel(record, transaction));
@@ -150,10 +153,10 @@ public class Consumer implements Callable<Integer>{
 
 	private List<CurrencyCustomer> resolveTransactionCount(Record record) {
 		List<CurrencyCustomer> list = new ArrayList<>(CurrencyCustomer.values().length);
-		if (record.getCostBYR() != 0) {
+		if (record.getCostBYR() != 0 || record.getLoanPaymentBYR() != 0) {
 			list.add(CurrencyCustomer.BYR);
 		}
-		if (record.getCostUSD() != 0) {
+		if (record.getCostUSD() != 0 || record.getLoanPaymentUSD() != 0) {
 			list.add(CurrencyCustomer.USD);
 		}
 		if (record.getCostBYRDad() != 0) {
@@ -168,11 +171,19 @@ public class Consumer implements Callable<Integer>{
 	private BigDecimal resolveAmount(Record record, CurrencyCustomer currencyCustomer) {
 		switch (currencyCustomer) {
 		case BYR:
-			return new BigDecimal(Denominator.denominate(record.getCostBYR())).setScale(2, RoundingMode.HALF_UP);
+			if (TransactionType.LOAN_PAYMENT.equals(record.getType())) {
+				return new BigDecimal(Denominator.denominate(record.getLoanPaymentBYR())).setScale(2, RoundingMode.HALF_UP);
+			} else {
+				return new BigDecimal(Denominator.denominate(record.getCostBYR())).setScale(2, RoundingMode.HALF_UP);
+			}
 		case BYR_DAD:
 			return new BigDecimal(Denominator.denominate(record.getCostBYRDad())).setScale(2, RoundingMode.HALF_UP);
 		case USD:
-			return new BigDecimal(record.getCostUSD()).setScale(2, RoundingMode.HALF_UP);
+			if (TransactionType.LOAN_PAYMENT.equals(record.getType())) {
+				return new BigDecimal(record.getLoanPaymentUSD()).setScale(2, RoundingMode.HALF_UP);
+			} else {
+				return new BigDecimal(record.getCostUSD()).setScale(2, RoundingMode.HALF_UP);
+			}
 		case USD_DAD:
 			return new BigDecimal(record.getCostUSDDad()).setScale(2, RoundingMode.HALF_UP);
 		default:
