@@ -11,6 +11,7 @@ public interface Constants {
 		String REGISTRATION = "/registration";
 		
 		String TRANSACTION_LIST = "/transaction/list";
+		String TRANSACTION_CREATE = "/transaction/create";
 	}
 	
 	static public interface View {
@@ -21,6 +22,7 @@ public interface Constants {
 		String REGISTRATION = "home/registration";
 		
 		String TRANSACTION_LIST = "transaction/transaction-list";
+		String TRANSACTION_CREATE = "transaction/transaction-create";
 	}
 	
 }
