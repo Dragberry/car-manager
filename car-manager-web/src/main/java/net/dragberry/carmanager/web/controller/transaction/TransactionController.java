@@ -1,6 +1,5 @@
 package net.dragberry.carmanager.web.controller.transaction;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.dragberry.carmanager.service.CarService;
 import net.dragberry.carmanager.service.TransactionService;
+import net.dragberry.carmanager.service.TransactionTypeService;
 import net.dragberry.carmanager.to.CarTO;
 import net.dragberry.carmanager.to.ResultList;
 import net.dragberry.carmanager.to.ResultTO;
@@ -17,12 +18,25 @@ import net.dragberry.carmanager.to.TransactionSummaryTO;
 import net.dragberry.carmanager.to.TransactionTO;
 import net.dragberry.carmanager.to.TransactionTypeTO;
 import net.dragberry.carmanager.web.common.Constants;
+import net.dragberry.carmanager.web.security.CMSecurityContext;
 
 @Controller
 public class TransactionController {
 
 	@Autowired
 	private TransactionService transactionService;
+	@Autowired
+	private CarService carService;
+	@Autowired
+	private TransactionTypeService transactionTypeService;
+	
+	private static interface Models {
+		String TRANSACTION_LIST = "transactionList";
+		String TRANSACTION_SUMMARY = "transactionSummary";
+		String CAR_LIST = "carList";
+		String TRANSACTION_TYPE_LIST = "transactionTypeList";
+		String TRANSACTION = "transaction";
+	}
 
 	@RequestMapping(Constants.Path.TRANSACTION_LIST)
 	public ModelAndView transactionList() {
@@ -32,29 +46,20 @@ public class TransactionController {
 		query.setPageSize(200);
 		query.setCarOwnerKey(3L);
 		ResultList<TransactionTO> list = transactionService.fetchList(query);
-		mv.addObject("transactionList", list.getResult());
+		mv.addObject(Models.TRANSACTION_LIST, list.getResult());
 		ResultTO<TransactionSummaryTO> summary = transactionService.fetchSummary(query);
-		mv.addObject("transactionSummary", summary.getObject());
+		mv.addObject(Models.TRANSACTION_SUMMARY, summary.getObject());
 		return mv;
 	}
 	
 	@RequestMapping(value = Constants.Path.TRANSACTION_CREATE)
 	public ModelAndView createTransaction() {
 		ModelAndView modelAndView = new ModelAndView(Constants.View.TRANSACTION_CREATE);
-		List<CarTO> carList = new ArrayList<>();
-		CarTO car = new CarTO();
-		car.setCarKey(1L);
-		car.setBrand("Mercedes-Benz");
-		car.setModel("C180");
-		carList.add(car);
-		modelAndView.addObject("carList", carList);
-		List<TransactionTypeTO> typeList = new ArrayList<>();
-		TransactionTypeTO type = new TransactionTypeTO();
-		type.setName("Fuel");
-		type.setTransactionTypeKey(1L);
-		typeList.add(type);
-		modelAndView.addObject("transactionTypeList", typeList);
-		modelAndView.addObject("transaction", new TransactionTO());
+		List<CarTO> carList = carService.fetchCarsForCustomer(CMSecurityContext.getCustomerKey()).getResult();
+		modelAndView.addObject(Models.CAR_LIST, carList);
+		List<TransactionTypeTO> typeList = transactionTypeService.fetchTypeListforCustomer(CMSecurityContext.getCustomerKey()).getResult();
+		modelAndView.addObject(Models.TRANSACTION_TYPE_LIST, typeList);
+		modelAndView.addObject(Models.TRANSACTION, new TransactionTO());
 		return modelAndView;
 	}
 }
