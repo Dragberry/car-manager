@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.dragberry.carmanager.common.Currency;
 import net.dragberry.carmanager.service.CarService;
 import net.dragberry.carmanager.service.TransactionService;
 import net.dragberry.carmanager.service.TransactionTypeService;
@@ -36,6 +38,7 @@ public class TransactionController {
 		String CAR_LIST = "carList";
 		String TRANSACTION_TYPE_LIST = "transactionTypeList";
 		String TRANSACTION = "transaction";
+		String CURRENCY_LIST = "currencyList";
 	}
 
 	@RequestMapping(Constants.Path.TRANSACTION_LIST)
@@ -52,14 +55,24 @@ public class TransactionController {
 		return mv;
 	}
 	
-	@RequestMapping(value = Constants.Path.TRANSACTION_CREATE)
+	@RequestMapping(value = Constants.Path.TRANSACTION_CREATE, method = RequestMethod.POST)
+	public ModelAndView submitTransaction(TransactionTO transaction) {
+		return prepareCreateTransactionScreen(transaction);
+	}
+	
+	@RequestMapping(value = Constants.Path.TRANSACTION_CREATE, method = RequestMethod.GET)
 	public ModelAndView createTransaction() {
+		return prepareCreateTransactionScreen(new TransactionTO());
+	}
+
+	private ModelAndView prepareCreateTransactionScreen(TransactionTO transaction) {
 		ModelAndView modelAndView = new ModelAndView(Constants.View.TRANSACTION_CREATE);
 		List<CarTO> carList = carService.fetchCarsForCustomer(CMSecurityContext.getCustomerKey()).getResult();
 		modelAndView.addObject(Models.CAR_LIST, carList);
 		List<TransactionTypeTO> typeList = transactionTypeService.fetchTypeListforCustomer(CMSecurityContext.getCustomerKey()).getResult();
 		modelAndView.addObject(Models.TRANSACTION_TYPE_LIST, typeList);
-		modelAndView.addObject(Models.TRANSACTION, new TransactionTO());
+		modelAndView.addObject(Models.TRANSACTION, transaction);
+		modelAndView.addObject(Models.CURRENCY_LIST, Currency.values());
 		return modelAndView;
 	}
 }

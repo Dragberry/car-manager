@@ -3,6 +3,9 @@ package net.dragberry.carmanager.to;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 import net.dragberry.carmanager.common.Currency;
 
 /**
@@ -25,6 +28,7 @@ public class TransactionTO implements TransferObject {
 	
 	private Double exchangeRate;
 	
+	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDate executionDate;
 	
 	private Long customerKey;
