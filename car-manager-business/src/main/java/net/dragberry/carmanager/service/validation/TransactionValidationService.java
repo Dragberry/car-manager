@@ -1,6 +1,7 @@
 package net.dragberry.carmanager.service.validation;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class TransactionValidationService implements ValidationService<Transacti
 			validationGroup.getValidators().forEach(validator -> validator.validate(entity));
 		});
 		
-		return null;
+		return Collections.emptyList();
 	}
 
 }

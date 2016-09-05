@@ -59,6 +59,7 @@ public class TransactionController {
 	
 	@RequestMapping(value = Constants.Path.TRANSACTION_CREATE, method = RequestMethod.POST)
 	public ModelAndView submitTransaction(TransactionTO transaction) {
+		transaction.setCustomerKey(CMSecurityContext.getCustomerKey());
 		ResultTO<TransactionTO> result = transactionService.createTransaction(transaction);
 		if (result.hasIssues()) {
 			return new ModelAndView(Constants.Path.redirect(Constants.Path.TRANSACTION_LIST));

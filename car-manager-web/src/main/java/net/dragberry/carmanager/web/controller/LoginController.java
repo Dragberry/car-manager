@@ -27,7 +27,7 @@ public class LoginController implements Serializable {
 		} catch (ServletException e) {
 			LOG.info("Error while logout action", e);
 		}
-		return Constants.View.HOME_REDIRECT;
+		return Constants.Path.redirect(Constants.Path.HOME);
 	}
 
 	@RequestMapping(value = Constants.Path.LOGIN, method = RequestMethod.GET)

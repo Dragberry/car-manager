@@ -28,7 +28,7 @@ public class TransactionTO implements TransferObject {
 	
 	private Double exchangeRate;
 	
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDate executionDate;
 	
 	private Long customerKey;
