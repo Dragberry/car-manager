@@ -60,7 +60,7 @@ public class Customer extends AbstractEntity {
         inverseJoinColumns = @JoinColumn(name = "ROLE_KEY", referencedColumnName = "ROLE_KEY"))
 	private Set<Role> roles = new HashSet<Role>();
 	
-	@ElementCollection(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable(name = "CUSTOMER_SETTING", joinColumns = @JoinColumn(name = "CUSTOMER_KEY", referencedColumnName = "CUSTOMER_KEY"))
 	@MapKeyColumn(name = "NAME")
 	@Column(name = "VALUE")

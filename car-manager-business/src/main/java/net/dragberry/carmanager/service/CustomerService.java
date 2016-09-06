@@ -1,5 +1,8 @@
 package net.dragberry.carmanager.service;
 
+import java.util.Map;
+
+import net.dragberry.carmanager.domain.CustomerSetting;
 import net.dragberry.carmanager.to.CustomerTO;
 
 /**
@@ -17,4 +20,6 @@ public interface CustomerService {
 	 * @return {@link CustomerTO}
 	 */
 	CustomerTO findByCustomerName(String customerName);
+
+	Map<CustomerSetting, String> fetchCustomerSettings(Long customerKey);
 }

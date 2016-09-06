@@ -1,6 +1,7 @@
 package net.dragberry.carmanager.service;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import net.dragberry.carmanager.dao.CustomerDao;
 import net.dragberry.carmanager.domain.Customer;
+import net.dragberry.carmanager.domain.CustomerSetting;
 import net.dragberry.carmanager.domain.Role;
 import net.dragberry.carmanager.to.CustomerTO;
 
@@ -44,6 +46,11 @@ public class CustomerServiceBean implements CustomerService {
 			to.setRoles(roles);
 		}
 		return to;
+	}
+
+	@Override
+	public Map<CustomerSetting, String> fetchCustomerSettings(Long customerKey) {
+		return customerDao.fetchCustomerSettings(customerKey);
 	}
 
 }

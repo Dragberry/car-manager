@@ -13,6 +13,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import net.dragberry.carmanager.service.CustomerService;
 import net.dragberry.carmanager.web.common.Constants;
 import net.dragberry.carmanager.web.security.CustomerSecurityService;
+import net.dragberry.carmanager.web.security.AuthSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private CustomerService customerService;
+	@Autowired
+	private AuthSuccessHandler authSucessHandler;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -33,9 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 		.authorizeRequests()
 			.antMatchers(Constants.Path.REGISTRATION).not().authenticated()
+			.antMatchers(Constants.Path.TRANSACTION_CREATE).authenticated()
 			.anyRequest().permitAll()
 		.and()
 			.formLogin().loginPage(Constants.Path.LOGIN)
+			.successHandler(authSucessHandler)
 		.and()
 			.exceptionHandling().accessDeniedPage(Constants.Path.ACCESS_DENIED)
 		.and()

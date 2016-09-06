@@ -1,11 +1,18 @@
 package net.dragberry.carmanager.dao.impl;
 
+import java.util.Map;
+
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
 import net.dragberry.carmanager.dao.CustomerDao;
 import net.dragberry.carmanager.domain.Customer;
+import net.dragberry.carmanager.domain.CustomerSetting;
 
 @Repository("customerDao")
 public class CustomerDaoImpl extends AbstractDao<Customer> implements CustomerDao {
@@ -19,6 +26,18 @@ public class CustomerDaoImpl extends AbstractDao<Customer> implements CustomerDa
 		TypedQuery<Customer> query = getEntityManager().createQuery("FROM " + getEntityName() + " e WHERE e.customerName = :customerName", getEntityType());
 		query.setParameter("customerName", name);
 		return query.getSingleResult();
+	}
+
+	@Override
+	public Map<CustomerSetting, String> fetchCustomerSettings(Long customerKey) {
+		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+		CriteriaQuery<Customer> cq = cb.createQuery(getEntityType());
+		Root<Customer> cRoot = cq.from(getEntityType());
+		cRoot.fetch("settings", JoinType.LEFT);
+		cq.where(cb.equal(cRoot.get("entityKey"), customerKey));
+		cq.select(cRoot);
+		Customer customer = getEntityManager().createQuery(cq).getSingleResult();
+		return customer.getSettings();
 	}
 
 }
