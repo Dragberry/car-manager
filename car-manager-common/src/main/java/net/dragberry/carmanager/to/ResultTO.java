@@ -3,6 +3,8 @@ package net.dragberry.carmanager.to;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 public class ResultTO<T extends TransferObject> implements TransferObject {
 
 	private static final long serialVersionUID = -7018780169278859998L;
@@ -29,7 +31,7 @@ public class ResultTO<T extends TransferObject> implements TransferObject {
 	}
 	
 	public boolean hasIssues() {
-		return true;
+		return !CollectionUtils.isEmpty(issues);
 	}
 
 }

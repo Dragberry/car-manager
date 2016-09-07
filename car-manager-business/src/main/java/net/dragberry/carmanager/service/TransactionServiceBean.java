@@ -24,7 +24,6 @@ import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
 import net.dragberry.carmanager.service.validation.ValidationIssue;
 import net.dragberry.carmanager.service.validation.ValidationService;
-import net.dragberry.carmanager.to.FuelTO;
 import net.dragberry.carmanager.to.IssueTO;
 import net.dragberry.carmanager.to.ResultList;
 import net.dragberry.carmanager.to.ResultTO;
@@ -102,13 +101,22 @@ public class TransactionServiceBean implements TransactionService {
 		transaction.setExecutionDate(to.getExecutionDate());
 		
 		transaction.setExchangeRate(currencyService.getExchangeRate(Currency.USD, to.getExecutionDate()));
-		
-		Car car = carDao.findOne(to.getCarKey());
-		transaction.setCar(car);
-		TransactionType tType = transactionTypeDao.findOne(to.getTransactionTypeKey());
-		transaction.setTransactionType(tType);
-		Customer customer = customerDao.findOne(to.getCustomerKey());
-		transaction.setCustomer(customer);
+		if (to.getCarKey() != null) {
+			Car car = carDao.findOne(to.getCarKey());
+			transaction.setCar(car);
+		}
+		if (to.getTransactionTypeKey() != null) {
+			TransactionType tType = transactionTypeDao.findOne(to.getTransactionTypeKey());
+			transaction.setTransactionType(tType);
+		}
+		if (to.getCustomerKey() != null) {
+			Customer customer = customerDao.findOne(to.getCustomerKey());
+			transaction.setCustomer(customer);
+		}
+		if (to.getCreditorKey() != null) {
+			Customer payer = customerDao.findOne(to.getCreditorKey());
+			transaction.setCreditor(payer);
+		}
 		
 		if (to.getFuel() != null && to.getFuel().isValid()) {
 			Fuel fuel = new Fuel();
@@ -120,17 +128,19 @@ public class TransactionServiceBean implements TransactionService {
 		
 		Collection<ValidationIssue<Transaction>> issues = validationService.validate(Arrays.asList(transaction));
 		Set<IssueTO> issuesTO = new HashSet<>();
-		issues.forEach(issue -> {
-			IssueTO issueTO = new IssueTO();
-			issueTO.setMsgCode(issue.getMsgNumber());
-			issueTO.setParams(issue.getParams());
-			issuesTO.add(issueTO);
-		});
-		
-		transaction = transactionDao.create(transaction);
+		if (issues.isEmpty()) {
+			transaction = transactionDao.create(transaction);
+		} else {
+			issues.forEach(issue -> {
+				IssueTO issueTO = new IssueTO();
+				issueTO.setMsgCode(issue.getMsgNumber());
+				issueTO.setParams(issue.getParams());
+				issuesTO.add(issueTO);
+			});
+		}
 
 		to.setTransactionKey(transaction.getEntityKey());
-		return new ResultTO<TransactionTO>(to);
+		return new ResultTO<TransactionTO>(to, issuesTO);
 	}
 
 	@Override

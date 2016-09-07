@@ -41,7 +41,7 @@ public class TransactionTO implements TransferObject {
 	
 	private FuelTO fuel;
 	
-	private Long payerKey;
+	private Long creditorKey;
 
 	public String getDescription() {
 		return description;
@@ -131,12 +131,12 @@ public class TransactionTO implements TransferObject {
 		this.transactionTypeName = transactionTypeName;
 	}
 
-	public Long getPayerKey() {
-		return payerKey;
+	public Long getCreditorKey() {
+		return creditorKey;
 	}
 
-	public void setPayerKey(Long payerKey) {
-		this.payerKey = payerKey;
+	public void setCreditorKey(Long payerKey) {
+		this.creditorKey = payerKey;
 	}
 	
 }

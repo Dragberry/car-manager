@@ -8,7 +8,7 @@ import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.service.validation.TransactionValidationGroup;
 import net.dragberry.carmanager.service.validation.ValidationGroup;
 import net.dragberry.carmanager.service.validation.ValidationService;
-
+import net.dragberry.carmanager.service.validation.validator.AmountValidator;
 import net.dragberry.carmanager.service.validation.validator.CustomerValidator;
 import net.dragberry.carmanager.service.validation.validator.DateValidator;
 
@@ -20,6 +20,7 @@ public class ValidationConfig {
 	public ValidationGroup<Transaction> transactionValidationGroup() {
 		TransactionValidationGroup group = new TransactionValidationGroup();
 		group.add(dateValidator());
+		group.add(amountValidator());
 		group.add(customerValidator());
 		return group;
 	}
@@ -32,6 +33,10 @@ public class ValidationConfig {
 	@Bean
 	public CustomerValidator customerValidator() {
 		return new CustomerValidator();
+	}
+	
+	public AmountValidator amountValidator() {
+		return new AmountValidator();
 	}
 	
 

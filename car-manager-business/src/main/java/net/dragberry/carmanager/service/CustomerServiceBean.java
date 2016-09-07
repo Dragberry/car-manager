@@ -1,12 +1,12 @@
 package net.dragberry.carmanager.service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.dragberry.carmanager.dao.CustomerDao;
 import net.dragberry.carmanager.domain.Customer;
@@ -56,18 +56,22 @@ public class CustomerServiceBean implements CustomerService {
 	}
 
 	@Override
+	@Transactional
 	public ResultList<CustomerTO> fetchPayersForCustomer(Long customerKey) {
 		ResultList<CustomerTO> payerList = new ResultList<>();
-		Set<Customer> customerList = customerDao.fetchPayersForCustomer(customerKey);
-		customerList.forEach(customer -> {
-			CustomerTO payer = new CustomerTO();
-			payer.setCustomerKey(customer.getEntityKey());
-			payer.setFirstName(customer.getFirstName());
-			payer.setLastName(customer.getLastName());
-			payerList.addItem(payer);
-		});
-		payerList.sort((o1, o2) -> o1.getCustomerKey().equals(customerKey) ? -1 : 0);
+		Customer customer = customerDao.fetchWithPayers(customerKey);
+		Set<Customer> customerList = customer.getPayers();
+		payerList.addItem(transfrormCustomer(customer));
+		customerList.forEach(cust -> payerList.addItem(transfrormCustomer(cust)));
 		return payerList;
+	}
+
+	private CustomerTO transfrormCustomer(Customer cust) {
+		CustomerTO to = new CustomerTO();
+		to.setCustomerKey(cust.getEntityKey());
+		to.setFirstName(cust.getFirstName());
+		to.setLastName(cust.getLastName());
+		return to;
 	}
 
 }

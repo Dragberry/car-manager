@@ -64,9 +64,8 @@ public class TransactionController {
 	
 	@RequestMapping(value = Constants.Path.TRANSACTION_CREATE, method = RequestMethod.POST)
 	public ModelAndView submitTransaction(TransactionTO transaction) {
-		transaction.setCustomerKey(CMSecurityContext.getCustomerKey());
 		ResultTO<TransactionTO> result = transactionService.createTransaction(transaction);
-		if (result.hasIssues()) {
+		if (!result.hasIssues()) {
 			return new ModelAndView(Constants.Path.redirect(Constants.Path.TRANSACTION_LIST));
 		} else {
 			return prepareCreateTransactionScreen(transaction);
@@ -77,11 +76,11 @@ public class TransactionController {
 	public ModelAndView createTransaction() {
 		TransactionTO to = new TransactionTO();
 		to.setExecutionDate(LocalDate.now());
-		to.setFuel(new FuelTO());
 		return prepareCreateTransactionScreen(to);
 	}
 
 	private ModelAndView prepareCreateTransactionScreen(TransactionTO transaction) {
+		transaction.setFuel(transaction.getFuel() == null ? new FuelTO() : transaction.getFuel());
 		ModelAndView modelAndView = new ModelAndView(Constants.View.TRANSACTION_CREATE);
 		Long customerKey = CMSecurityContext.getCustomerKey();
 		List<CarTO> carList = carService.fetchCarsForCustomer(customerKey).getResult();

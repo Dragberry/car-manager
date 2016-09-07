@@ -19,6 +19,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.MapKeyEnumerated;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -27,6 +29,11 @@ import javax.persistence.TemporalType;
 @Table(name = "CUSTOMER")
 @AttributeOverrides({
 	@AttributeOverride(column = @Column(name =  "CUSTOMER_KEY"), name = "entityKey")
+})
+@NamedQueries({
+	@NamedQuery(
+			name = "Customer.fetchPayers",
+			query = "select c from Customer c left join c.payers p where c.entityKey  = :customerKey or c.entityKey = p.entityKey")
 })
 public class Customer extends AbstractEntity {
 
