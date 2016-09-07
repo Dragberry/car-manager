@@ -4,6 +4,7 @@ import java.util.Map;
 
 import net.dragberry.carmanager.domain.CustomerSetting;
 import net.dragberry.carmanager.to.CustomerTO;
+import net.dragberry.carmanager.to.ResultList;
 
 /**
  * Customer service
@@ -22,4 +23,6 @@ public interface CustomerService {
 	CustomerTO findByCustomerName(String customerName);
 
 	Map<CustomerSetting, String> fetchCustomerSettings(Long customerKey);
+
+	ResultList<CustomerTO> fetchPayersForCustomer(Long customerKey);
 }

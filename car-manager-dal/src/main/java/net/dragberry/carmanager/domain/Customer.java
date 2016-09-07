@@ -66,6 +66,11 @@ public class Customer extends AbstractEntity {
 	@Column(name = "VALUE")
 	@MapKeyEnumerated(EnumType.STRING)
 	private Map<CustomerSetting, String> settings;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "CUSTOMER_PAYER", 
+	    joinColumns = @JoinColumn(name = "CUSTOMER_KEY", referencedColumnName = "CUSTOMER_KEY"), 
+	    inverseJoinColumns = @JoinColumn(name = "PAYER_KEY", referencedColumnName = "CUSTOMER_KEY"))
+	private Set<Customer> payers;
 
 	public String getCustomerName() {
 		return customerName;
@@ -137,6 +142,14 @@ public class Customer extends AbstractEntity {
 
 	public void setSettings(Map<CustomerSetting, String> settings) {
 		this.settings = settings;
+	}
+
+	public Set<Customer> getPayers() {
+		return payers;
+	}
+
+	public void setPayers(Set<Customer> payers) {
+		this.payers = payers;
 	}
 	
 }

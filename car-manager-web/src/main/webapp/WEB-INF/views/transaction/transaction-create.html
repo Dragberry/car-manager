@@ -53,6 +53,17 @@
 				        	th:text="#{msg.transactionType. + ${type.name}}"/>
 				  	</select>
 				</div>
+				<div class="form-group col-md-8">
+				  	<label th:for="*{payerKey}" 
+				  		th:text="#{msg.payer}">
+				  		Payer
+				  	</label>
+				  	<select id="creditor" class="form-control" th:field="*{payerKey}">
+				  		<option th:each="payer : ${payerList}" 
+				        	th:value="${payer.customerKey}" 
+				        	th:text="${payer.firstName} + ' ' + ${payer.lastName}"/>
+				  	</select>
+				</div>
 			</div>
 			<div class="col-md-6" >
 				<div class="form-group col-md-8">
@@ -64,8 +75,7 @@
 					<select class="form-control" th:field="*{currency}">
 				  		<option th:each="currency : ${currencyList}" 
 				        	th:value="${currency}" 
-				        	th:text="${currency}"
-				        	th:attr="${sessionScope.customerSettings.PREFERRED_PAYMENT_CURRENCY == currency ? 'selected' : ''"/>
+				        	th:text="${currency}"/>
 				  	</select>
 				</div>
 				<div class="form-group col-md-12">

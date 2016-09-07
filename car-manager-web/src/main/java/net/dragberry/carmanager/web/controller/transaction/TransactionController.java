@@ -11,9 +11,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import net.dragberry.carmanager.common.Currency;
 import net.dragberry.carmanager.service.CarService;
+import net.dragberry.carmanager.service.CustomerService;
 import net.dragberry.carmanager.service.TransactionService;
 import net.dragberry.carmanager.service.TransactionTypeService;
 import net.dragberry.carmanager.to.CarTO;
+import net.dragberry.carmanager.to.CustomerTO;
 import net.dragberry.carmanager.to.FuelTO;
 import net.dragberry.carmanager.to.ResultList;
 import net.dragberry.carmanager.to.ResultTO;
@@ -30,6 +32,8 @@ public class TransactionController {
 	@Autowired
 	private TransactionService transactionService;
 	@Autowired
+	private CustomerService customerService;
+	@Autowired
 	private CarService carService;
 	@Autowired
 	private TransactionTypeService transactionTypeService;
@@ -41,6 +45,7 @@ public class TransactionController {
 		String TRANSACTION_TYPE_LIST = "transactionTypeList";
 		String TRANSACTION = "transaction";
 		String CURRENCY_LIST = "currencyList";
+		String PAYER_LIST = "payerList";
 	}
 
 	@RequestMapping(Constants.Path.TRANSACTION_LIST)
@@ -78,11 +83,14 @@ public class TransactionController {
 
 	private ModelAndView prepareCreateTransactionScreen(TransactionTO transaction) {
 		ModelAndView modelAndView = new ModelAndView(Constants.View.TRANSACTION_CREATE);
-		List<CarTO> carList = carService.fetchCarsForCustomer(CMSecurityContext.getCustomerKey()).getResult();
+		Long customerKey = CMSecurityContext.getCustomerKey();
+		List<CarTO> carList = carService.fetchCarsForCustomer(customerKey).getResult();
 		modelAndView.addObject(Models.CAR_LIST, carList);
-		List<TransactionTypeTO> typeList = transactionTypeService.fetchTypeListforCustomer(CMSecurityContext.getCustomerKey()).getResult();
+		List<TransactionTypeTO> typeList = transactionTypeService.fetchTypeListforCustomer(customerKey).getResult();
 		modelAndView.addObject(Models.TRANSACTION_TYPE_LIST, typeList);
 		modelAndView.addObject(Models.TRANSACTION, transaction);
+		List<CustomerTO> payerList = customerService.fetchPayersForCustomer(customerKey).getResult();
+		modelAndView.addObject(Models.PAYER_LIST, payerList);
 		modelAndView.addObject(Models.CURRENCY_LIST, Currency.values());
 		return modelAndView;
 	}

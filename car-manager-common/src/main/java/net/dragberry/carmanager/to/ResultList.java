@@ -1,6 +1,7 @@
 package net.dragberry.carmanager.to;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ResultList<T extends TransferObject> implements TransferObject {
@@ -49,6 +50,10 @@ public class ResultList<T extends TransferObject> implements TransferObject {
 
 	public void setResult(List<T> result) {
 		this.result = result;
+	}
+
+	public void sort(Comparator<T> comparator) {
+		result.sort(comparator);
 	}
 	
 }

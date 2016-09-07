@@ -1,6 +1,7 @@
 package net.dragberry.carmanager.service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import net.dragberry.carmanager.domain.Customer;
 import net.dragberry.carmanager.domain.CustomerSetting;
 import net.dragberry.carmanager.domain.Role;
 import net.dragberry.carmanager.to.CustomerTO;
+import net.dragberry.carmanager.to.ResultList;
 
 /**
  * Customer service bean
@@ -51,6 +53,21 @@ public class CustomerServiceBean implements CustomerService {
 	@Override
 	public Map<CustomerSetting, String> fetchCustomerSettings(Long customerKey) {
 		return customerDao.fetchCustomerSettings(customerKey);
+	}
+
+	@Override
+	public ResultList<CustomerTO> fetchPayersForCustomer(Long customerKey) {
+		ResultList<CustomerTO> payerList = new ResultList<>();
+		Set<Customer> customerList = customerDao.fetchPayersForCustomer(customerKey);
+		customerList.forEach(customer -> {
+			CustomerTO payer = new CustomerTO();
+			payer.setCustomerKey(customer.getEntityKey());
+			payer.setFirstName(customer.getFirstName());
+			payer.setLastName(customer.getLastName());
+			payerList.addItem(payer);
+		});
+		payerList.sort((o1, o2) -> o1.getCustomerKey().equals(customerKey) ? -1 : 0);
+		return payerList;
 	}
 
 }
