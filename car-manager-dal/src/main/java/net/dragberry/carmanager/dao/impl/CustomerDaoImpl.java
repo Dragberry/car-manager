@@ -1,7 +1,6 @@
 package net.dragberry.carmanager.dao.impl;
 
 import java.util.Map;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
@@ -22,9 +21,9 @@ public class CustomerDaoImpl extends AbstractDao<Customer> implements CustomerDa
 
 	@Override
 	public Customer findByCustomerName(String name) {
-		TypedQuery<Customer> query = getEntityManager().createQuery("FROM " + getEntityName() + " e WHERE e.customerName = :customerName", getEntityType());
-		query.setParameter("customerName", name);
-		return query.getSingleResult();
+		return getEntityManager().createNamedQuery(Customer.FIND_BY_CUSTOMER_NAME_QUERY, getEntityType())
+			.setParameter("customerName", name)
+			.getSingleResult();
 	}
 
 	@Override
@@ -41,9 +40,9 @@ public class CustomerDaoImpl extends AbstractDao<Customer> implements CustomerDa
 
 	@Override
 	public Customer fetchWithPayers(Long customerKey) {
-		TypedQuery<Customer> query = getEntityManager().createNamedQuery("Customer.fetchPayers", getEntityType());
-		query.setParameter("customerKey", customerKey);
-		return query.getSingleResult();
+		return getEntityManager().createNamedQuery(Customer.FETCH_PAYERS_QUERY, getEntityType())
+				.setParameter("customerKey", customerKey)
+				.getSingleResult();
 	}
 
 }

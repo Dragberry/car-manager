@@ -32,12 +32,18 @@ import javax.persistence.TemporalType;
 })
 @NamedQueries({
 	@NamedQuery(
-			name = "Customer.fetchPayers",
-			query = "select c from Customer c left join c.payers p where c.entityKey  = :customerKey or c.entityKey = p.entityKey")
+			name = Customer.FETCH_PAYERS_QUERY,
+			query = "select c from Customer c left join c.payers p where c.entityKey  = :customerKey or c.entityKey = p.entityKey"),
+	@NamedQuery(
+			name = Customer.FIND_BY_CUSTOMER_NAME_QUERY,
+			query = "select c from Customer c where c.customerName = :customerName")
 })
 public class Customer extends AbstractEntity {
 
 	private static final long serialVersionUID = 1951614770708868066L;
+	
+	public static final String FETCH_PAYERS_QUERY = "Customer.fetchPayers";
+	public static final String FIND_BY_CUSTOMER_NAME_QUERY = "Customer.findByCustomerNAme";
 
 	@Column(name = "CUSTOMER_NAME")
 	private String customerName;

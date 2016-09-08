@@ -114,8 +114,8 @@ public class TransactionServiceBean implements TransactionService {
 			transaction.setCustomer(customer);
 		}
 		if (to.getCreditorKey() != null) {
-			Customer payer = customerDao.findOne(to.getCreditorKey());
-			transaction.setCreditor(payer);
+			Customer creditor = customerDao.findOne(to.getCreditorKey());
+			transaction.setCreditor(creditor);
 		}
 		
 		if (to.getFuel() != null && to.getFuel().isValid()) {

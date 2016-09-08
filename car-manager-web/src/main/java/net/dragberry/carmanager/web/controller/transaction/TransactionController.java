@@ -46,6 +46,7 @@ public class TransactionController {
 		String TRANSACTION = "transaction";
 		String CURRENCY_LIST = "currencyList";
 		String PAYER_LIST = "payerList";
+		String CREDITOR_LIST = "creditorList";
 	}
 
 	@RequestMapping(Constants.Path.TRANSACTION_LIST)
@@ -90,6 +91,8 @@ public class TransactionController {
 		modelAndView.addObject(Models.TRANSACTION, transaction);
 		List<CustomerTO> payerList = customerService.fetchPayersForCustomer(customerKey).getResult();
 		modelAndView.addObject(Models.PAYER_LIST, payerList);
+		List<CustomerTO> creditorList = customerService.fetchCreditorsForCustomer(customerKey).getResult();
+		modelAndView.addObject(Models.CREDITOR_LIST, creditorList);
 		modelAndView.addObject(Models.CURRENCY_LIST, Currency.values());
 		return modelAndView;
 	}

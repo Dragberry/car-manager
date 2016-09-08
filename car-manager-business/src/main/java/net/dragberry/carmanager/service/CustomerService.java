@@ -25,4 +25,6 @@ public interface CustomerService {
 	Map<CustomerSetting, String> fetchCustomerSettings(Long customerKey);
 
 	ResultList<CustomerTO> fetchPayersForCustomer(Long customerKey);
+	
+	ResultList<CustomerTO> fetchCreditorsForCustomer(Long customerKey);
 }
