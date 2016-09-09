@@ -1,5 +1,6 @@
 package net.dragberry.carmanager.service;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -8,12 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.dragberry.carmanager.common.Currency;
 import net.dragberry.carmanager.dao.CustomerDao;
 import net.dragberry.carmanager.domain.Customer;
 import net.dragberry.carmanager.domain.CustomerSetting;
 import net.dragberry.carmanager.domain.Role;
+import net.dragberry.carmanager.to.CustomerSettingsTO;
 import net.dragberry.carmanager.to.CustomerTO;
 import net.dragberry.carmanager.to.ResultList;
+import net.dragberry.carmanager.to.TransactionTypeTO;
 
 /**
  * Customer service bean
@@ -26,6 +30,9 @@ public class CustomerServiceBean implements CustomerService {
 
 	@Autowired
 	private CustomerDao customerDao;
+	
+	@Autowired
+	private TransactionTypeService transactionTypeService;
 	
 	@Override
 	public CustomerTO findByCustomerName(String customerName) {
@@ -51,8 +58,28 @@ public class CustomerServiceBean implements CustomerService {
 	}
 
 	@Override
-	public Map<CustomerSetting, String> fetchCustomerSettings(Long customerKey) {
-		return customerDao.fetchCustomerSettings(customerKey);
+	public CustomerSettingsTO fetchCustomerSettings(Long customerKey) {
+		CustomerSettingsTO settingsTO = new CustomerSettingsTO();
+		Map<CustomerSetting, String> settings = customerDao.fetchCustomerSettings(customerKey);
+		String currency = settings.get(CustomerSetting.PREFERRED_PAYMENT_CURRENCY);
+		if (currency != null) {
+			settingsTO.setPreferredPaymentCurrency(Currency.valueOf(currency));
+		}
+		String type = settings.get(CustomerSetting.PREFERRED_PAYMENT_TYPE);
+		if (type != null) {
+			TransactionTypeTO typeTO = transactionTypeService.fetchTypeByName(type).getObject();
+			settingsTO.setPreferredPaymentType(typeTO);
+		}
+		settingsTO.getPreferredFuel().setType(settings.get(CustomerSetting.PREFERRED_FUEL_TYPE));
+		String fueldCost = settings.get(CustomerSetting.LAST_FUEL_COST);
+		if (fueldCost != null) {
+			settingsTO.getPreferredFuel().setCost(new BigDecimal(fueldCost));
+		}
+		String fuelQuantity = settings.get(CustomerSetting.PREFERRED_FUEL_QUANTITY);
+		if (fuelQuantity != null) {
+			settingsTO.getPreferredFuel().setQuantity(Double.valueOf(fuelQuantity));
+		}
+		return settingsTO;
 	}
 
 	@Override

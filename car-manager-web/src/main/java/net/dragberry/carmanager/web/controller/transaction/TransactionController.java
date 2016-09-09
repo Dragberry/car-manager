@@ -1,12 +1,15 @@
 package net.dragberry.carmanager.web.controller.transaction;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.dragberry.carmanager.common.Currency;
@@ -15,6 +18,7 @@ import net.dragberry.carmanager.service.CustomerService;
 import net.dragberry.carmanager.service.TransactionService;
 import net.dragberry.carmanager.service.TransactionTypeService;
 import net.dragberry.carmanager.to.CarTO;
+import net.dragberry.carmanager.to.CustomerSettingsTO;
 import net.dragberry.carmanager.to.CustomerTO;
 import net.dragberry.carmanager.to.FuelTO;
 import net.dragberry.carmanager.to.ResultList;
@@ -27,6 +31,7 @@ import net.dragberry.carmanager.web.common.Constants;
 import net.dragberry.carmanager.web.security.CMSecurityContext;
 
 @Controller
+@SessionAttributes(TransactionController.Models.CUSTOMER_SETTINGS)
 public class TransactionController {
 
 	@Autowired
@@ -47,6 +52,7 @@ public class TransactionController {
 		String CURRENCY_LIST = "currencyList";
 		String PAYER_LIST = "payerList";
 		String CREDITOR_LIST = "creditorList";
+		String CUSTOMER_SETTINGS = "customerSettings";
 	}
 
 	@RequestMapping(Constants.Path.TRANSACTION_LIST)
@@ -64,7 +70,7 @@ public class TransactionController {
 	}
 	
 	@RequestMapping(value = Constants.Path.TRANSACTION_CREATE, method = RequestMethod.POST)
-	public ModelAndView submitTransaction(TransactionTO transaction) {
+	public ModelAndView submitTransaction(@ModelAttribute(Models.CUSTOMER_SETTINGS) CustomerSettingsTO customerSettingsTO, TransactionTO transaction) {
 		ResultTO<TransactionTO> result = transactionService.createTransaction(transaction);
 		if (!result.hasIssues()) {
 			return new ModelAndView(Constants.Path.redirect(Constants.Path.TRANSACTION_LIST));
@@ -74,8 +80,20 @@ public class TransactionController {
 	}
 	
 	@RequestMapping(value = Constants.Path.TRANSACTION_CREATE, method = RequestMethod.GET)
-	public ModelAndView createTransaction() {
+	public ModelAndView createTransaction(@ModelAttribute(Models.CUSTOMER_SETTINGS) CustomerSettingsTO customerSettingsTO) {
 		TransactionTO to = new TransactionTO();
+		if (customerSettingsTO != null) {
+			to.setCurrency(customerSettingsTO.getPreferredPaymentCurrency());
+			TransactionTypeTO preferredPaymentType = customerSettingsTO.getPreferredPaymentType();
+			to.setTransactionTypeKey(preferredPaymentType != null ? preferredPaymentType.getTransactionTypeKey() : null);
+			FuelTO fuel = customerSettingsTO.getPreferredFuel();
+			if (fuel != null) {
+				to.setFuel(customerSettingsTO.getPreferredFuel());
+				BigDecimal cost = fuel.getCost() != null ? fuel.getCost() : BigDecimal.ZERO;
+				Double qunatity = fuel.getQuantity() != null ? fuel.getQuantity() : 0.0;
+				to.setAmount(cost.multiply(new BigDecimal(qunatity)));
+			}
+		}
 		to.setExecutionDate(LocalDate.now());
 		return prepareCreateTransactionScreen(to);
 	}
@@ -86,7 +104,7 @@ public class TransactionController {
 		Long customerKey = CMSecurityContext.getCustomerKey();
 		List<CarTO> carList = carService.fetchCarsForCustomer(customerKey).getResult();
 		modelAndView.addObject(Models.CAR_LIST, carList);
-		List<TransactionTypeTO> typeList = transactionTypeService.fetchTypeListforCustomer(customerKey).getResult();
+		List<TransactionTypeTO> typeList = transactionTypeService.fetchTypeListForCustomer(customerKey).getResult();
 		modelAndView.addObject(Models.TRANSACTION_TYPE_LIST, typeList);
 		modelAndView.addObject(Models.TRANSACTION, transaction);
 		List<CustomerTO> payerList = customerService.fetchPayersForCustomer(customerKey).getResult();

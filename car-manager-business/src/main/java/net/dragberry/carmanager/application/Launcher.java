@@ -61,8 +61,8 @@ public class Launcher {
 //			});
 			
 			DataImporter importer = context.getBean(DataImporter.class);
-			InputStream is = new FileInputStream("c:\\Users\\Maksi\\OneDrive\\Расходы на машину.xlsx");
-//			InputStream is = new FileInputStream("y:\\OneDrive\\Расходы на машину.xlsx");
+//			InputStream is = new FileInputStream("c:\\Users\\Maksi\\OneDrive\\Расходы на машину.xlsx");
+			InputStream is = new FileInputStream("y:\\OneDrive\\Расходы на машину.xlsx");
 			importer.doImport(is);
 		/**
 		String regexp = "^([0-9]+[,.]?[0-9]+).+(��������)$";

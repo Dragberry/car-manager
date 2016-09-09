@@ -2,8 +2,6 @@ package net.dragberry.carmanager.dao.impl;
 
 import java.util.List;
 
-import javax.persistence.TypedQuery;
-
 import org.springframework.stereotype.Repository;
 
 import net.dragberry.carmanager.dao.TransactionTypeDao;
@@ -18,10 +16,10 @@ public class TransactionTypeDaoImpl extends AbstractDao<TransactionType> impleme
 
 	@Override
 	public TransactionType findByName(String name) {
-		TypedQuery<TransactionType> query = getEntityManager().createQuery("FROM " + getEntityName() + " e WHERE e.name = :name", getEntityType());
-		query.setParameter("name", name);
-		List<TransactionType> resultList = query.getResultList();
-		return resultList.isEmpty() ? null : resultList.get(0);
+		List<TransactionType> list = getEntityManager().createNamedQuery(TransactionType.FIND_BY_NAME_QUERY, TransactionType.class)
+				.setParameter("name", name)
+				.getResultList();
+		return list.isEmpty() ? null : list.get(0);
 	}
 
 }
