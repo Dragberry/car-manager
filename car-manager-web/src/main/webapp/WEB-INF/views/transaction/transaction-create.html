@@ -64,12 +64,12 @@
 				        	th:text="${payer.firstName} + ' ' + ${payer.lastName}"/>
 				  	</select>
 				</div>
-				<div id="creditorPanel" class="form-group col-md-8">
+				<div id="creditorPanel" hidden="hidden" class="form-group col-md-8">
 				  	<label th:for="*{creditorKey}" 
 				  		th:text="#{msg.creditor}">
 				  		Creditor
 				  	</label>
-				  	<select id="creditor" class="form-control" th:field="*{creditorKey}">
+				  	<select id="creditor" disabled="disabled" class="form-control" th:field="*{creditorKey}">
 				  		<option th:each="creditor : ${creditorList}" 
 				        	th:value="${creditor.customerKey}" 
 				        	th:text="${creditor.firstName} + ' ' + ${creditor.lastName}"/>
@@ -166,8 +166,8 @@
 	            	} else {
 	            		enableFuelPanel(false);
 	            		resetFuelPanel();
-	            		switchCreditorPanel(selectedType == 2);
 	            	}
+	            	switchCreditorPanel(selectedType == 2);
 				}
 				
 				function switchCreditorPanel(enabled) {

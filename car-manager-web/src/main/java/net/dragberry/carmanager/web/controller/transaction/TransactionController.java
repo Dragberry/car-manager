@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.dragberry.carmanager.common.Currency;
+import net.dragberry.carmanager.domain.TransactionType;
 import net.dragberry.carmanager.service.CarService;
 import net.dragberry.carmanager.service.CustomerService;
 import net.dragberry.carmanager.service.TransactionService;
@@ -29,6 +30,7 @@ import net.dragberry.carmanager.to.TransactionTO;
 import net.dragberry.carmanager.to.TransactionTypeTO;
 import net.dragberry.carmanager.web.common.Constants;
 import net.dragberry.carmanager.web.security.CMSecurityContext;
+import net.dragberry.carmanager.web.util.ReferenceBuilder;
 
 @Controller
 @SessionAttributes(TransactionController.Models.CUSTOMER_SETTINGS)
@@ -71,6 +73,9 @@ public class TransactionController {
 	
 	@RequestMapping(value = Constants.Path.TRANSACTION_CREATE, method = RequestMethod.POST)
 	public ModelAndView submitTransaction(@ModelAttribute(Models.CUSTOMER_SETTINGS) CustomerSettingsTO customerSettingsTO, TransactionTO transaction) {
+		if (transaction.getTransactionTypeKey() == TransactionType.FUEL_KEY) {
+			transaction.setDescription(ReferenceBuilder.buildDescription(transaction));
+		}
 		ResultTO<TransactionTO> result = transactionService.createTransaction(transaction);
 		if (!result.hasIssues()) {
 			return new ModelAndView(Constants.Path.redirect(Constants.Path.TRANSACTION_LIST));
