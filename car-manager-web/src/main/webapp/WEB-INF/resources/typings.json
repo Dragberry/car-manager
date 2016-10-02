@@ -1,0 +1,7 @@
+{
+  "name": "car-manager-angular",
+  "dependencies": {},
+  "globalDependencies": {
+    "core-js": "registry:dt/core-js#0.0.0+20160914114559"
+  }
+}
