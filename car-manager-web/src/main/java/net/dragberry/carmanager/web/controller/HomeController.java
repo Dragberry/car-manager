@@ -2,16 +2,13 @@ package net.dragberry.carmanager.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-
-import net.dragberry.carmanager.web.common.Constants;
 
 @Controller
 public class HomeController {
 	
-	@RequestMapping(Constants.Path.HOME)
-	public ModelAndView home() {
-		ModelAndView mv = new ModelAndView(Constants.View.HOME);
-		return mv;
+	@RequestMapping("/")
+	public String home() {
+		return "home";
 	}
+
 }
