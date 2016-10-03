@@ -1,0 +1,19 @@
+<h3>Transaction list</h3>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Description</th>
+    </tr>
+    <tr *ngFor="let tnx of transactionList">
+        <td>
+            <button (click)="viewTransactionDetails(tnx)">
+                {{tnx.transactionId}}
+            </button>
+        </td>
+        <td>{{tnx.executionDate}}</td>
+        <td>{{tnx.amount}} {{tnx.currency}}</td>
+        <td>{{tnx.description}}</td>
+    </tr>
+</table>

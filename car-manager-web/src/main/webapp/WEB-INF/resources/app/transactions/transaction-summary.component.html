@@ -1,0 +1,17 @@
+<h3>Transaction summary</h3>
+<table>
+    <tr>
+        <td>Total spent:</td>
+        <td>{{totalSpent}} {{currency}}</td>
+    </tr>
+    <tr>
+        <td>Total spent by customer:</td>
+        <td>{{totalSpentByCustomer}} {{currency}}</td>
+    </tr>
+    <tr>
+        <td>Total spent for fuel:</td>
+        <td>{{totalSpentForFuel}} {{currency}}</td>
+    </tr>
+</table>
+<input  type="text" #additionalValue/>
+<button (click)="refresh(additionalValue.value)">Refresh</button>

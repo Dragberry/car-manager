@@ -1,24 +1,34 @@
-import { Component } from '@angular/core';
+import { 
+    Component,
+    OnInit 
+} from '@angular/core';
+
+import { Transaction } from '../common/transaction';
+import { TransactionService } from '../service/transaction.service';
 
 @Component({
     selector: 'cm-transaction-list',
-    template: `
-        <h3>Transaction list</h3>
-        <table>
-            <tr>
-                <th>Id</th>
-                <th>Description</th>
-                <th>Amount</th>
-            </tr>
-            <tr>
-                <td>001</td>
-                <td>Fuel</td>
-                <td>33.3 BYN</td>
-            </tr>
-        </table>
-    `
+    templateUrl: './app/transactions/transaction-list.component.html',
+    providers: [
+        TransactionService
+    ]
 })
-export class TransactionListComponent {
+export class TransactionListComponent implements OnInit {
 
-    isVisible: boolean = false;
+    transactionList: Transaction[];
+
+    constructor(private transactionService: TransactionService) {}
+
+    ngOnInit(): void {
+        this.fetchTransactionList();
+    }
+
+    fetchTransactionList(): void {
+        this.transactionService.fetchTransactionList()
+            .then(result => this.transactionList = result);
+    }
+
+    viewTransactionDetails(tnx: Transaction) {
+        alert(`Transaction ID: ${tnx.transactionId}`);
+    }
 }

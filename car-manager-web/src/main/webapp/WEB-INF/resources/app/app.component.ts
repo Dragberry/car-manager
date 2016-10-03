@@ -5,7 +5,7 @@ import  { Component } from '@angular/core';
     template: `
         <h1>Car Manager</h1>
         <h3>Welcome, {{customerName}}!</h3>
-        <cm-transaction-summary [customerName]="customerName"></cm-transaction-summary>
+        <cm-transaction-summary></cm-transaction-summary>
         <cm-transaction-list></cm-transaction-list>
         `
 })
