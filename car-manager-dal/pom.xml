@@ -78,6 +78,6 @@
 	</dependencies>
 
 	<properties>
-		<hibernate-version>5.2.2.Final</hibernate-version>
+		<hibernate-version>5.2.3.Final</hibernate-version>
 	</properties>
 </project>

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
+@Import(value = { BusinessConfig.class })
 public class AppConfig {
 
 	@Bean

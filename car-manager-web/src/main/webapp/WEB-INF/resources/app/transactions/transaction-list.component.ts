@@ -25,10 +25,13 @@ export class TransactionListComponent implements OnInit {
 
     fetchTransactionList(): void {
         this.transactionService.fetchTransactionList()
-            .then(result => this.transactionList = result);
+            .then(result => {
+                this.transactionList = result
+            });
     }
 
     viewTransactionDetails(tnx: Transaction) {
-        alert(`Transaction ID: ${tnx.transactionId}`);
+        alert(`Transaction ID: ${tnx.transactionKey}`);
     }
+
 }

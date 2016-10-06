@@ -1,19 +1,15 @@
 <h3>Transaction list</h3>
-<table>
+<table class="table">
     <tr>
-        <th>Id</th>
         <th>Date</th>
-        <th>Amount</th>
         <th>Description</th>
+        <th>Transaction type</th>
+        <th>Amount</th>
     </tr>
     <tr *ngFor="let tnx of transactionList">
-        <td>
-            <button (click)="viewTransactionDetails(tnx)">
-                {{tnx.transactionId}}
-            </button>
-        </td>
         <td>{{tnx.executionDate}}</td>
-        <td>{{tnx.amount}} {{tnx.currency}}</td>
         <td>{{tnx.description}}</td>
+        <td>{{tnx.transactionTypeName}}</td>
+        <td class="text-right">{{tnx.amount|number:'.2'}} {{tnx.currency}}</td>
     </tr>
 </table>

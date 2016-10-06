@@ -24,6 +24,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/**").addResourceLocations("/WEB-INF/resources/");
+		registry.addResourceHandler("/theme**").addResourceLocations("/WEB-INF/resources/theme");
 	}
 	
 	@Bean

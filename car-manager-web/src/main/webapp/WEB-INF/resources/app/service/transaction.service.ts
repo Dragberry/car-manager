@@ -1,28 +1,26 @@
 import { Injectable } from '@angular/core';
+import { 
+    Headers,
+    Http
+} from '@angular/http';
+
+import 'rxjs/add/operator/toPromise';
 
 import { Transaction } from '../common/transaction';
 
-const DB: Transaction[] = [
-     {
-        transactionId: 1000,
-        executionDate: new Date("03-SEP-2016"),
-        amount: "33.3",
-        currency: "BYN",
-        description: "30 litters of fuel"
-     },
-     {
-         transactionId: 1001,
-         executionDate: new Date("03-SEP-2016"),
-         amount: "33.3",
-         currency: "BYN",
-         description: "30 litters of fuel"
-      }
-]; 
-
 @Injectable()
 export class TransactionService {
+
+    private fetchTnxListUrl = "service/transaction/list";
+
+    constructor(private http: Http) {}
         
     fetchTransactionList(): Promise<Transaction[]> {
-        return Promise.resolve(DB);
+        return this.http.get(this.fetchTnxListUrl)
+            .toPromise()
+            .then(response => {
+                let tnxs: Transaction[] = response.json() as Transaction[];
+                return tnxs;
+            });
     }
 }
