@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.dragberry.carmanager.service.TransactionService;
 import net.dragberry.carmanager.to.TransactionQueryListTO;
+import net.dragberry.carmanager.to.TransactionSummaryTO;
 import net.dragberry.carmanager.to.TransactionTO;
 
 @Controller
@@ -25,4 +26,9 @@ public class TransactionController {
 		return transactionService.fetchList(new TransactionQueryListTO()).getResult();
 	}
 
+	@RequestMapping(value ="/summary", method = RequestMethod.GET)
+	@ResponseBody
+	public TransactionSummaryTO fetchTransactionSummary() {
+		return transactionService.fetchSummary(new TransactionQueryListTO()).getObject();
+	}
 }

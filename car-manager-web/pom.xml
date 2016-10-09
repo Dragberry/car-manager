@@ -63,6 +63,11 @@
 			<groupId>net.dragberry.carmanager</groupId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<artifactId>car-manager-menu</artifactId>
+			<groupId>net.dragberry.carmanager</groupId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -30,8 +30,4 @@ export class TransactionListComponent implements OnInit {
             });
     }
 
-    viewTransactionDetails(tnx: Transaction) {
-        alert(`Transaction ID: ${tnx.transactionKey}`);
-    }
-
 }

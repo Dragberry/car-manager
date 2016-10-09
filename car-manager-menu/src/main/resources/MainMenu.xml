@@ -18,4 +18,22 @@
 		</MenuItemXML>
 	</MenuItemXML>
 	
+	<MenuItemXML id="transactions" key="msg.menu.cars" header="true">
+		<Role>ADMIN</Role>
+		<Role>CUSTOMER</Role>
+		<MenuItemXML id="car.create" key="msg.menu.carCreate" action="/car/create">
+			<Role>ADMIN</Role>
+			<Role>CUSTOMER</Role>
+		</MenuItemXML>
+		<MenuItemXML id="car.list" key="msg.menu.carList" action="/car/list">
+			<Role>ADMIN</Role>
+			<Role>CUSTOMER</Role>
+		</MenuItemXML>
+	</MenuItemXML>
+	
+	<MenuItemXML id="settings" key="msg.menu.settings" action="/settings">
+		<Role>ADMIN</Role>
+		<Role>CUSTOMER</Role>
+	</MenuItemXML>
+	
 </MainMenuXML>

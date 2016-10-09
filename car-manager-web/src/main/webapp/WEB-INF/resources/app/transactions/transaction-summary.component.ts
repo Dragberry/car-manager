@@ -1,20 +1,32 @@
-import { Component, Input } from '@angular/core';
+import { 
+    Component,
+    OnInit 
+} from '@angular/core';
+
+import { TransactionService } from '../service/transaction.service';
+import { TransactionSummary } from '../common/transaction-summary';
 
 @Component({
     selector: "cm-transaction-summary",
-    templateUrl: './app/transactions/transaction-summary.component.html'
+    templateUrl: './app/transactions/transaction-summary.component.html',
+    providers: [
+        TransactionService
+    ]
 })
-export class TransactionSummaryComponent {
+export class TransactionSummaryComponent implements OnInit {
 
-    totalSpent: number = 1000;
-    totalSpentByCustomer: number = 9900;
-    totalSpentForFuel: number = 1600;
-    currency: string = "USD";
-    customerName: string  = "Makseemka";
+    transactionSummary: TransactionSummary;
 
-    refresh(additionalValue: number): void {
-        this.totalSpent += additionalValue;
-        this.totalSpentByCustomer += additionalValue;
-        this.totalSpentForFuel += additionalValue; 
+    constructor(private transactionService : TransactionService) {}
+
+    ngOnInit() {
+        this.fetchTransactionSummary();
+    }
+
+    fetchTransactionSummary(): void {
+        this.transactionService.fetchTransactionSummary()
+            .then(result => {
+                this.transactionSummary = result
+            });
     }
 }

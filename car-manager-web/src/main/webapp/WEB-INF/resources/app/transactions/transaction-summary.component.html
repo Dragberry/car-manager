@@ -1,17 +1,25 @@
-<h3>Transaction summary</h3>
-<table>
-    <tr>
-        <td>Total spent:</td>
-        <td>{{totalSpent}} {{currency}}</td>
-    </tr>
-    <tr>
-        <td>Total spent by customer:</td>
-        <td>{{totalSpentByCustomer}} {{currency}}</td>
-    </tr>
-    <tr>
-        <td>Total spent for fuel:</td>
-        <td>{{totalSpentForFuel}} {{currency}}</td>
-    </tr>
-</table>
-<input  type="text" #additionalValue/>
-<button (click)="refresh(additionalValue.value)">Refresh</button>
+<div class="row">
+	<fieldset>
+		<legend>Transaction summary</legend>
+		<div *ngIf="transactionSummary" class="row">
+			<div class="col-md-4">
+				<label>
+					Total
+				</label>
+				<div>{{transactionSummary.totalAmount}} {{transactionSummary.displayCurrency}}</div>
+			</div>
+			<div class="col-md-4">
+				<label>
+					Total by customer
+				</label>
+				<div>{{transactionSummary.totalAmountByCustomer}} {{transactionSummary.displayCurrency}}</div>
+			</div>
+			<div class="col-md-4">
+				<label>
+					Total fuel
+				</label>
+				<div>{{transactionSummary.totalFuelAmount}} {{transactionSummary.displayCurrency}}</div>
+			</div>
+		</div>
+	</fieldset>
+</div>

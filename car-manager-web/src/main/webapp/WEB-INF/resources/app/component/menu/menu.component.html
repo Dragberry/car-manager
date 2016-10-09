@@ -8,20 +8,21 @@
 					        <span class="icon-bar"></span>
 					        <span class="icon-bar"></span>
 				      	</button>
-            <a class="navbar-brand" href='/'>
+            <a class="navbar-brand" routerLink="/" href="">
                 <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
             </a>
         </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div *ngIf="menu" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li class='dropdown'>
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My transactions<span class="caret"></span></a>
-					<ul class="dropdown-menu">
-                    	<li>
-                        	<a href="/">Transaction list</a>
-                        </li>
-                    	<li>
-                            <a href="/">New transaction</a>
+				<li *ngFor="let item of menu.items" [class.dropdown]="item.header">
+					<a *ngIf="!item.header" routerLink="{{item.action}}" href="">{{item.key}}</a>
+					<a *ngIf="item.header" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+						{{item.key}}
+						<span class="caret"></span>
+					</a>
+					<ul *ngIf="item.header" class="dropdown-menu">
+                    	<li *ngFor="let subItem of item.items">
+                        	<a routerLink="{{subItem.action}}" href="">{{subItem.key}}</a>
                         </li>
 			    	</ul>
 				</li>

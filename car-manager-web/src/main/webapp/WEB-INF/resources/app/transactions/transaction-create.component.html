@@ -1,0 +1,84 @@
+<div class="row">
+    <form (ngSubmit)="submitTransaction(transactionForm.value)" #transactionForm="ngForm">
+        <div class="col-md-6" >
+            <div class="form-group col-md-8">
+                <label>
+                    Car
+                </label>
+                <select [(ngModel)]="transaction.carKey" name="carKey" class="form-control" >
+                    <option *ngFor="let car of carList" value="{{car.carKey}}">{{car.brand}} {{car.model}}</option>
+                </select>
+            </div>
+            <div class="form-group col-md-8">
+                <label>
+                    Execution date
+                </label>
+                <div class="input-group date">
+                    <input [(ngModel)]="transaction.executionDate" name="executionDate" value={{transaction.executionDate}} type="text" class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-md-8">
+                <label>
+                    Transaction type
+                </label>
+                <select [(ngModel)]="transaction.transactionTypeKey" name="transactionTypeKey" class="form-control">
+                    <option value="1">Fuel</option>
+                </select>
+            </div>
+            <div class="form-group col-md-8">
+                <label>
+                    Payer
+                </label>
+                <select [(ngModel)]="transaction.payerKey" name="payerKey" class="form-control">
+                    <option>Maksim Drahun</option>
+                </select>
+            </div>
+            <div id="creditorPanel" class="form-group col-md-8">
+                <label>
+                    Creditor
+                </label>
+                <select [(ngModel)]="transaction.creditorKey" name="creditorKey" class="form-control">
+                    <option>Maksim Drahun</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group col-md-8">
+                <label>Amount</label>
+                <input [(ngModel)]="transaction.amount" name="amount" type="text" class="form-control amount"/>
+            </div>
+            <div class="form-group col-md-4">
+                <label>Currency</label>
+                <select [(ngModel)]="transaction.currency" name="currency" class="form-control">
+                    <option *ngFor="let currency of currencyList" value="{{currency}}">{{currency}}</option>
+                </select>
+            </div>
+            <div class="form-group col-md-12">
+                <label>Description</label>
+                <input [(ngModel)]="transaction.description" name="description" type="text" class="form-control"/>
+            </div>
+            
+            <fieldset id="fuelPanel" class="form-group col-md-12">
+                <legend>Fuel</legend>
+                <div class="form-group col-md-4">
+                    <label>Quantity</label>
+                    <input id="fuelQuantity" type="text" class="form-control"/>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Type</label>
+                    <input id="fuelType" type="text" class="form-control"/>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Cost</label>
+                    <input id="fuelCost" type="text" class="form-control amount"/>
+                </div>
+            </fieldset>
+        </div>
+        <div class="form-group col-md-12">
+            <button type="submit" class="btn btn-primary">Submit transaction</button>
+        </div>
+    </form>
+</div>

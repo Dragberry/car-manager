@@ -5,8 +5,10 @@ import org.springframework.context.annotation.CommonAnnotationBeanPostProcessor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import net.dragberry.carmanager.menu.config.MenuConfig;
+
 @Configuration
-@Import(value = { BusinessConfig.class })
+@Import(value = { BusinessConfig.class, MenuConfig.class })
 public class AppConfig {
 
 	@Bean
