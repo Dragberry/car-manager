@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CarService} from '../service/car.service';
-import { CurrencyService} from '../service/currency.service';
+import { CarService} from '../../service/car.service';
+import { CurrencyService} from '../../service/currency.service';
 
-import { Car } from '../common/car';
-import { Transaction } from '../common/transaction';
+import { Car } from '../../common/car';
+import { Transaction } from '../../common/transaction';
 
 @Component({
     selector: "cm-transaction-create",
-    templateUrl: "./app/transactions/transaction-create.component.html"
+    templateUrl: "./app/component/transactions/transaction-create.component.html"
 })
 export class TransactionCreateComponent implements OnInit {
 

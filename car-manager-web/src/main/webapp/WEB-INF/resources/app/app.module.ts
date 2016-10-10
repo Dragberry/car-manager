@@ -7,10 +7,11 @@ import { RouterModule } from '@angular/router';
 import { ROUTES } from './app.routes';
 
 import { CarManagerAppComponent } from './app.component'; 
+import { DashboardComponent } from './component/dashboard/dashboard.component'; 
 import { MenuComponent } from './component/menu/menu.component';
-import { TransactionCreateComponent } from './transactions/transaction-create.component';
-import { TransactionListComponent } from './transactions/transaction-list.component';
-import { TransactionSummaryComponent } from './transactions/transaction-summary.component';
+import { TransactionCreateComponent } from './component/transactions/transaction-create.component';
+import { TransactionListComponent } from './component/transactions/transaction-list.component';
+import { TransactionSummaryComponent } from './component/transactions/transaction-summary.component';
 
 import { FromNowPipe } from './pipes/from-now.pipe';
 
@@ -23,6 +24,7 @@ import { FromNowPipe } from './pipes/from-now.pipe';
         ],
     declarations: [
         CarManagerAppComponent,
+        DashboardComponent,
         MenuComponent,
         TransactionCreateComponent,
         TransactionListComponent,

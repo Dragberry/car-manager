@@ -3,12 +3,12 @@ import {
     OnInit 
 } from '@angular/core';
 
-import { Transaction } from '../common/transaction';
-import { TransactionService } from '../service/transaction.service';
+import { Transaction } from '../../common/transaction';
+import { TransactionService } from '../../service/transaction.service';
 
 @Component({
     selector: 'cm-transaction-list',
-    templateUrl: './app/transactions/transaction-list.component.html',
+    templateUrl: './app/component/transactions/transaction-list.component.html',
     providers: [
         TransactionService
     ]
