@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CarService} from '../../service/car.service';
-import { CurrencyService} from '../../service/currency.service';
+import { CarService } from '../../service/car.service';
+import { CurrencyService } from '../../service/currency.service';
+import { TransactionTypeService } from '../../service/transaction-type.service';
 
 import { Car } from '../../common/car';
 import { Transaction } from '../../common/transaction';
+import { TransactionType } from '../../common/transaction-type';
+
 
 @Component({
     selector: "cm-transaction-create",
@@ -15,10 +18,14 @@ export class TransactionCreateComponent implements OnInit {
     transaction: Transaction = new Transaction();
     currencyList: string[];
     carList: Car[];
+    transactionTypeList: TransactionType[];
+
+    customerKey: number = 3;
 
     constructor(
+        private carService: CarService,
         private currencyService: CurrencyService,
-        private carService: CarService
+        private transactionTypeService: TransactionTypeService
     ) {}
 
     submitTransaction(transaction: Transaction): void {
@@ -30,6 +37,17 @@ export class TransactionCreateComponent implements OnInit {
         this.transaction.executionDate = new Date().toDateString();
         this.fetchCurrencyList();
         this.fetchCarList();
+        this.fetchTransactionTypeList();
+    }
+
+    fetchTransactionTypeList(): void {
+        this.transactionTypeService.fetchTransactionTypeList(this.customerKey)
+            .then(transactionTypeList => {
+                this.transactionTypeList = transactionTypeList;
+                if (transactionTypeList[0]) {
+                    this.transaction.transactionTypeKey = transactionTypeList[0].transactionTypeKey;
+                }
+            });
     }
 
     fetchCurrencyList(): void {
@@ -43,7 +61,7 @@ export class TransactionCreateComponent implements OnInit {
     }
 
     fetchCarList(): void {
-        this.carService.fetchCarList(3)
+        this.carService.fetchCarList(this.customerKey)
             .then(carList => {
                 this.carList = carList;
                 if (carList[0]) {
