@@ -9,6 +9,7 @@ import { ROUTES } from './app.routes';
 import { CarManagerAppComponent } from './app.component'; 
 import { DashboardComponent } from './component/dashboard/dashboard.component'; 
 import { MenuComponent } from './component/menu/menu.component';
+import { SimpleLoginComponent } from './component/login/simple-login.component';
 import { TransactionCreateComponent } from './component/transactions/transaction-create.component';
 import { TransactionListComponent } from './component/transactions/transaction-list.component';
 import { TransactionSummaryComponent } from './component/transactions/transaction-summary.component';
@@ -26,6 +27,7 @@ import { FromNowPipe } from './pipes/from-now.pipe';
         CarManagerAppComponent,
         DashboardComponent,
         MenuComponent,
+        SimpleLoginComponent,
         TransactionCreateComponent,
         TransactionListComponent,
         TransactionSummaryComponent,

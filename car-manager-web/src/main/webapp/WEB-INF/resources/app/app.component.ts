@@ -3,6 +3,7 @@ import  { Title } from '@angular/platform-browser';
 
 import { CarService } from './service/car.service';
 import { CurrencyService } from './service/currency.service';
+import { CustomerContext } from './component/login/customer-context';
 import { TransactionTypeService } from './service/transaction-type.service';
 
 @Component({
@@ -10,6 +11,7 @@ import { TransactionTypeService } from './service/transaction-type.service';
     providers: [
         CarService,
         CurrencyService,
+        CustomerContext,
         TransactionTypeService
     ],
     viewProviders: [
