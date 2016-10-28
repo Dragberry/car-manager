@@ -8,7 +8,7 @@ import {
 
 import 'rxjs/add/operator/toPromise';
 
-import { TransactionType } from '../common/transaction-type';
+import { TransactionType } from '../../shared/common/transaction-type';
 
 @Injectable()
 export class TransactionTypeService {

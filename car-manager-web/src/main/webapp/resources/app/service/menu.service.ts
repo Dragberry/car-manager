@@ -7,7 +7,6 @@ import {
 import 'rxjs/add/operator/toPromise';
 
 import { MenuItem } from '../common/menu-item';
-import { Transaction } from '../common/transaction';
 
 @Injectable()
 export class MenuService {

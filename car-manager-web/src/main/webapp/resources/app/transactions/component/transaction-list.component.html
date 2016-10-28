@@ -1,6 +1,6 @@
 <div class="row">
 	<fieldset>
-		<legend>Transaction summary</legend>
+		<legend highlight>Transaction summary</legend>
 		<div *ngIf="transactionSummary" class="row">
 			<div class="col-md-4">
 				<label>
@@ -21,5 +21,24 @@
 				<div>{{transactionSummary.totalFuelAmount}} {{transactionSummary.displayCurrency}}</div>
 			</div>
 		</div>
+	</fieldset>
+</div>
+<div class="row">
+	<fieldset>
+		<legend highlight>Transaction list</legend>
+		<table class="table table-striped">
+			<tr>
+				<th>Date</th>
+				<th>Description</th>
+				<th>Transaction type</th>
+				<th>Amount</th>
+			</tr>
+			<tr *ngFor="let tnx of transactionList">
+				<td>{{tnx.executionDate}}</td>
+				<td>{{tnx.description}}</td>
+				<td>{{tnx.transactionTypeName}}</td>
+				<td class="text-right">{{tnx.amount|number:'.2'}} {{tnx.currency}}</td>
+			</tr>
+		</table>
 	</fieldset>
 </div>

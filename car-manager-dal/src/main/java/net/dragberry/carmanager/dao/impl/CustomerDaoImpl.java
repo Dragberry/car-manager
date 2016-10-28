@@ -1,11 +1,13 @@
 package net.dragberry.carmanager.dao.impl;
 
+import java.util.List;
 import java.util.Map;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import net.dragberry.carmanager.dao.CustomerDao;
@@ -21,9 +23,10 @@ public class CustomerDaoImpl extends AbstractDao<Customer> implements CustomerDa
 
 	@Override
 	public Customer findByCustomerName(String name) {
-		return getEntityManager().createNamedQuery(Customer.FIND_BY_CUSTOMER_NAME_QUERY, getEntityType())
+		List<Customer> result = getEntityManager().createNamedQuery(Customer.FIND_BY_CUSTOMER_NAME_QUERY, getEntityType())
 			.setParameter("customerName", name)
-			.getSingleResult();
+			.getResultList();
+		return CollectionUtils.get(result, 0);
 	}
 
 	@Override
@@ -40,9 +43,10 @@ public class CustomerDaoImpl extends AbstractDao<Customer> implements CustomerDa
 
 	@Override
 	public Customer fetchWithPayers(Long customerKey) {
-		return getEntityManager().createNamedQuery(Customer.FETCH_PAYERS_QUERY, getEntityType())
+		List<Customer> result =  getEntityManager().createNamedQuery(Customer.FETCH_PAYERS_QUERY, getEntityType())
 				.setParameter("customerKey", customerKey)
-				.getSingleResult();
+				.getResultList();
+		return CollectionUtils.get(result, 0);
 	}
 
 }

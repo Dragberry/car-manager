@@ -14,17 +14,18 @@ import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 import net.dragberry.carmanager.web.controller.Controllers;
+import net.dragberry.carmanager.web.security.Security;
 
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackageClasses = { Controllers.class })
+@ComponentScan(basePackageClasses = { Controllers.class, Security.class })
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/**").addResourceLocations("/WEB-INF/resources/");
-		registry.addResourceHandler("/theme**").addResourceLocations("/WEB-INF/resources/theme");
+		registry.addResourceHandler("/**").addResourceLocations("/resources/");
+		registry.addResourceHandler("/theme**").addResourceLocations("/resources/theme");
 	}
 	
 	@Bean

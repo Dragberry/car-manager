@@ -2,6 +2,7 @@ package net.dragberry.carmanager.dao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import net.dragberry.carmanager.dao.TransactionTypeDao;
@@ -19,7 +20,7 @@ public class TransactionTypeDaoImpl extends AbstractDao<TransactionType> impleme
 		List<TransactionType> list = getEntityManager().createNamedQuery(TransactionType.FIND_BY_NAME_QUERY, TransactionType.class)
 				.setParameter("name", name)
 				.getResultList();
-		return list.isEmpty() ? null : list.get(0);
+		return CollectionUtils.get(list, 0);
 	}
 
 }

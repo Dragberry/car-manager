@@ -8,7 +8,7 @@ import {
 
 import 'rxjs/add/operator/toPromise';
 
-import { Car } from '../common/car';
+import { Car } from '../../shared/common/car';
 
 @Injectable()
 export class CarService {

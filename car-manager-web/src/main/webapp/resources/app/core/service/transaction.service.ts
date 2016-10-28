@@ -6,8 +6,8 @@ import {
 
 import 'rxjs/add/operator/toPromise';
 
-import { Transaction } from '../common/transaction';
-import { TransactionSummary } from '../common/transaction-summary';
+import { Transaction } from '../../shared/common/transaction';
+import { TransactionSummary } from '../../shared/common/transaction-summary';
 
 @Injectable()
 export class TransactionService {

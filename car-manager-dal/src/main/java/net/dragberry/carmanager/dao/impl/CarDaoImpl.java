@@ -2,10 +2,6 @@ package net.dragberry.carmanager.dao.impl;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 import org.springframework.stereotype.Repository;
 
 import net.dragberry.carmanager.dao.CarDao;
@@ -20,12 +16,9 @@ public class CarDaoImpl extends AbstractDao<Car> implements CarDao {
 
 	@Override
 	public List<Car> fetchListForCustomer(Long customerKey) {
-		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-		CriteriaQuery<Car> cq = cb.createQuery(Car.class);
-		Root<Car> cRoot = cq.from(Car.class);
-		cq.where(cb.equal(cRoot.get("owner"), customerKey));
-		cq.select(cRoot);
-		return getEntityManager().createQuery(cq).getResultList();
+		return getEntityManager().createNamedQuery(Car.CARS_FOR_CUSTOMER_QUERY, getEntityType())
+			.setParameter("owner", customerKey)
+			.getResultList();
 	}
 
 }

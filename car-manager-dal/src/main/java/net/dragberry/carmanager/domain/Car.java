@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
@@ -16,9 +18,16 @@ import javax.persistence.Table;
 @AttributeOverrides({
 	@AttributeOverride(column = @Column(name =  "CAR_KEY"), name = "entityKey")
 })
+@NamedQueries({
+	@NamedQuery(
+			name = Car.CARS_FOR_CUSTOMER_QUERY,
+			query = "select c from Car c where c.owner.entityKey = :owner")
+})
 public class Car extends AbstractEntity {
 
 	private static final long serialVersionUID = 6026805942501399545L;
+	
+	public static final String CARS_FOR_CUSTOMER_QUERY = "Car.CarsForCustomer";
 	
 	@Column(name = "MODEL")
 	private String model;
