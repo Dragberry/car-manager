@@ -8,6 +8,7 @@
         <base href='<c:url value="/"/>'>
 	    <link href='<c:url value="/theme/css/bootstrap.min.css"/>' rel="stylesheet"/>
 	    <link href='<c:url value="/theme/css/sticky-footer.css"/>' rel="stylesheet"/>
+        <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" media="all">
         <script src='<c:url value="/node_modules/zone.js/dist/zone.js"/>'></script>
         <script src='<c:url value="/node_modules/reflect-metadata/Reflect.js"/>'></script>
         <script src='<c:url value="/node_modules/systemjs/dist/system.js"/>'></script>
@@ -25,6 +26,7 @@
                     '@angular/router': 'node_modules/@angular/router/bundles/router.umd.js',
                     'rxjs': 'node_modules/rxjs',
                     'moment': 'node_modules/moment/moment.js',
+                    'angular2-cookie': 'node_modules/angular2-cookie'
                 }
             });
             System.import('<c:url value="/main"/>'); 

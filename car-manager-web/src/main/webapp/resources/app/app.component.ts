@@ -10,12 +10,11 @@ import  { Title } from '@angular/platform-browser';
     ],
     template: `
         <cm-menu></cm-menu>
+        <cm-messages></cm-messages>
         <router-outlet></router-outlet>
         `
 })
 export class CarManagerAppComponent {
-
-    customerName: string = "Makseemka";
 
     constructor(private title: Title) {
         title.setTitle("Car Manager Application");

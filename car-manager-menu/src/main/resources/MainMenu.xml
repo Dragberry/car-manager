@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MainMenuXML>
 
-	<MenuItemXML id="registration" key="msg.menu.registration" action="/registration">
+	<MenuItemXML id="registration" key="Registration" action="/registration">
 		<Role>ANONYMOUS</Role>
 	</MenuItemXML>
 	
-	<MenuItemXML id="transactions" key="msg.menu.transaction" header="true">
+	<MenuItemXML id="transactions" key="My transactions" header="true">
 		<Role>ADMIN</Role>
 		<Role>CUSTOMER</Role>
-		<MenuItemXML id="transactions.create" key="msg.menu.transactionCreate" action="/transaction/create">
+		<MenuItemXML id="transactions.create" key="Create transaction" action="/transaction/create">
 			<Role>ADMIN</Role>
 			<Role>CUSTOMER</Role>
 		</MenuItemXML>
-		<MenuItemXML id="transactions.list" key="msg.menu.transactionList" action="/transaction/list">
+		<MenuItemXML id="transactions.list" key="View transactions" action="/transaction/list">
 			<Role>ADMIN</Role>
 			<Role>CUSTOMER</Role>
 		</MenuItemXML>
 	</MenuItemXML>
 	
-	<MenuItemXML id="transactions" key="msg.menu.cars" header="true">
+	<MenuItemXML id="transactions" key="My cars" header="true">
 		<Role>ADMIN</Role>
 		<Role>CUSTOMER</Role>
-		<MenuItemXML id="car.create" key="msg.menu.carCreate" action="/car/create">
+		<MenuItemXML id="car.create" key="Add car" action="/car/create">
 			<Role>ADMIN</Role>
 			<Role>CUSTOMER</Role>
 		</MenuItemXML>
-		<MenuItemXML id="car.list" key="msg.menu.carList" action="/car/list">
+		<MenuItemXML id="car.list" key="View cars" action="/car/list">
 			<Role>ADMIN</Role>
 			<Role>CUSTOMER</Role>
 		</MenuItemXML>
 	</MenuItemXML>
 	
-	<MenuItemXML id="settings" key="msg.menu.settings" action="/settings">
+	<MenuItemXML id="settings" key="Settings" action="/settings">
 		<Role>ADMIN</Role>
 		<Role>CUSTOMER</Role>
 	</MenuItemXML>

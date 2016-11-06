@@ -14,8 +14,18 @@ export class TransactionService {
 
     private fetchTnxListUrl = "service/transaction/list";
     private fetchTnxSummaryUrl = "service/transaction/summary";
+    private submitTxnUrl = "service/transaction/submit";
+
+    private headers = new Headers({'Content-Type': 'application/json'});
 
     constructor(private http: Http) {}
+
+    submitTransaction(transaction: Transaction): Promise<Transaction> {
+        return this.http
+            .post(this.submitTxnUrl, JSON.stringify(transaction), {headers: this.headers})
+            .toPromise()
+            .then(() => transaction);
+    }
         
     fetchTransactionList(): Promise<Transaction[]> {
         return this.http.get(this.fetchTnxListUrl)

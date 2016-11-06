@@ -35,12 +35,15 @@ public class CurrencyServiceBean implements CurrencyService {
 	private RestTemplate restTemplate;
 
 	@Override
-	public double getExchangeRate(Currency currecny, LocalDate date) {
+	public double getExchangeRate(Currency currency, LocalDate date) {
 		URI uri = null;
 		try {
-			uri = new URI(MessageFormat.format(EX_RATE_TEMPLATE_URL, CURRENCY_MAP.get(currecny), DateTimeFormatter.ISO_LOCAL_DATE.format(date)));
+			String formattedDate = DateTimeFormatter.ISO_LOCAL_DATE.format(date);
+			uri = new URI(MessageFormat.format(EX_RATE_TEMPLATE_URL, CURRENCY_MAP.get(currency), formattedDate));
 		    CurrencyExRate result = restTemplate.getForObject(uri, CurrencyExRate.class);
-		    return date.isBefore(Denominator.DATE) ? Denominator.denominate(result.getRate()) : result.getRate();
+		    double exRate = date.isBefore(Denominator.DATE) ? Denominator.denominate(result.getRate()) : result.getRate();
+		    System.out.println(MessageFormat.format("{0}: [{1}] BYN/{2}={3}", CurrencyServiceBean.class.getName(), formattedDate, currency, exRate));
+		    return exRate;
 		} catch (Exception exc) {
 			System.out.println("An exception has been occured during CurrencyService#getCurrency invoking!");
 			if (uri != null) {

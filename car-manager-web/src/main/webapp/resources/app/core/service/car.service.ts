@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import { 
-    Headers,
-    Http,
-    URLSearchParams,
-    RequestOptions
-} from '@angular/http';
+import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -18,11 +13,7 @@ export class CarService {
     constructor(private http: Http) {}
         
     fetchCarList(customerKey: number): Promise<Car[]> {
-        const params = new URLSearchParams();
-        params.set("customerKey", customerKey.toString());
-        const options = new RequestOptions({ search: params });
-
-        return this.http.get(this.fetchCarListUrl, options)
+        return this.http.get(this.fetchCarListUrl)
             .toPromise()
             .then(response => {
                 let carList: Car[] = response.json() as Car[]

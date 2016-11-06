@@ -24,7 +24,7 @@
                 <label>
                     Transaction type
                 </label>
-                <select [(ngModel)]="transaction.transactionTypeKey" name="transactionTypeKey" class="form-control">
+                <select [(ngModel)]="transaction.transactionTypeKey" (change)="transactionTypeChanged($event.target.value)" name="transactionTypeKey" class="form-control">
                     <option *ngFor="let type of transactionTypeList" value="{{type.transactionTypeKey}}">{{type.name}}</option>
                 </select>
             </div>
@@ -32,23 +32,33 @@
                 <label>
                     Payer
                 </label>
-                <select [(ngModel)]="transaction.payerKey" name="payerKey" class="form-control">
-                    <option>Maksim Drahun</option>
-                </select>
+                <span [hidden]="!isCreditorShown()">
+                    <input [(ngModel)]="customerName" name="customeName" value="{{customerName}}" [disabled]="isCreditorShown()" type="text" class="form-control" />
+                </span>
+                <span [hidden]="isCreditorShown()">
+                    <select [(ngModel)]="transaction.customerKey" name="payerKey" class="form-control">
+                        <option *ngFor="let payer of payerList" value="{{payer.customerKey}}">{{payer.firstName}} {{payer.lastName}}</option>
+                    </select>
+                </span>
             </div>
-            <div id="creditorPanel" class="form-group col-md-8">
+            <div [hidden]="!isCreditorShown()" id="creditorPanel" class="form-group col-md-8">
                 <label>
                     Creditor
                 </label>
                 <select [(ngModel)]="transaction.creditorKey" name="creditorKey" class="form-control">
-                    <option>Maksim Drahun</option>
+                    <option *ngFor="let creditor of creditorList" value="{{creditor.customerKey}}">{{creditor.firstName}} {{creditor.lastName}}</option>
                 </select>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group col-md-8">
                 <label>Amount</label>
-                <input [(ngModel)]="transaction.amount" name="amount" type="text" class="form-control amount"/>
+                <input [(ngModel)]="transaction.amount" 
+                    name="amount"
+                    (change)="amountChanged($event)" 
+                    (keyup)="amountChanged($event)" 
+                    type="text"
+                    class="form-control amount"/>
             </div>
             <div class="form-group col-md-4">
                 <label>Currency</label>
@@ -61,19 +71,34 @@
                 <input [(ngModel)]="transaction.description" name="description" type="text" class="form-control"/>
             </div>
             
-            <fieldset id="fuelPanel" class="form-group col-md-12">
+            <fieldset [hidden]="!isFuelShown()" id="fuelPanel" class="form-group col-md-12">
                 <legend>Fuel</legend>
                 <div class="form-group col-md-4">
                     <label>Quantity</label>
-                    <input id="fuelQuantity" type="text" class="form-control"/>
+                    <input [(ngModel)]="transaction.fuel.quantity" 
+                        name="fuel.quantity" 
+                        (change)="fuelQuantityChanged($event)" 
+                        (keyup)="fuelQuantityChanged($event)" 
+                        type="text"
+                        class="form-control"/>
                 </div>
                 <div class="form-group col-md-4">
                     <label>Type</label>
-                    <input id="fuelType" type="text" class="form-control"/>
+                    <input [(ngModel)]="transaction.fuel.type" 
+                        name="fuel.type" 
+                        (change)="fuelTypeChanged($event)" 
+                        (keyup)="fuelTypeChanged($event)" 
+                        type="text"
+                        class="form-control"/>
                 </div>
                 <div class="form-group col-md-4">
                     <label>Cost</label>
-                    <input id="fuelCost" type="text" class="form-control amount"/>
+                    <input [(ngModel)]="transaction.fuel.cost" 
+                        name="fuel.cost" 
+                        (change)="fuelCostChanged($event)" 
+                        (keyup)="fuelCostChanged($event)" 
+                        type="text"
+                        class="form-control"/>
                 </div>
             </fieldset>
         </div>

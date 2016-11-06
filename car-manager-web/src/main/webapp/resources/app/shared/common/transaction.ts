@@ -1,15 +1,17 @@
+import { Fuel } from './fuel';
+
 export class Transaction {
     transactionKey: number;
-    executionDate: any;
+    executionDate: string;
     description: string;
-    amount: string;
+    amount: number;
     currency: string;
     exchangeRate: string;
     customerKey: number;
     carKey: number;    
     transactionTypeKey: number;
     transactionTypeName: string;
-    fuel: any;
-    creditorKey: string;
+    fuel: Fuel = new Fuel();
+    creditorKey: number;
 
 }

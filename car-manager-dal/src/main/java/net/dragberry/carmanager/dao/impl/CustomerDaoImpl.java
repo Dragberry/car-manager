@@ -7,7 +7,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import net.dragberry.carmanager.dao.CustomerDao;
@@ -26,7 +25,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer> implements CustomerDa
 		List<Customer> result = getEntityManager().createNamedQuery(Customer.FIND_BY_CUSTOMER_NAME_QUERY, getEntityType())
 			.setParameter("customerName", name)
 			.getResultList();
-		return CollectionUtils.get(result, 0);
+		return result.size() > 0  ? result.get(0) : null;
 	}
 
 	@Override
@@ -46,7 +45,7 @@ public class CustomerDaoImpl extends AbstractDao<Customer> implements CustomerDa
 		List<Customer> result =  getEntityManager().createNamedQuery(Customer.FETCH_PAYERS_QUERY, getEntityType())
 				.setParameter("customerKey", customerKey)
 				.getResultList();
-		return CollectionUtils.get(result, 0);
+		return result.size() > 0  ? result.get(0) : null;
 	}
 
 }

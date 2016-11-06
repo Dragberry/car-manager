@@ -6,7 +6,7 @@ import {
 
 import 'rxjs/add/operator/toPromise';
 
-import { MenuItem } from '../common/menu-item';
+import { MenuItem } from './menu-item';
 
 @Injectable()
 export class MenuService {
@@ -23,4 +23,5 @@ export class MenuService {
                 return menu;
             });
     }
+
 }

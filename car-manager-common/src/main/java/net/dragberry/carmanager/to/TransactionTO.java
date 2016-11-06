@@ -6,6 +6,11 @@ import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+
 import net.dragberry.carmanager.common.Currency;
 
 /**
@@ -29,6 +34,8 @@ public class TransactionTO implements TransferObject {
 	private Double exchangeRate;
 	
 	@DateTimeFormat(iso = ISO.DATE)
+	@JsonDeserialize(using = LocalDateDeserializer.class)  
+	@JsonSerialize(using = LocalDateSerializer.class)  
 	private LocalDate executionDate;
 	
 	private Long customerKey;

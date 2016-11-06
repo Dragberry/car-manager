@@ -11,6 +11,9 @@ public class CustomerDetails extends User {
 
 	private static final long serialVersionUID = -2611246446268300417L;
 	
+	public static final String ANONYMOUS_ROLE = "ANONYMOUS";
+	public static final Long ANONYMOUS_KEY = 2L;
+	
 	private Long customerKey;
 	
 	private Set<String> roles;

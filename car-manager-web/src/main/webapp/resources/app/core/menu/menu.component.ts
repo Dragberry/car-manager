@@ -3,12 +3,12 @@ import {
     OnInit
 } from '@angular/core';
 
-import { MenuService } from '../../service/menu.service'
-import { MenuItem } from '../../common/menu-item';
+import { MenuService } from './menu.service'
+import { MenuItem } from './menu-item';
 
 @Component({
     selector: 'cm-menu',
-    templateUrl: './app/component/menu/menu.component.html',
+    templateUrl: './app/core/menu/menu.component.html',
     providers: [
         MenuService
     ]
@@ -28,6 +28,10 @@ export class MenuComponent implements OnInit {
             .then(result => {
                 this.menu = result;
             });
+    }
+
+    reloadMenu(): void {
+        this.fetchMenu();
     }
 
 }
