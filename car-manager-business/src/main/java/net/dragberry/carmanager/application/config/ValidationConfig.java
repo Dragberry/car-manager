@@ -8,9 +8,12 @@ import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.service.validation.TransactionValidationGroup;
 import net.dragberry.carmanager.service.validation.ValidationGroup;
 import net.dragberry.carmanager.service.validation.ValidationService;
+import net.dragberry.carmanager.service.validation.Validator;
 import net.dragberry.carmanager.service.validation.validator.AmountValidator;
 import net.dragberry.carmanager.service.validation.validator.CustomerValidator;
 import net.dragberry.carmanager.service.validation.validator.DateValidator;
+import net.dragberry.carmanager.service.validation.validator.DescriptionValidator;
+import net.dragberry.carmanager.service.validation.validator.FuelValidator;
 
 @Configuration
 @ComponentScan(basePackageClasses = { ValidationService.class })
@@ -22,21 +25,34 @@ public class ValidationConfig {
 		group.add(dateValidator());
 		group.add(amountValidator());
 		group.add(customerValidator());
+		group.add(descriptionValidator());
+		group.add(fuelValidator());
 		return group;
 	}
 	
 	@Bean
-	public DateValidator dateValidator() {
+	public Validator<Transaction> dateValidator() {
 		return new DateValidator();
 	}
 	
 	@Bean
-	public CustomerValidator customerValidator() {
+	public Validator<Transaction> customerValidator() {
 		return new CustomerValidator();
 	}
 	
-	public AmountValidator amountValidator() {
+	@Bean
+	public Validator<Transaction>  amountValidator() {
 		return new AmountValidator();
+	}
+	
+	@Bean
+	public Validator<Transaction> descriptionValidator() {
+		return new DescriptionValidator();
+	}
+	
+	@Bean
+	public Validator<Transaction> fuelValidator() {
+		return new FuelValidator();
 	}
 	
 

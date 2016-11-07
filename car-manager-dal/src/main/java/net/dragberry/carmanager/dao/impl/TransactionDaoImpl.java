@@ -33,7 +33,7 @@ public class TransactionDaoImpl extends AbstractDao<Transaction> implements Tran
 		tRoot.fetch("transactionType");
 		
 		cq.where(buildConditions(cb, tRoot, query));
-		cq.orderBy(cb.asc(tRoot.get("executionDate")));
+		cq.orderBy(cb.desc(tRoot.get("executionDate")));
 		cq.select(tRoot);
 		
 		return getEntityManager().createQuery(cq).getResultList();

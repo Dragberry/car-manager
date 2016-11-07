@@ -14,14 +14,16 @@
         </div>
         <div *ngIf="menu" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li *ngFor="let item of menu.items" [class.dropdown]="item.header">
+				<li *ngFor="let item of menu.items" 
+						[class.dropdown]="item.header"
+						[class.active]="isMenuActive(item.action)">
 					<a *ngIf="!item.header" routerLink="{{item.action}}" href="">{{item.key}}</a>
 					<a *ngIf="item.header" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 						{{item.key}}
 						<span class="caret"></span>
 					</a>
 					<ul *ngIf="item.header" class="dropdown-menu">
-                    	<li *ngFor="let subItem of item.items">
+                    	<li *ngFor="let subItem of item.items" [class.active]="isSubMenuActive(subItem.action)">
                         	<a routerLink="{{subItem.action}}" href="">{{subItem.key}}</a>
                         </li>
 			    	</ul>

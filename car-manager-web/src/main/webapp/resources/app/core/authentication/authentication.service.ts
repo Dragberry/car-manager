@@ -11,6 +11,8 @@ export class AuthenticationService {
 
     private authUrl: string = "auth/login";
     private logoutUrl: string = "auth/logout";
+    private loggedUserUrl: string = "auth/logged-user";
+
 
     constructor(
         private http: Http,
@@ -40,5 +42,14 @@ export class AuthenticationService {
                 return;
             })
             .catch((response: any) => console.log(`Login Failure: data=${response}`));
+    }
+
+    getLoggedUser(): Promise<UserDetails> {
+     return this.http.get(this.loggedUserUrl)
+            .toPromise()
+            .then(response => {
+                return response.json() as UserDetails;
+            })
+            .catch((response: any) => console.log("Failure: get logged user!"));
     }
 }

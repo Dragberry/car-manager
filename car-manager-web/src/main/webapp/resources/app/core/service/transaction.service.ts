@@ -6,6 +6,10 @@ import {
 
 import 'rxjs/add/operator/toPromise';
 
+import {
+    Issue,
+    Result
+} from '../../shared/common/common';
 import { Transaction } from '../../shared/common/transaction';
 import { TransactionSummary } from '../../shared/common/transaction-summary';
 
@@ -20,11 +24,13 @@ export class TransactionService {
 
     constructor(private http: Http) {}
 
-    submitTransaction(transaction: Transaction): Promise<Transaction> {
+    submitTransaction(transaction: Transaction): Promise<Result<Transaction>> {
         return this.http
             .post(this.submitTxnUrl, JSON.stringify(transaction), {headers: this.headers})
             .toPromise()
-            .then(() => transaction);
+            .then(response => {
+                return response.json() as Result<Transaction>;
+            });
     }
         
     fetchTransactionList(): Promise<Transaction[]> {

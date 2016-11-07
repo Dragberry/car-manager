@@ -31,4 +31,12 @@ export class MessagesService {
         this.subscriber.next([]);
     }
 
+    showErrorMessage(response: any): void {
+        this.subscriber.next([
+            new Message(MessageType.ERROR, 
+            `An error has occured: ${response.status} (${response.statusText})`, 
+            true)
+        ]);
+    }
+
 }

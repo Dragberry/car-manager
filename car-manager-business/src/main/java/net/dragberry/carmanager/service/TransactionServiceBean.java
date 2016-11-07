@@ -118,7 +118,7 @@ public class TransactionServiceBean implements TransactionService {
 			transaction.setCreditor(creditor);
 		}
 		
-		if (to.getFuel() != null && to.getFuel().isValid()) {
+		if (to.getFuel() != null) {
 			Fuel fuel = new Fuel();
 			fuel.setCost(to.getFuel().getCost());
 			fuel.setQuantity(to.getFuel().getQuantity());

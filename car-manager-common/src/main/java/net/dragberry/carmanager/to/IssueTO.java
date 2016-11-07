@@ -11,6 +11,16 @@ public class IssueTO implements TransferObject {
 	private String msgCode;
 	
 	private Serializable[] params;
+	
+	private String message;
+	
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
 	public String getMsgCode() {
 		return msgCode;

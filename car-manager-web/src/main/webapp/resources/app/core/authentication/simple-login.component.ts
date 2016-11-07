@@ -1,4 +1,4 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 
 import { AuthenticationService } from './authentication.service';
 import { CustomerContext } from './customer-context';
@@ -24,7 +24,7 @@ import { UserDetails } from '../../shared/common/user-details';
 
     `
 })
-export class SimpleLoginComponent {
+export class SimpleLoginComponent implements OnInit {
 
     loginData: LoginData = new LoginData();
     authenticationSuccess: EventEmitter<UserDetails> = new EventEmitter<UserDetails>();
@@ -32,6 +32,18 @@ export class SimpleLoginComponent {
     constructor(
         private authenticationService: AuthenticationService,
         private customerContext: CustomerContext) {}
+
+        ngOnInit(): void {
+            this.authenticationService.getLoggedUser()
+            .then((userDetails: UserDetails) =>{
+                if (userDetails) {
+                    this.customerContext.customerKey =  userDetails.customerKey;
+                    this.customerContext.customerName = userDetails.username;
+                    this.authenticationSuccess.emit(userDetails);
+                }
+            });
+            console.log("SimpleLoginComponent onInit");
+        }
 
     login(loginData: LoginData): void {
         this.authenticationService

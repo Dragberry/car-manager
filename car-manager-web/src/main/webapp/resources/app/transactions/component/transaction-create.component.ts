@@ -12,6 +12,9 @@ import { MessagesService } from '../../core/messages/messages.service';
 import { TransactionService } from '../../core/service/transaction.service';
 import { TransactionTypeService } from '../../core/service/transaction-type.service';
 
+import {
+    Issue, Result
+} from '../../shared/common/common';
 import { Car } from '../../shared/common/car';
 import { Customer } from '../../shared/common/customer';
 import { Fuel } from '../../shared/common/fuel';
@@ -141,22 +144,30 @@ export class TransactionCreateComponent implements OnInit {
         return fuelKey == this.transaction.transactionTypeKey;
     }
 
-    submitTransaction(transaction: Transaction): void {
+    submitTransaction(): void {
+        this.messagesService.reset();
         if (this.isLoanPayment()) {
-            transaction.customerKey = this.customerContext.customerKey;
+            this.transaction.customerKey = this.customerContext.customerKey;
         } else {
-            transaction.creditorKey = null;
+            this.transaction.creditorKey = null;
         }
-        if (this.isFuel()) {
-            transaction.fuel = new Fuel();
-        }
-        this.transactionService.submitTransaction(transaction)
-            .then(transaction => {
-                this.transaction = transaction;
-                this.messagesService.addMessage(new Message(MessageType.SUCCESS, "Transaction has been created!", false));
-                this.router.navigate(["transaction/list"]);
+        this.transactionService.submitTransaction(this.transaction)
+            .then((result: Result<Transaction>) => {
+                if (!result.issues || result.issues.length == 0) {
+                    this.transaction = result.object;
+                    this.messagesService.addMessage(new Message(MessageType.SUCCESS, "Transaction has been created!", false));
+                    this.router.navigate(["transaction/list"]);
+                } else {
+                    result.issues.forEach((issue: Issue) => {
+                        this.messagesService.addMessage(
+                            new Message(MessageType.ERROR, issue.message, true)
+                        );
+                    });
+                }
             })
-            .catch(() => this.transaction = transaction);
+            .catch((error: any) => {
+                this.messagesService.showErrorMessage(error);
+            });
     }
 
     fetchCreditorList(): void {

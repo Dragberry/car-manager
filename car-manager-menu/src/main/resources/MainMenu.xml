@@ -5,7 +5,7 @@
 		<Role>ANONYMOUS</Role>
 	</MenuItemXML>
 	
-	<MenuItemXML id="transactions" key="My transactions" header="true">
+	<MenuItemXML id="transactions" key="My transactions" header="true" action="/transaction">
 		<Role>ADMIN</Role>
 		<Role>CUSTOMER</Role>
 		<MenuItemXML id="transactions.create" key="Create transaction" action="/transaction/create">
@@ -18,7 +18,7 @@
 		</MenuItemXML>
 	</MenuItemXML>
 	
-	<MenuItemXML id="transactions" key="My cars" header="true">
+	<MenuItemXML id="transactions" key="My cars" header="true" action="/car">
 		<Role>ADMIN</Role>
 		<Role>CUSTOMER</Role>
 		<MenuItemXML id="car.create" key="Add car" action="/car/create">

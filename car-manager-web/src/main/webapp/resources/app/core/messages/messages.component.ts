@@ -67,9 +67,9 @@ export class MessagesComponent {
 
     onMessageChange(): void {
         this.messagesService.source.subscribe((msgs: Message[]) => {
-                if (msgs.length == 0) {
-                    this.messages.forEach((msgs: Message[]) => {
-                        msgs = [];
+                if (!msgs || msgs.length == 0) {
+                    MESSAGE_TYPES.forEach((type: MessageType) => {
+                        this.messages.set(type, []);
                     });
                 } else {
                     msgs.forEach(msg => {

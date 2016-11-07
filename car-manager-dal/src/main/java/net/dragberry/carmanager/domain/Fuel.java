@@ -11,7 +11,7 @@ public class Fuel implements Serializable {
 
 	private static final long serialVersionUID = 6141793340217770908L;
 	@Column(name = "FUEL_QUANTITY")
-	private double quantity;
+	private Double quantity;
 	@Column(name = "FUEL_TYPE", columnDefinition = "char")
 	private String type;
 	@Column(name = "FUEL_COST")
@@ -26,11 +26,11 @@ public class Fuel implements Serializable {
 		return sb.toString();
 	}
 
-	public double getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(double quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 

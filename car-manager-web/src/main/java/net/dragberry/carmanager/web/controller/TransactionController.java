@@ -3,7 +3,10 @@ package net.dragberry.carmanager.web.controller;
 import java.util.Collections;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +27,15 @@ import net.dragberry.carmanager.web.security.CMSecurityContext;
 public class TransactionController {
 	
 	@Autowired
+	private HttpServletRequest request;
+	
+	@Autowired
 	private TransactionService transactionService;
 	@Autowired
 	private TransactionTypeService transactionTypeService;
+	
+	@Autowired
+    private MessageSource messageSource;
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
@@ -56,10 +65,16 @@ public class TransactionController {
 	
 	@RequestMapping(value = "/submit", method = RequestMethod.POST)
 	@ResponseBody
-	public TransactionTO submitTransaction(@RequestBody TransactionTO transactionTO) {
+	public ResultTO<TransactionTO> submitTransaction(@RequestBody TransactionTO transactionTO) {
 		transactionTO.setCustomerKey(CMSecurityContext.getLoggedCustomerKey());
 		ResultTO<TransactionTO> tnx = transactionService.createTransaction(transactionTO);
-		return tnx.getObject();
+		if (tnx.hasIssues()) {
+			tnx.getIssues().forEach(issue -> {
+				issue.setMessage(messageSource.getMessage(issue.getMsgCode(), issue.getParams(), request.getLocale()));
+			});
+		}
+		request.getLocale();
+		return tnx;
 	}
 	
 }

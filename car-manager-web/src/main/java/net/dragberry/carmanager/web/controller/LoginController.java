@@ -29,6 +29,12 @@ public class LoginController {
 		return null;
 	}
 	
+	@RequestMapping(value = "/logged-user", method = RequestMethod.GET)
+	@ResponseBody
+	public CustomerDetails getLoggedUser(HttpServletRequest request, Principal principal) {
+		return getCustomerDetails(request, principal);
+	}
+	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public void logout(HttpServletRequest req, HttpServletResponse res) {
 		SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
