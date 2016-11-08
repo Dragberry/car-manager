@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.dragberry.carmanager.service.TransactionService;
@@ -39,17 +40,19 @@ public class TransactionController {
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public List<TransactionTO> fetchTransactionList() {
+	public List<TransactionTO> fetchTransactionList(@RequestParam Long carKey) {
 		TransactionQueryListTO query = new TransactionQueryListTO();
 		query.setCarOwnerKey(CMSecurityContext.getLoggedCustomerKey());
+		query.setCarKey(carKey);
 		return transactionService.fetchList(query).getResult();
 	}
 
 	@RequestMapping(value ="/summary", method = RequestMethod.GET)
 	@ResponseBody
-	public TransactionSummaryTO fetchTransactionSummary() {
+	public TransactionSummaryTO fetchTransactionSummary(@RequestParam Long carKey) {
 		TransactionQueryListTO query = new TransactionQueryListTO();
 		query.setCarOwnerKey(CMSecurityContext.getLoggedCustomerKey());
+		query.setCarKey(carKey);
 		return transactionService.fetchSummary(query).getObject();
 	}
 	

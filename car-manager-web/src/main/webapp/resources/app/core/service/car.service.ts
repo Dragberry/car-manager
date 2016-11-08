@@ -12,7 +12,7 @@ export class CarService {
 
     constructor(private http: Http) {}
         
-    fetchCarList(customerKey: number): Promise<Car[]> {
+    fetchCarList(): Promise<Car[]> {
         return this.http.get(this.fetchCarListUrl)
             .toPromise()
             .then(response => {

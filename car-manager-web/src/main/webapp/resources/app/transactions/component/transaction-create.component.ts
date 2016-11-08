@@ -215,7 +215,7 @@ export class TransactionCreateComponent implements OnInit {
     }
 
     fetchCarList(): void {
-        this.carService.fetchCarList(this.customerContext.customerKey)
+        this.carService.fetchCarList()
             .then(carList => {
                 this.carList = carList;
                 if (carList[0]) {

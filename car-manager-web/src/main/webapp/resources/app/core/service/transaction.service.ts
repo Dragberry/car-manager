@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { 
     Headers,
-    Http
+    Http,
+    RequestOptions,
+    URLSearchParams
 } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
@@ -33,8 +35,8 @@ export class TransactionService {
             });
     }
         
-    fetchTransactionList(): Promise<Transaction[]> {
-        return this.http.get(this.fetchTnxListUrl)
+    fetchTransactionList(selectedCar: number): Promise<Transaction[]> {
+        return this.http.get(this.fetchTnxListUrl, this.getSelectedCarOptions(selectedCar))
             .toPromise()
             .then(response => {
                 let tnxs: Transaction[] = response.json() as Transaction[];
@@ -42,12 +44,18 @@ export class TransactionService {
             });
     }
 
-    fetchTransactionSummary(): Promise<TransactionSummary> {
-        return this.http.get(this.fetchTnxSummaryUrl)
+    fetchTransactionSummary(selectedCar: number): Promise<TransactionSummary> {
+        return this.http.get(this.fetchTnxSummaryUrl, this.getSelectedCarOptions(selectedCar))
             .toPromise()
             .then(response => {
                 let tnxs: TransactionSummary = response.json() as TransactionSummary;
                 return tnxs;
             });
+    }
+
+    getSelectedCarOptions(selectedCarKey: number): RequestOptions {
+        const params = new URLSearchParams();
+        params.set("carKey", selectedCarKey.toString());
+        return new RequestOptions({ search: params });
     }
 }

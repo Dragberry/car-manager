@@ -26,6 +26,16 @@
 <div class="row">
 	<fieldset>
 		<legend highlight>Transaction list</legend>
+		<div class="row">
+			<div class="form-group col-xs-12 col-md-4 col-lg-3">
+				<select (change)="onCarChange()"
+					[(ngModel)]="selectedCar"
+					name="selected-car"
+					class="form-control">
+					<option *ngFor="let car of carList" value="{{car.carKey}}">{{car.brand}} {{car.model}}</option>
+				</select>
+			</div>
+		</div>
 		<table class="table table-striped">
 			<tr>
 				<th>Date</th>
