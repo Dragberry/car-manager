@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -14,6 +12,9 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -22,14 +23,12 @@ import javax.persistence.MapKeyEnumerated;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "CUSTOMER")
-@AttributeOverrides({
-	@AttributeOverride(column = @Column(name =  "CUSTOMER_KEY"), name = "entityKey")
-})
 @NamedQueries({
 	@NamedQuery(
 			name = Customer.FETCH_PAYERS_QUERY,
@@ -38,6 +37,14 @@ import javax.persistence.TemporalType;
 			name = Customer.FIND_BY_CUSTOMER_NAME_QUERY,
 			query = "select c from Customer c where c.customerName = :customerName")
 })
+@TableGenerator(
+		name = "CUSTOMER_GEN", 
+		table = "GENERATOR",
+		pkColumnName = "GEN_NAME", 
+		pkColumnValue = "CUSTOMER_GEN",
+		valueColumnName = "GEN_VALUE",
+		initialValue = 1000,
+		allocationSize = 1)
 public class Customer extends AbstractEntity {
 
 	private static final long serialVersionUID = 1951614770708868066L;
@@ -45,6 +52,11 @@ public class Customer extends AbstractEntity {
 	public static final String FETCH_PAYERS_QUERY = "Customer.fetchPayers";
 	public static final String FIND_BY_CUSTOMER_NAME_QUERY = "Customer.findByCustomerNAme";
 
+	@Id
+	@Column(name = "CUSTOMER_KEY")
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "CUSTOMER_GEN")
+	private Long entityKey;
+	
 	@Column(name = "CUSTOMER_NAME")
 	private String customerName;
 	
@@ -85,6 +97,16 @@ public class Customer extends AbstractEntity {
 	    inverseJoinColumns = @JoinColumn(name = "PAYER_KEY", referencedColumnName = "CUSTOMER_KEY"))
 	private Set<Customer> payers;
 
+	@Override
+	public Long getEntityKey() {
+		return entityKey;
+	}
+	
+	@Override
+	public void setEntityKey(Long entityKey) {
+		this.entityKey = entityKey;
+	}
+	
 	public String getCustomerName() {
 		return customerName;
 	}

@@ -3,28 +3,40 @@ package net.dragberry.carmanager.domain;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 
 import net.dragberry.carmanager.common.Currency;
 
 @Entity
 @Table(name = "TRANSACTION")
-@AttributeOverrides({ 
-	@AttributeOverride(column = @Column(name = "TRANSACTION_KEY") , name = "entityKey") 
-})
+@TableGenerator(
+		name = "TRANSACTION_GEN", 
+		table = "GENERATOR",
+		pkColumnName = "GEN_NAME", 
+		pkColumnValue = "TRANSACTION_GEN",
+		valueColumnName = "GEN_VALUE",
+		initialValue = 1000,
+		allocationSize = 1)
 public class Transaction extends AbstractEntity {
 
 	private static final long serialVersionUID = -1124381093271131117L;
+	
+	@Id
+	@Column(name = "TRANSACTION_KEY")
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TRANSACTION_GEN")
+	private Long entityKey;
 	@Column(name = "AMOUNT")
 	private BigDecimal amount;
 	@Column(name = "DESCRIPTION")
@@ -50,6 +62,16 @@ public class Transaction extends AbstractEntity {
 	private Customer creditor;
 	@Embedded
 	private Fuel fuel;
+	
+	@Override
+	public Long getEntityKey() {
+		return entityKey;
+	}
+	
+	@Override
+	public void setEntityKey(Long entityKey) {
+		this.entityKey = entityKey;
+	}
 
 	@Override
 	public String toString() {

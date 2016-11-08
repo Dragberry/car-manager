@@ -4,35 +4,25 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.MappedSuperclass;
 
 import org.apache.commons.lang3.StringUtils;
 
 @MappedSuperclass
+@Access(AccessType.FIELD)
 public abstract class AbstractEntity implements Serializable {
 
 	private static final long serialVersionUID = 54446865118204573L;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ENTITY_KEY")
-	private Long entityKey;
+	public abstract Long getEntityKey();
 
-	public Long getEntityKey() {
-		return entityKey;
-	}
-
-	public void setEntityKey(Long entityKey) {
-		this.entityKey = entityKey;
-	}
+	public abstract void setEntityKey(Long entityKey);
 	
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder(getClass().getSimpleName()).append("[").append(entityKey).append("]=[\n");
+		StringBuilder sb = new StringBuilder(getClass().getSimpleName()).append("[").append(getEntityKey()).append("]=[\n");
 		for (Method method : getClass().getMethods()) {
 			if (method.getName().startsWith("get") && !"getClass".equals(method.getName())) {
 				sb.append("\t[");

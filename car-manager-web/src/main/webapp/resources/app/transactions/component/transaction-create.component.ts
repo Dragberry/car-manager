@@ -23,6 +23,8 @@ import { Transaction } from '../../shared/common/transaction';
 import { TransactionType } from '../../shared/common/transaction-type';
 
 const DEFAULT_DESCRIPTION = "Топливо";
+const FUEL_KEY = 1000;
+const LOAN_PAYMENT_KEY = 1001;
 
 @Component({
     selector: "cm-transaction-create",
@@ -118,8 +120,7 @@ export class TransactionCreateComponent implements OnInit {
     }
     
     transactionTypeChanged(typeKey: number): void {
-        const loanPaymentKey: number = 2;
-        if (typeKey == loanPaymentKey) {
+        if (LOAN_PAYMENT_KEY == typeKey) {
             let customer: Customer = this.payerMap.get(this.customerContext.customerKey);
             this.transaction.customerKey = customer.customerKey;
             this.customerName = `${customer.firstName} ${customer.lastName}`;
@@ -131,8 +132,7 @@ export class TransactionCreateComponent implements OnInit {
     }
 
     isFuel(): boolean {
-        const fuelKey: number = 1;
-        return fuelKey == this.transaction.transactionTypeKey;
+        return FUEL_KEY == this.transaction.transactionTypeKey;
     }
     
     isCreditorShown(): boolean {
@@ -140,8 +140,7 @@ export class TransactionCreateComponent implements OnInit {
     }
 
     isLoanPayment(): boolean {
-        const fuelKey: number = 2;
-        return fuelKey == this.transaction.transactionTypeKey;
+        return LOAN_PAYMENT_KEY == this.transaction.transactionTypeKey;
     }
 
     submitTransaction(): void {

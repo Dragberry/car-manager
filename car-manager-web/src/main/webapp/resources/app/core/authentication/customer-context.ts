@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
 import { RequestOptions, URLSearchParams } from '@angular/http';
 
+export const GUEST_KEY: number = 1001;
+export const GUEST_NAME: string = "Guest";
+
 @Injectable()
 export class CustomerContext {
-    customerName: string = "Anonymous";
-    customerKey: number = 2;
+    customerName: string = GUEST_NAME
+    customerKey: number = GUEST_KEY;
     
     /**
      * Checks whether the user is logged or not
      */
     isLogged(): boolean {
-        return this.customerKey && this.customerKey != 2;
+        return this.customerKey && this.customerKey != GUEST_KEY;
     }
 
     /**

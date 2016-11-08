@@ -59,10 +59,10 @@ public class Consumer implements Callable<Integer>{
 	@Override
 	public Integer call() throws Exception {
 		try {
-			context.addCustomer(3L, customerDao.findOne(3L));
-			context.addCustomer(4L, customerDao.findOne(4L));
-			context.addCustomer(5L, customerDao.findOne(5L));
-			context.setCar(carDao.findOne(1L));
+			context.addCustomer(1002L, customerDao.findOne(1002L));
+			context.addCustomer(1003L, customerDao.findOne(1003L));
+			context.addCustomer(1004L, customerDao.findOne(1004L));
+			context.setCar(carDao.findOne(1000L));
 			
 			Record record= null;
 			while ((record = queue.poll(3, TimeUnit.SECONDS)) != null) {
@@ -127,10 +127,10 @@ public class Consumer implements Callable<Integer>{
 		switch (currencyCustomer) {
 		case BYR:
 		case USD:
-			return context.getCustomer(record.getDescription().endsWith("получено") ? 5L : 3L);
+			return context.getCustomer(record.getDescription().endsWith("получено") ? 1004L : 1002L);
 		case BYR_DAD:
 		case USD_DAD:
-			return context.getCustomer(4L);
+			return context.getCustomer(1003L);
 		default:
 			throw new IllegalArgumentException(MessageFormat.format("Invalid value for CurrencyCustomer [{0}]!", currencyCustomer));
 		}
