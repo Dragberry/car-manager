@@ -1,5 +1,6 @@
 package net.dragberry.carmanager.web.controller;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import net.dragberry.carmanager.common.TransactionStatus;
 import net.dragberry.carmanager.service.TransactionService;
 import net.dragberry.carmanager.service.TransactionTypeService;
 import net.dragberry.carmanager.to.ResultTO;
@@ -44,6 +46,7 @@ public class TransactionController {
 		TransactionQueryListTO query = new TransactionQueryListTO();
 		query.setCarOwnerKey(CMSecurityContext.getLoggedCustomerKey());
 		query.setCarKey(carKey);
+		query.setStatuses(Arrays.asList(TransactionStatus.ACTIVE));
 		return transactionService.fetchList(query).getResult();
 	}
 
@@ -53,6 +56,7 @@ public class TransactionController {
 		TransactionQueryListTO query = new TransactionQueryListTO();
 		query.setCarOwnerKey(CMSecurityContext.getLoggedCustomerKey());
 		query.setCarKey(carKey);
+		query.setStatuses(Arrays.asList(TransactionStatus.ACTIVE));
 		return transactionService.fetchSummary(query).getObject();
 	}
 	

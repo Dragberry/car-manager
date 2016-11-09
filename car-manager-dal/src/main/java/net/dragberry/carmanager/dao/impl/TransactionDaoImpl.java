@@ -13,6 +13,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import net.dragberry.carmanager.common.Currency;
+import net.dragberry.carmanager.common.TransactionStatus;
 import net.dragberry.carmanager.dao.TransactionDao;
 import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
@@ -23,6 +24,13 @@ public class TransactionDaoImpl extends AbstractDao<Transaction> implements Tran
 
 	public TransactionDaoImpl() {
 		super(Transaction.class);
+	}
+	
+	@Override
+	public List<Transaction> fetchInactiveTransactions() {
+		return getEntityManager().createNamedQuery(Transaction.FIND_BY_STATUS, getEntityType())
+				.setParameter("status", TransactionStatus.PROCESSING)
+				.getResultList();
 	}
 
 	@Override
@@ -112,6 +120,9 @@ public class TransactionDaoImpl extends AbstractDao<Transaction> implements Tran
 		}
 		if (CollectionUtils.isNotEmpty(query.getCurrencyList())) {
 			predicates.add(tRoot.get("currency").in(query.getCurrencyList()));
+		}
+		if (CollectionUtils.isNotEmpty(query.getStatuses())) {
+			predicates.add(tRoot.get("status").in(query.getStatuses()));
 		}
 		return predicates.toArray(new Predicate[]{});
 	}

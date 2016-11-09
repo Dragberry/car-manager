@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,10 +15,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 import net.dragberry.carmanager.common.Currency;
+import net.dragberry.carmanager.common.TransactionStatus;
 
 @Entity
 @Table(name = "TRANSACTION")
@@ -29,10 +33,16 @@ import net.dragberry.carmanager.common.Currency;
 		valueColumnName = "GEN_VALUE",
 		initialValue = 1000,
 		allocationSize = 1)
+@NamedQueries({
+	@NamedQuery(
+			name = Transaction.FIND_BY_STATUS,
+			query = "select t from Transaction t where t.status = :status")
+})
 public class Transaction extends AbstractEntity {
 
 	private static final long serialVersionUID = -1124381093271131117L;
 	
+	public final static String FIND_BY_STATUS = "Transaction.findByStatus";
 	@Id
 	@Column(name = "TRANSACTION_KEY")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TRANSACTION_GEN")
@@ -62,6 +72,9 @@ public class Transaction extends AbstractEntity {
 	private Customer creditor;
 	@Embedded
 	private Fuel fuel;
+	@Column(name = "STATUS")
+	@Convert(converter = TransactionStatusConverter.class)
+	private TransactionStatus status;
 	
 	@Override
 	public Long getEntityKey() {
@@ -164,6 +177,14 @@ public class Transaction extends AbstractEntity {
 
 	public void setCreditor(Customer creditor) {
 		this.creditor = creditor;
+	}
+
+	public TransactionStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TransactionStatus status) {
+		this.status = status;
 	}
 	
 }

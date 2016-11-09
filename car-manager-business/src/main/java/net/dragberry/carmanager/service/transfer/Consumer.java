@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.dragberry.carmanager.common.Currency;
+import net.dragberry.carmanager.common.TransactionStatus;
 import net.dragberry.carmanager.dao.CarDao;
 import net.dragberry.carmanager.dao.CustomerDao;
 import net.dragberry.carmanager.dao.TransactionDao;
@@ -97,10 +98,17 @@ public class Consumer implements Callable<Integer>{
 				transaction.setDescription(record.getDescription());
 				transaction.setCurrency(currencyCustomer.getCurrency());
 				transaction.setAmount(resolveAmount(record, currencyCustomer));
-				transaction.setExchangeRate(currencyService.getExchangeRate(Currency.USD, record.getDate()));
 				TransactionType tType = resolveType(record);
 				transaction.setTransactionType(tType);
 				transaction.setCustomer(getCustomer(record, currencyCustomer));
+				Double exchangeRate = currencyService.getExchangeRate(Currency.USD, record.getDate());
+				if (exchangeRate == null) {
+					transaction.setStatus(TransactionStatus.ACTIVE);
+					transaction.setExchangeRate(exchangeRate);
+				} else {
+					transaction.setStatus(TransactionStatus.PROCESSING);
+				}
+				
 				
 				if (TransactionType.LOAN_PAYMENT.equals(tType.getName())) {
 					transaction.setCreditor(context.getCustomer(4L));

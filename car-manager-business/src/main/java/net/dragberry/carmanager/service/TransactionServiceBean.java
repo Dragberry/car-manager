@@ -31,6 +31,7 @@ import net.dragberry.carmanager.to.TransactionQueryListTO;
 import net.dragberry.carmanager.to.TransactionSummaryTO;
 import net.dragberry.carmanager.to.TransactionTO;
 import net.dragberry.carmanager.common.Currency;
+import net.dragberry.carmanager.common.TransactionStatus;
 import net.dragberry.carmanager.ws.client.CurrencyService;
 
 /**
@@ -100,7 +101,13 @@ public class TransactionServiceBean implements TransactionService {
 		transaction.setExchangeRate(to.getExchangeRate());
 		transaction.setExecutionDate(to.getExecutionDate());
 		
-		transaction.setExchangeRate(currencyService.getExchangeRate(Currency.USD, to.getExecutionDate()));
+		Double exchangeRate = currencyService.getExchangeRate(Currency.USD, to.getExecutionDate());
+		if (exchangeRate == null) {
+			transaction.setStatus(TransactionStatus.PROCESSING);
+		} else {
+			transaction.setStatus(TransactionStatus.ACTIVE);
+			transaction.setExchangeRate(exchangeRate);
+		}
 		if (to.getCarKey() != null) {
 			Car car = carDao.findOne(to.getCarKey());
 			transaction.setCar(car);

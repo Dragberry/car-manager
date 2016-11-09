@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import net.dragberry.carmanager.common.Currency;
+import net.dragberry.carmanager.common.TransactionStatus;
 
 public class TransactionQueryListTO extends QueryListTO {
 
@@ -33,6 +34,8 @@ public class TransactionQueryListTO extends QueryListTO {
 	private Double fuelQuantityTo;
 
 	private Double fuelQuantityFrom;
+	
+	private List<TransactionStatus> statuses;
 	
 	public Long getCarOwnerKey() {
 		return carOwnerKey;
@@ -129,5 +132,14 @@ public class TransactionQueryListTO extends QueryListTO {
 	public void setDisplayCurrency(Currency displayCurrency) {
 		this.displayCurrency = displayCurrency;
 	}
+
+	public List<TransactionStatus> getStatuses() {
+		return statuses;
+	}
+
+	public void setStatuses(List<TransactionStatus> statuses) {
+		this.statuses = statuses;
+	}
+	
 	
 }

@@ -35,7 +35,7 @@ public class CurrencyServiceBean implements CurrencyService {
 	private RestTemplate restTemplate;
 
 	@Override
-	public double getExchangeRate(Currency currency, LocalDate date) {
+	public Double getExchangeRate(Currency currency, LocalDate date) {
 		URI uri = null;
 		try {
 			String formattedDate = DateTimeFormatter.ISO_LOCAL_DATE.format(date);
@@ -51,7 +51,7 @@ public class CurrencyServiceBean implements CurrencyService {
 			}
 			exc.printStackTrace();
 		}
-		return 0;
+		return null;
 	}
 
 }

@@ -9,6 +9,8 @@ public interface TransactionDao extends DataAccessObject<Transaction, Long> {
 
 	List<Transaction> fetchList(TransactionQueryListTO query);
 	
+	List<Transaction> fetchInactiveTransactions();
+	
 	Long count(TransactionQueryListTO query);
 	
 	Object[] summary(TransactionQueryListTO query);
