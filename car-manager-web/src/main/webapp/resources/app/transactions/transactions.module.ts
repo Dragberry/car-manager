@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
 
 import { TransactionCreateComponent } from './component/transaction-create.component';
 import { TransactionListComponent } from './component/transaction-list.component';
@@ -13,7 +14,8 @@ import { TransactionService } from '../core/service/transaction.service';
     imports: [
         CommonModule,
         FormsModule,
-        TransactionsRoutingModule
+        TransactionsRoutingModule,
+        SharedModule
     ],
     declarations: [
         TransactionCreateComponent,

@@ -12,7 +12,7 @@ import {
     Issue,
     Result
 } from '../../shared/common/common';
-import { Transaction } from '../../shared/common/transaction';
+import { Transaction } from '../../shared/common/common';
 import { TransactionSummary } from '../../shared/common/transaction-summary';
 
 @Injectable()

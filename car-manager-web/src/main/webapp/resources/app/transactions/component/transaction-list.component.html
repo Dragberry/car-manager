@@ -24,10 +24,20 @@
 	</fieldset>
 </div>
 <div class="row">
+	<form (ngSubmit)="search()" #searchForm="ngForm">
+		<div class="col-lg-3 col-md-4 col-xs-6" >
+
+		</div>
+		<div class="form-group col-md-12">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+	</form>
+</div>
+<div class="row">
 	<fieldset>
 		<legend highlight>Transaction list</legend>
 		<div class="row">
-			<div class="form-group col-xs-12 col-md-4 col-lg-3">
+			<div class="form-group col-lg-3 col-md-4 col-xs-12">
 				<select (change)="onCarChange()"
 					[(ngModel)]="selectedCar"
 					name="selected-car"

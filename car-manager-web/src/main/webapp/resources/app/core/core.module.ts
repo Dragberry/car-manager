@@ -21,12 +21,13 @@ import { MessagesService }          from './messages/messages.service';
 import { TransactionService }       from './service/transaction.service';
 import { TransactionTypeService }   from './service/transaction-type.service';
 
+
+
 @NgModule({
     imports:        [
         HttpModule,
         SharedModule
     ],
-    declarations:   [],
     exports:        [],
     providers:      [
         AuthenticationService,

@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 
 import { Car } from '../../shared/common/car';
-import { Transaction } from '../../shared/common/transaction';
+import { Transaction } from '../../shared/common/common';
 import { TransactionSummary } from '../../shared/common/transaction-summary';
 
 import { CarService } from '../../core/service/car.service';

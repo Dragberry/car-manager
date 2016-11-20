@@ -13,13 +13,14 @@ import { TransactionService } from '../../core/service/transaction.service';
 import { TransactionTypeService } from '../../core/service/transaction-type.service';
 
 import {
-    Issue, Result
+    Fuel,
+    Issue,
+    Result,
+    Transaction
 } from '../../shared/common/common';
 import { Car } from '../../shared/common/car';
 import { Customer } from '../../shared/common/customer';
-import { Fuel } from '../../shared/common/fuel';
 import { Message, MessageType } from '../../core/messages/message';
-import { Transaction } from '../../shared/common/transaction';
 import { TransactionType } from '../../shared/common/transaction-type';
 
 const DEFAULT_DESCRIPTION = "Топливо";
@@ -28,7 +29,7 @@ const LOAN_PAYMENT_KEY = 1001;
 
 @Component({
     selector: "cm-transaction-create",
-    templateUrl: "./app/transactions/component/transaction-create.component.html"
+    templateUrl: "./app/transactions/component/transaction-create.component.html",
 })
 export class TransactionCreateComponent implements OnInit {
 
@@ -40,7 +41,8 @@ export class TransactionCreateComponent implements OnInit {
     payerMap: Map<number, Customer>;
     transactionTypeList: TransactionType[];
 
-    customerName: string;
+    public customerName: string;
+    public amountMask: string = "^\\d+(\\\.\\d{1,2})?$";
 
     constructor(
         private carService: CarService,
@@ -65,27 +67,27 @@ export class TransactionCreateComponent implements OnInit {
 
     amountChanged(event: any): void {
         if (this.transaction.amount && this.transaction.fuel.cost) {
-            this.transaction.fuel.quantity = this.transaction.amount / this.transaction.fuel.cost;
+            this.transaction.fuel.quantity = (+this.transaction.amount / +this.transaction.fuel.cost).toFixed(2);
         }
         this.transaction.description = this.buildFuelDescription(this.transaction.fuel);
     }
 
     fuelQuantityChanged(event: any): void {
         if (this.transaction.fuel.cost && this.transaction.fuel.quantity) {
-            this.transaction.amount = this.transaction.fuel.cost * this.transaction.fuel.quantity;
+            this.transaction.amount = (+this.transaction.fuel.cost * +this.transaction.fuel.quantity).toFixed(2);
             this.transaction.description = this.buildFuelDescription(this.transaction.fuel);
         } else {
-            this.transaction.amount = 0.00;
+            this.transaction.amount = '0.00';
             this.transaction.description = DEFAULT_DESCRIPTION;
         }
     }
 
     fuelCostChanged(event: any): void {
         if (this.transaction.fuel.cost && this.transaction.fuel.quantity) {
-            this.transaction.amount = this.transaction.fuel.cost * this.transaction.fuel.quantity;
+            this.transaction.amount = (+this.transaction.fuel.cost * +this.transaction.fuel.quantity).toFixed(2);
             this.transaction.description = this.buildFuelDescription(this.transaction.fuel);
         } else {
-            this.transaction.amount = 0.00;
+            this.transaction.amount = '0.00';
             this.transaction.description = DEFAULT_DESCRIPTION;
         }
     }
@@ -106,14 +108,13 @@ export class TransactionCreateComponent implements OnInit {
         return DEFAULT_DESCRIPTION;
     }
 
-    resolveEnding(quantity: number): string {
-        let quantityStr: string = quantity.toString();
+    resolveEnding(quantity: string): string {
         let ending: string = "а";
-        if (quantityStr.match(/[\.,]/)) {
+        if (quantity.match(/[\.,]/)) {
             ending = "а";
-        } else if (quantityStr.match(/([056789]|(1[1-9]))$/)) {
+        } else if (quantity.match(/([056789]|(1[1-9]))$/)) {
             ending = "ов";
-        } else if (quantityStr.match(/\d*[1]$/)) {
+        } else if (quantity.match(/\d*[1]$/)) {
             ending = "";
         }
         return ending;
