@@ -30,7 +30,7 @@ export class MaskedAmountInput implements OnInit, ControlValueAccessor {
     private regExp: string;
     private oldValue: string;
 
-    public amountMask: string = "^\\d+(\\\.\\d{1,2})?$";
+    public amountMask: string = "^\\d*(\\\.)?(\\d{0,4})?$";
 
     _onTouched = () => {}
     _onChange = (_: any) => {}
@@ -64,7 +64,7 @@ export class MaskedAmountInput implements OnInit, ControlValueAccessor {
 
     onInput($event) {
         let newValue: string = $event.target.value;
-        if (newValue.match(this.mask)) {
+        if (newValue.match(this.amountMask)) {
             this.oldValue = newValue;
             this._onChange($event.target.value);
         } else {

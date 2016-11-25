@@ -53,7 +53,8 @@
         <div class="col-md-6">
             <div class="form-group col-md-8">
                 <label>Amount</label>
-                <input [(ngModel)]="transaction.amount" 
+                <input [(ngModel)]="transaction.amount"
+                    masked-amount-input
                     name="amount"
                     (change)="amountChanged($event)" 
                     (keyup)="amountChanged($event)" 
@@ -68,14 +69,15 @@
             </div>
             <div class="form-group col-md-12">
                 <label>Description</label>
-                <input masked-input mask="{{amountMask}}" [(ngModel)]="transaction.description" name="description" type="text" class="form-control"/>
+                <input [(ngModel)]="transaction.description" name="description" type="text" class="form-control"/>
             </div>
             
             <fieldset [hidden]="!isFuelShown()" id="fuelPanel" class="form-group col-md-12">
                 <legend>Fuel</legend>
                 <div class="form-group col-md-4">
                     <label>Quantity</label>
-                    <input [(ngModel)]="transaction.fuel.quantity" 
+                    <input [(ngModel)]="transaction.fuel.quantity"
+                        masked-amount-input
                         name="fuel.quantity" 
                         (change)="fuelQuantityChanged($event)" 
                         (keyup)="fuelQuantityChanged($event)" 
@@ -93,7 +95,8 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label>Cost</label>
-                    <input [(ngModel)]="transaction.fuel.cost" 
+                    <input [(ngModel)]="transaction.fuel.cost"
+                        masked-amount-input
                         name="fuel.cost" 
                         (change)="fuelCostChanged($event)" 
                         (keyup)="fuelCostChanged($event)" 

@@ -26,6 +26,7 @@ import { TransactionType } from '../../shared/common/transaction-type';
 const DEFAULT_DESCRIPTION = "Топливо";
 const FUEL_KEY = 1000;
 const LOAN_PAYMENT_KEY = 1001;
+const ZERO = '0.00';
 
 @Component({
     selector: "cm-transaction-create",
@@ -67,27 +68,30 @@ export class TransactionCreateComponent implements OnInit {
 
     amountChanged(event: any): void {
         if (this.transaction.amount && this.transaction.fuel.cost) {
-            this.transaction.fuel.quantity = (+this.transaction.amount / +this.transaction.fuel.cost).toFixed(2);
+            let quantity: number = (+this.transaction.amount / +this.transaction.fuel.cost);
+            this.transaction.fuel.quantity = quantity ? quantity.toFixed(2) : ZERO;
         }
         this.transaction.description = this.buildFuelDescription(this.transaction.fuel);
     }
 
     fuelQuantityChanged(event: any): void {
         if (this.transaction.fuel.cost && this.transaction.fuel.quantity) {
-            this.transaction.amount = (+this.transaction.fuel.cost * +this.transaction.fuel.quantity).toFixed(2);
+            let amount: number = (+this.transaction.fuel.cost * +this.transaction.fuel.quantity);
+            this.transaction.amount = amount ? amount.toFixed(2) : ZERO;
             this.transaction.description = this.buildFuelDescription(this.transaction.fuel);
         } else {
-            this.transaction.amount = '0.00';
+            this.transaction.amount = ZERO;
             this.transaction.description = DEFAULT_DESCRIPTION;
         }
     }
 
     fuelCostChanged(event: any): void {
         if (this.transaction.fuel.cost && this.transaction.fuel.quantity) {
-            this.transaction.amount = (+this.transaction.fuel.cost * +this.transaction.fuel.quantity).toFixed(2);
+            let amount: number = (+this.transaction.fuel.cost * +this.transaction.fuel.quantity);
+            this.transaction.amount = amount ? amount.toFixed(2) : ZERO;
             this.transaction.description = this.buildFuelDescription(this.transaction.fuel);
         } else {
-            this.transaction.amount = '0.00';
+            this.transaction.amount = ZERO;
             this.transaction.description = DEFAULT_DESCRIPTION;
         }
     }
