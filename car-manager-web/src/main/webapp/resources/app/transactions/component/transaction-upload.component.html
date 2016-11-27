@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-md-12" >
+        <fieldset>
+            <legend highlight>Upload file</legend>
+            <div class="col-md-6">
+                <label class="btn btn-primary btn-file" for="tranasction-upload-selector">
+                    Browse 
+                    <input id="tranasction-upload-selector"
+                        (change)="onFileSelected($event.target)"
+                        type="file"
+                        ng2FileSelect
+                        [uploader]="uploader"
+                        style="display: none;" />
+                </label>
+                <span class='label label-info'>{{selectedFileName}}</span>
+            </div>
+            <div class="col-md-6">
+                <button type="button" 
+                    class="btn btn-primary btn-s"
+                    (click)="upload()"
+                    [disabled]="!uploader.getNotUploadedItems().length">
+                    <span class="glyphicon glyphicon-upload"></span> 
+                    <span>Upload</span> 
+                </button>
+            </div>
+        </fieldset>
+    </div>
+</div>

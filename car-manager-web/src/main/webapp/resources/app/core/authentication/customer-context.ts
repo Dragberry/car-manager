@@ -8,6 +8,7 @@ export const GUEST_NAME: string = "Guest";
 export class CustomerContext {
     customerName: string = GUEST_NAME
     customerKey: number = GUEST_KEY;
+    authToken: string = null;
     
     /**
      * Checks whether the user is logged or not

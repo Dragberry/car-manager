@@ -39,6 +39,7 @@ export class SimpleLoginComponent implements OnInit {
                 if (userDetails) {
                     this.customerContext.customerKey =  userDetails.customerKey;
                     this.customerContext.customerName = userDetails.username;
+                    this.customerContext.authToken = userDetails.authToken;
                     this.authenticationSuccess.emit(userDetails);
                 }
             });
@@ -51,6 +52,7 @@ export class SimpleLoginComponent implements OnInit {
             .then((userDetails: UserDetails) => {
                 this.customerContext.customerKey =  userDetails.customerKey;
                 this.customerContext.customerName = userDetails.username;
+                this.customerContext.authToken = userDetails.authToken;
                 this.authenticationSuccess.emit(userDetails);
                 console.log("Login success!")
             });
@@ -62,6 +64,7 @@ export class SimpleLoginComponent implements OnInit {
             .then(() => {
                 this.customerContext.customerKey =  2;
                 this.customerContext.customerName = "Anonymous";
+                this.customerContext.authToken = null;
                 console.log("Logout success!")
             });
     }

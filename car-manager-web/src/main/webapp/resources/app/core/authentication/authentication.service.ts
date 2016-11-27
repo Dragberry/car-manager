@@ -31,7 +31,9 @@ export class AuthenticationService {
         return this.http.get(this.authUrl, options)
             .toPromise()
             .then(response => {
-                return response.json() as UserDetails;
+                let userDetails: UserDetails = response.json() as UserDetails;
+                userDetails.authToken = headers.get('Authorization');
+                return userDetails;
             })
             .catch((response: any) => console.log(`Login Failure: data=${response}`));
     }

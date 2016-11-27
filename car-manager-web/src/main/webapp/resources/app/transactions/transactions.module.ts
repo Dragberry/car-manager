@@ -5,6 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 
 import { TransactionCreateComponent } from './component/transaction-create.component';
 import { TransactionListComponent } from './component/transaction-list.component';
+import { TransactionUploadComponent } from './component/transaction-upload.component';
 
 import { TransactionsRoutingModule } from './transactions-routing.module';
 
@@ -19,11 +20,13 @@ import { TransactionService } from '../core/service/transaction.service';
     ],
     declarations: [
         TransactionCreateComponent,
-        TransactionListComponent
+        TransactionListComponent,
+        TransactionUploadComponent
     ],
     exports: [
         TransactionCreateComponent,
-        TransactionListComponent
+        TransactionListComponent,
+        TransactionUploadComponent
     ],
     providers: [
         TransactionService
