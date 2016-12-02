@@ -26,7 +26,8 @@
                     '@angular/router': 'node_modules/@angular/router/bundles/router.umd.js',
                     'rxjs': 'node_modules/rxjs',
                     'moment': 'node_modules/moment/moment.js',
-                    'angular2-cookie': 'node_modules/angular2-cookie'
+                    'angular2-cookie': 'node_modules/angular2-cookie',
+                    'ng2-file-upload': 'node_modules/ng2-file-upload/ng2-file-upload.js',
                 }
             });
             System.import('<c:url value="/main"/>'); 

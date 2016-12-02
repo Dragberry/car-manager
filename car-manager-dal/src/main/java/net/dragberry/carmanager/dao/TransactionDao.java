@@ -13,5 +13,4 @@ public interface TransactionDao extends DataAccessObject<Transaction, Long> {
 	
 	Long count(TransactionQueryListTO query);
 	
-	Object[] summary(TransactionQueryListTO query);
 }

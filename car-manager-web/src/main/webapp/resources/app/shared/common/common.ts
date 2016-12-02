@@ -30,5 +30,12 @@ export class Transaction {
     transactionTypeName: string;
     fuel: Fuel = new Fuel();
     creditorKey: number;
+}
 
+export class TransactionSummary {
+	amountPerMounth: number;
+    totalAmount : number;
+	totalAmountByCustomer: number;
+	totalFuelAmount: number;
+	displayCurrency: string;
 }

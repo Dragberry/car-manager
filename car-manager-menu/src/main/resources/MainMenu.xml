@@ -16,6 +16,10 @@
 			<Role>ADMIN</Role>
 			<Role>CUSTOMER</Role>
 		</MenuItemXML>
+		<MenuItemXML id="transactions.upload" key="Upload file" action="/transaction/upload">
+			<Role>ADMIN</Role>
+			<Role>CUSTOMER</Role>
+		</MenuItemXML>
 	</MenuItemXML>
 	
 	<MenuItemXML id="transactions" key="My cars" header="true" action="/car">

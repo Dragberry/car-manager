@@ -37,21 +37,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding(UTF_8);
         filter.setForceEncoding(true);
-        http.addFilterBefore(filter, CsrfFilter.class);
-		http
+        http
+        	.csrf().csrfTokenRepository(customCsrfTokenRepository())
+        .and()
+        	.addFilterAfter(customCsrfHeaderFilter, CsrfFilter.class)
+        	.rememberMe().key(CARAMANAGER_REMEMBER_TOKEN).rememberMeServices(rememberMeServices())
+        .and()
+        	.httpBasic().authenticationEntryPoint(http403ForbiddenEntryPoint());
+//		.and()
 //			.authorizeRequests()
 //			.antMatchers("/app/transactions/*").denyAll()
 //			.antMatchers("/app/component/transactions/**").denyAll()
 //			.antMatchers("/app/component/transactions/").denyAll()
 //			.antMatchers("/app/component/transactions").denyAll()
-//		.and()
-			.httpBasic()
-			.authenticationEntryPoint(http403ForbiddenEntryPoint())
-		.and()
-			.csrf().csrfTokenRepository(customCsrfTokenRepository())
-		.and()
-			.addFilterAfter(customCsrfHeaderFilter, CsrfFilter.class)
-			.rememberMe().key(CARAMANAGER_REMEMBER_TOKEN).rememberMeServices(rememberMeServices());
+
+			
 	}
 	
 	@Override

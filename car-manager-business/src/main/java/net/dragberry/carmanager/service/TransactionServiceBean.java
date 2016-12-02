@@ -2,6 +2,10 @@ package net.dragberry.carmanager.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.MonthDay;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -59,6 +63,7 @@ public class TransactionServiceBean implements TransactionService {
 	private ValidationService<Transaction> validationService;
 	
 	@Override
+	@Transactional
 	public ResultList<TransactionTO> fetchList(TransactionQueryListTO query) {
 		ResultList<TransactionTO> result = new ResultList<>();
 		Long count = transactionDao.count(query);
@@ -84,11 +89,36 @@ public class TransactionServiceBean implements TransactionService {
 				}
 				result.addItem(to);
 			});
+			
+			TransactionSummaryTO summary = new TransactionSummaryTO();
+			list.forEach(tnx -> {
+				BigDecimal amount = calcuateAmount(tnx);
+				if (TransactionType.FUEL_KEY.equals(tnx.getTransactionType().getEntityKey())) {
+					summary.setTotalFuelAmount(summary.getTotalFuelAmount().add(amount));
+				}
+				if (tnx.getCustomer().getEntityKey().equals(query.getCarOwnerKey())) {
+					summary.setTotalAmountByCustomer(summary.getTotalAmountByCustomer().add(amount));
+				}
+				if (!TransactionType.LOAN_PAYMENT_KEY.equals(tnx.getTransactionType().getEntityKey())) {
+					summary.setTotalAmount(summary.getTotalAmount().add(amount));
+				}
+			});
+			summary.toString();
+			
 		}
+		
 		result.setTotalCount(count);
 		result.setPageNumber(query.getPageNumber());
 		result.setPageSize(query.getPageSize());
 		return result;
+	}
+
+	private static BigDecimal calcuateAmount(Transaction tnx) {
+		if (Currency.USD == tnx.getCurrency()) {
+			return tnx.getAmount();
+		} else {
+			return tnx.getAmount().divide(new BigDecimal(tnx.getExchangeRate()), RoundingMode.HALF_UP);
+		}
 	}
 	
 	@Override
@@ -151,13 +181,30 @@ public class TransactionServiceBean implements TransactionService {
 	}
 
 	@Override
+	@Transactional
 	public ResultTO<TransactionSummaryTO> fetchSummary(TransactionQueryListTO query) {
+		List<Transaction> list = transactionDao.fetchList(query);
+		
 		TransactionSummaryTO summary = new TransactionSummaryTO();
-		Object[] total = transactionDao.summary(query);
-		summary.setTotalAmount(total[0] == null ? BigDecimal.ZERO : ((BigDecimal) total[0]).setScale(2, RoundingMode.HALF_UP));
-		summary.setTotalAmountByCustomer(total[1] == null ? BigDecimal.ZERO : ((BigDecimal) total[1]).setScale(2, RoundingMode.HALF_UP));
-		summary.setTotalFuelAmount(total[2] == null ? BigDecimal.ZERO : ((BigDecimal) total[2]).setScale(2, RoundingMode.HALF_UP));
-		summary.setDisplayCurrency(Currency.USD);
+		list.forEach(tnx -> {
+			BigDecimal amount = calcuateAmount(tnx);
+			Long transactionTypeKey = tnx.getTransactionType().getEntityKey();
+			if (TransactionType.FUEL_KEY.equals(transactionTypeKey)) {
+				summary.addTotalFuelAmount(amount);
+			}
+			if (tnx.getCustomer().getEntityKey().equals(query.getCarOwnerKey())) {
+				summary.addTotalAmountByCustomer(amount);
+			}
+			if (!TransactionType.LOAN_PAYMENT_KEY.equals(transactionTypeKey)) {
+				summary.addTotalAmount(amount);
+			}
+		});
+		Car car = carDao.findOne(query.getCarKey());
+		LocalDate endDate = car.getSaleDate() != null ? car.getSaleDate() : LocalDate.now();
+		long months = car.getPurchaseDate().until(endDate, ChronoUnit.MONTHS);
+		summary.setAmountPerMounth(summary.getTotalAmount().divide(new BigDecimal(months), 2, RoundingMode.HALF_UP));
+		
+		summary.setDisplayCurrency(query.getDisplayCurrency());
 		return new ResultTO<TransactionSummaryTO>(summary);
 	}
 }

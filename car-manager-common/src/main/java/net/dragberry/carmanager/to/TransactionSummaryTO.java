@@ -8,11 +8,13 @@ public class TransactionSummaryTO implements TransferObject {
 
 	private static final long serialVersionUID = -1108741730332854092L;
 	
-	private BigDecimal totalAmount;
+	private BigDecimal totalAmount = BigDecimal.ZERO;
 	
-	private BigDecimal totalAmountByCustomer;
+	private BigDecimal totalAmountByCustomer = BigDecimal.ZERO;
 	
-	private BigDecimal totalFuelAmount;
+	private BigDecimal totalFuelAmount = BigDecimal.ZERO;
+	
+	private BigDecimal amountPerMounth = BigDecimal.ZERO;
 	
 	private Currency displayCurrency;
 
@@ -23,6 +25,10 @@ public class TransactionSummaryTO implements TransferObject {
 	public void setTotalAmount(BigDecimal totalAmount) {
 		this.totalAmount = totalAmount;
 	}
+	
+	public void addTotalAmount(BigDecimal totalAmount) {
+		this.totalAmount = this.totalAmount.add(totalAmount);
+	}
 
 	public BigDecimal getTotalAmountByCustomer() {
 		return totalAmountByCustomer;
@@ -31,6 +37,10 @@ public class TransactionSummaryTO implements TransferObject {
 	public void setTotalAmountByCustomer(BigDecimal totalAmountByCustomer) {
 		this.totalAmountByCustomer = totalAmountByCustomer;
 	}
+	
+	public void addTotalAmountByCustomer(BigDecimal totalAmount) {
+		this.totalAmountByCustomer = this.totalAmountByCustomer.add(totalAmount);
+	}
 
 	public BigDecimal getTotalFuelAmount() {
 		return totalFuelAmount;
@@ -38,6 +48,10 @@ public class TransactionSummaryTO implements TransferObject {
 
 	public void setTotalFuelAmount(BigDecimal totalFuelAmount) {
 		this.totalFuelAmount = totalFuelAmount;
+	}
+	
+	public void addTotalFuelAmount(BigDecimal totalFuelAmount) {
+		this.totalFuelAmount = this.totalFuelAmount.add(totalFuelAmount);
 	}
 
 	public Currency getDisplayCurrency() {
@@ -48,4 +62,13 @@ public class TransactionSummaryTO implements TransferObject {
 		this.displayCurrency = displayCurrency;
 	}
 
+	public BigDecimal getAmountPerMounth() {
+		return amountPerMounth;
+	}
+
+	public void setAmountPerMounth(BigDecimal amountPerMounth) {
+		this.amountPerMounth = amountPerMounth;
+	}
+
+	
 }

@@ -1,33 +1,40 @@
 <div class="row">
 	<fieldset>
-		<legend highlight>Transaction summary</legend>
+		<legend>Transaction summary</legend>
 		<div *ngIf="transactionSummary" class="row">
-			<div class="col-md-4">
+			<div class="col-lg-3 col-md-3 col-xs-6">
 				<label>
 					Total
 				</label>
 				<div>{{transactionSummary.totalAmount}} {{transactionSummary.displayCurrency}}</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-lg-3 col-md-3 col-xs-6">
 				<label>
 					Total by customer
 				</label>
 				<div>{{transactionSummary.totalAmountByCustomer}} {{transactionSummary.displayCurrency}}</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-lg-3 col-md-3 col-xs-6">
 				<label>
 					Total fuel
 				</label>
 				<div>{{transactionSummary.totalFuelAmount}} {{transactionSummary.displayCurrency}}</div>
+			</div>
+			<div class="col-lg-3 col-md-3 col-xs-6">
+				<label>
+					Amount per month
+				</label>
+				<div>{{transactionSummary.amountPerMounth}} {{transactionSummary.displayCurrency}}</div>
 			</div>
 		</div>
 	</fieldset>
 </div>
 <div class="row">
 	<fieldset>
-		<legend highlight>Transaction list</legend>
+		<legend>Transaction list</legend>
 		<div class="row">
 			<div class="form-group col-lg-3 col-md-4 col-xs-12">
+				<label>Car</label>
 				<select (change)="onCarChange()"
 					[(ngModel)]="selectedCar"
 					name="selected-car"
@@ -35,6 +42,12 @@
 					<option *ngFor="let car of carList" value="{{car.carKey}}">{{car.brand}} {{car.model}}</option>
 				</select>
 			</div>
+			<div class="form-group col-lg-3 col-md-4 col-xs-12">
+                <label>Display currency</label>
+                <select [(ngModel)]="displayCurrency" name="displayCurrency" class="form-control">
+                    <option *ngFor="let currency of currencyList" value="{{currency}}">{{currency}}</option>
+                </select>
+            </div>
 		</div>
 		<table class="table table-striped">
 			<tr>

@@ -47,8 +47,8 @@ public class Producer implements Callable<Integer> {
 				}
 //				System.out.println(sb);
 			});
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		} catch (IOException exc) {
+			throw new RuntimeException("An error has been occured during the Producer task!", exc);
 		}
 		System.out.println(MessageFormat.format("Thread [{0}] has been finished!", Thread.currentThread().getName()));
 		return 1;

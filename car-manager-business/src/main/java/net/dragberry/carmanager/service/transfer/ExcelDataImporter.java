@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import net.dragberry.carmanager.to.ResultTO;
+import net.dragberry.carmanager.to.UploadTransactionResult;
+
 /**
  * Excel data importer
  * 
@@ -26,19 +29,24 @@ public class ExcelDataImporter implements DataImporter {
 	private ApplicationContext appContext;
 	
 	@Override
-	public void doImport(InputStream is) throws Exception {
-		int availableProcessors = Runtime.getRuntime().availableProcessors();
-		ExecutorService executor = Executors.newFixedThreadPool(availableProcessors);
-		Producer producer = appContext.getBean(Producer.class);
-		producer.setInputStream(is);
-		executor.submit(producer);
-		
-		for (int i = 0; i < availableProcessors - 1; i++) {
-			Consumer consumer = appContext.getBean(Consumer.class);
-			executor.submit(consumer);
+	public ResultTO<UploadTransactionResult> doImport(InputStream is) throws Exception {
+		try {
+			int availableProcessors = Runtime.getRuntime().availableProcessors();
+			ExecutorService executor = Executors.newFixedThreadPool(availableProcessors);
+			Producer producer = appContext.getBean(Producer.class);
+			producer.setInputStream(is);
+			executor.submit(producer);
+			
+			for (int i = 0; i < availableProcessors - 1; i++) {
+				Consumer consumer = appContext.getBean(Consumer.class);
+				executor.submit(consumer);
+			}
+			executor.shutdown();
+			executor.awaitTermination(10, TimeUnit.MINUTES);
+			System.out.println("Main thread has been finished!");
+			return null;
+		} catch (Exception exc) {
+			throw new RuntimeException(exc);
 		}
-		executor.shutdown();
-		executor.awaitTermination(10, TimeUnit.MINUTES);
-		System.out.println("Main thread has been finished!");
 	}
 }

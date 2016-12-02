@@ -1,19 +1,24 @@
 import { Injectable } from '@angular/core';
 import { 
     Headers,
-    Http,
-    RequestOptions,
-    URLSearchParams
+    Http
 } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
 import {
     Issue,
-    Result
+    Result,
+    Transaction,
+    TransactionSummary
 } from '../../shared/common/common';
-import { Transaction } from '../../shared/common/common';
-import { TransactionSummary } from '../../shared/common/transaction-summary';
+
+import {
+    createOptions
+} from '../../shared/utils/parameter-utils';
+
+const SELECTED_CAR_PARAM = "selectedCar";
+const DISPLAY_CURRENCY_PARAM = "displayCurrency";
 
 @Injectable()
 export class TransactionService {
@@ -30,32 +35,28 @@ export class TransactionService {
         return this.http
             .post(this.submitTxnUrl, JSON.stringify(transaction), {headers: this.headers})
             .toPromise()
-            .then(response => {
-                return response.json() as Result<Transaction>;
-            });
+            .then(response => response.json() as Result<Transaction>);
     }
         
     fetchTransactionList(selectedCar: number): Promise<Transaction[]> {
-        return this.http.get(this.fetchTnxListUrl, this.getSelectedCarOptions(selectedCar))
+        return this.http.get(
+            this.fetchTnxListUrl, 
+            createOptions([
+                { name: SELECTED_CAR_PARAM, value: selectedCar }
+            ]))
             .toPromise()
-            .then(response => {
-                let tnxs: Transaction[] = response.json() as Transaction[];
-                return tnxs;
-            });
+            .then(response => response.json() as Transaction[]);
     }
 
-    fetchTransactionSummary(selectedCar: number): Promise<TransactionSummary> {
-        return this.http.get(this.fetchTnxSummaryUrl, this.getSelectedCarOptions(selectedCar))
+    fetchTransactionSummary(selectedCar: number, displayCurrency: string): Promise<TransactionSummary> {
+        return this.http.get(
+            this.fetchTnxSummaryUrl,
+            createOptions([
+                { name: SELECTED_CAR_PARAM, value: selectedCar },
+                { name: DISPLAY_CURRENCY_PARAM, value: displayCurrency }
+            ]))
             .toPromise()
-            .then(response => {
-                let tnxs: TransactionSummary = response.json() as TransactionSummary;
-                return tnxs;
-            });
+            .then(response => response.json() as TransactionSummary);
     }
 
-    getSelectedCarOptions(selectedCarKey: number): RequestOptions {
-        const params = new URLSearchParams();
-        params.set("carKey", selectedCarKey.toString());
-        return new RequestOptions({ search: params });
-    }
 }

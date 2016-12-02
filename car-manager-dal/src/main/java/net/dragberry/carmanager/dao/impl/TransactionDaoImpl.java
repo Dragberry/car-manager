@@ -12,11 +12,9 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
-import net.dragberry.carmanager.common.Currency;
 import net.dragberry.carmanager.common.TransactionStatus;
 import net.dragberry.carmanager.dao.TransactionDao;
 import net.dragberry.carmanager.domain.Transaction;
-import net.dragberry.carmanager.domain.TransactionType;
 import net.dragberry.carmanager.to.TransactionQueryListTO;
 
 @Repository
@@ -56,36 +54,6 @@ public class TransactionDaoImpl extends AbstractDao<Transaction> implements Tran
 		cq.where(buildConditions(cb, tRoot, query));
 		cq.select(cb.count(tRoot));
 		
-		return getEntityManager().createQuery(cq).getSingleResult();
-	}
-	
-	@Override
-	public Object[] summary(TransactionQueryListTO query) {
-		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-		CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
-		Root<Transaction> tRoot = cq.from(Transaction.class);
-		
-		cq.where(buildConditions(cb, tRoot, query));
-		cq.multiselect(
-				cb.sum(
-						cb.<Number>selectCase().when(cb.notEqual(tRoot.<Long>get("transactionType"), TransactionType.LOAN_PAYMENT_KEY), 
-								cb.<Number>selectCase().when(cb.equal(tRoot.get("currency"), Currency.USD), 
-										tRoot.<Number>get("amount")).otherwise(cb.quot(tRoot.<BigDecimal>get("amount"), tRoot.<Double>get("exchangeRate")))
-								).otherwise(BigDecimal.ZERO)
-						),
-				cb.sum(
-						cb.<Number>selectCase().when(cb.equal(tRoot.<Long>get("customer"), query.getCarOwnerKey()), 
-								cb.<Number>selectCase().when(cb.equal(tRoot.get("currency"), Currency.USD), 
-										tRoot.<Number>get("amount")).otherwise(cb.quot(tRoot.<BigDecimal>get("amount"), tRoot.<Double>get("exchangeRate")))
-								).otherwise(BigDecimal.ZERO)
-						),
-				cb.sum(
-						cb.<Number>selectCase().when(cb.equal(tRoot.<Long>get("transactionType"), TransactionType.FUEL_KEY), 
-								cb.<Number>selectCase().when(cb.equal(tRoot.get("currency"), Currency.USD), 
-										tRoot.<Number>get("amount")).otherwise(cb.quot(tRoot.<BigDecimal>get("amount"), tRoot.<Double>get("exchangeRate")))
-								).otherwise(BigDecimal.ZERO)
-						)
-				);
 		return getEntityManager().createQuery(cq).getSingleResult();
 	}
 	
