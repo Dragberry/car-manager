@@ -48,6 +48,10 @@ export class TransactionListComponent implements OnInit {
         this.doSearch();
     }
 
+    onCurrencyChange(displayCurrency: string): void {
+        this.fetchTransactionSummary(displayCurrency);
+    }
+
     doSearch(): void {
         this.fetchTransactionSummary();
         this.fetchTransactionList();
@@ -58,8 +62,10 @@ export class TransactionListComponent implements OnInit {
             .then(result => this.transactionList = result);
     }
 
-    fetchTransactionSummary(): void {
-        this.transactionService.fetchTransactionSummary(this.selectedCar, this.displayCurrency)
+    fetchTransactionSummary(currency?: string): void {
+        this.transactionService.fetchTransactionSummary(
+            this.selectedCar, 
+            currency ? currency : this.displayCurrency)
             .then(result => this.transactionSummary = result);
     }
 

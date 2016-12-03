@@ -32,7 +32,7 @@ import net.dragberry.carmanager.domain.Fuel;
 import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
 import net.dragberry.carmanager.to.Record;
-import net.dragberry.carmanager.util.Denominator;
+import net.dragberry.carmanager.util.BYDenominator;
 import net.dragberry.carmanager.ws.client.CurrencyService;
 
 @Component
@@ -180,12 +180,12 @@ public class Consumer implements Callable<Integer>{
 		switch (currencyCustomer) {
 		case BYR:
 			if (TransactionType.LOAN_PAYMENT.equals(record.getType())) {
-				return new BigDecimal(Denominator.denominate(record.getLoanPaymentBYR())).setScale(2, RoundingMode.HALF_UP);
+				return new BigDecimal(BYDenominator.denominate(record.getLoanPaymentBYR())).setScale(2, RoundingMode.HALF_UP);
 			} else {
-				return new BigDecimal(Denominator.denominate(record.getCostBYR())).setScale(2, RoundingMode.HALF_UP);
+				return new BigDecimal(BYDenominator.denominate(record.getCostBYR())).setScale(2, RoundingMode.HALF_UP);
 			}
 		case BYR_DAD:
-			return new BigDecimal(Denominator.denominate(record.getCostBYRDad())).setScale(2, RoundingMode.HALF_UP);
+			return new BigDecimal(BYDenominator.denominate(record.getCostBYRDad())).setScale(2, RoundingMode.HALF_UP);
 		case USD:
 			if (TransactionType.LOAN_PAYMENT.equals(record.getType())) {
 				return new BigDecimal(record.getLoanPaymentUSD()).setScale(2, RoundingMode.HALF_UP);

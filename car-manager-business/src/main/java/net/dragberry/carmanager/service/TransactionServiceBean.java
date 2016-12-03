@@ -3,8 +3,6 @@ package net.dragberry.carmanager.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.MonthDay;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collection;
@@ -89,22 +87,6 @@ public class TransactionServiceBean implements TransactionService {
 				}
 				result.addItem(to);
 			});
-			
-			TransactionSummaryTO summary = new TransactionSummaryTO();
-			list.forEach(tnx -> {
-				BigDecimal amount = calcuateAmount(tnx);
-				if (TransactionType.FUEL_KEY.equals(tnx.getTransactionType().getEntityKey())) {
-					summary.setTotalFuelAmount(summary.getTotalFuelAmount().add(amount));
-				}
-				if (tnx.getCustomer().getEntityKey().equals(query.getCarOwnerKey())) {
-					summary.setTotalAmountByCustomer(summary.getTotalAmountByCustomer().add(amount));
-				}
-				if (!TransactionType.LOAN_PAYMENT_KEY.equals(tnx.getTransactionType().getEntityKey())) {
-					summary.setTotalAmount(summary.getTotalAmount().add(amount));
-				}
-			});
-			summary.toString();
-			
 		}
 		
 		result.setTotalCount(count);
@@ -113,14 +95,6 @@ public class TransactionServiceBean implements TransactionService {
 		return result;
 	}
 
-	private static BigDecimal calcuateAmount(Transaction tnx) {
-		if (Currency.USD == tnx.getCurrency()) {
-			return tnx.getAmount();
-		} else {
-			return tnx.getAmount().divide(new BigDecimal(tnx.getExchangeRate()), RoundingMode.HALF_UP);
-		}
-	}
-	
 	@Override
 	@Transactional
 	public ResultTO<TransactionTO> createTransaction(TransactionTO to) {
@@ -186,8 +160,10 @@ public class TransactionServiceBean implements TransactionService {
 		List<Transaction> list = transactionDao.fetchList(query);
 		
 		TransactionSummaryTO summary = new TransactionSummaryTO();
+		Set<IssueTO> issue = new HashSet<>();
+		
 		list.forEach(tnx -> {
-			BigDecimal amount = calcuateAmount(tnx);
+			BigDecimal amount = calcuateAmount(tnx, query.getDisplayCurrency());
 			Long transactionTypeKey = tnx.getTransactionType().getEntityKey();
 			if (TransactionType.FUEL_KEY.equals(transactionTypeKey)) {
 				summary.addTotalFuelAmount(amount);
@@ -206,6 +182,11 @@ public class TransactionServiceBean implements TransactionService {
 		
 		summary.setDisplayCurrency(query.getDisplayCurrency());
 		return new ResultTO<TransactionSummaryTO>(summary);
+	}
+	
+	private BigDecimal calcuateAmount(Transaction tnx, Currency displayCurrency) {
+		Double exRate = currencyService.getExchangeRate(displayCurrency, tnx.getCurrency(), tnx.getExecutionDate());
+		return exRate == null ? null : tnx.getAmount().divide(new BigDecimal(exRate), RoundingMode.HALF_UP);
 	}
 }
 

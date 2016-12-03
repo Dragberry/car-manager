@@ -44,7 +44,10 @@
 			</div>
 			<div class="form-group col-lg-3 col-md-4 col-xs-12">
                 <label>Display currency</label>
-                <select [(ngModel)]="displayCurrency" name="displayCurrency" class="form-control">
+                <select (change)="onCurrencyChange($event.target.value)"
+					[(ngModel)]="displayCurrency"
+					name="displayCurrency"
+					class="form-control">
                     <option *ngFor="let currency of currencyList" value="{{currency}}">{{currency}}</option>
                 </select>
             </div>

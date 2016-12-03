@@ -7,4 +7,6 @@ import net.dragberry.carmanager.common.Currency;
 public interface CurrencyService {
 
 	Double getExchangeRate(Currency currency, LocalDate date);
+	
+	Double getExchangeRate(Currency numeratorCurrency, Currency denominatorCurrency, LocalDate date);
 }
