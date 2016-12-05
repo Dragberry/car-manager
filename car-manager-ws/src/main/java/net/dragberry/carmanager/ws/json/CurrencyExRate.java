@@ -11,11 +11,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class CurrencyExRate implements Serializable {
 
 	private static final long serialVersionUID = 683295946595145846L;
+	
+	private static final String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
 	@JsonProperty("Cur_ID")
 	private Long id;
 	@JsonProperty("Date")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN)
 	private LocalDateTime date;
 	@JsonProperty("Cur_Abbreviation")
 	private String currencyCode;

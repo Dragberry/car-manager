@@ -101,13 +101,7 @@ public class Consumer implements Callable<Integer>{
 				TransactionType tType = resolveType(record);
 				transaction.setTransactionType(tType);
 				transaction.setCustomer(getCustomer(record, currencyCustomer));
-				Double exchangeRate = currencyService.getExchangeRate(Currency.USD, record.getDate());
-				if (exchangeRate == null) {
-					transaction.setStatus(TransactionStatus.ACTIVE);
-					transaction.setExchangeRate(exchangeRate);
-				} else {
-					transaction.setStatus(TransactionStatus.PROCESSING);
-				}
+				transaction.setStatus(TransactionStatus.ACTIVE);
 				
 				
 				if (TransactionType.LOAN_PAYMENT.equals(tType.getName())) {

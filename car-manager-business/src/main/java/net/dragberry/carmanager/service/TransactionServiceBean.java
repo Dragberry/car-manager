@@ -34,7 +34,6 @@ import net.dragberry.carmanager.to.TransactionSummaryTO;
 import net.dragberry.carmanager.to.TransactionTO;
 import net.dragberry.carmanager.common.Currency;
 import net.dragberry.carmanager.common.TransactionStatus;
-import net.dragberry.carmanager.ws.client.CurrencyService;
 
 /**
  * Transaction service bean
@@ -55,7 +54,8 @@ public class TransactionServiceBean implements TransactionService {
 	private TransactionTypeDao transactionTypeDao;
 	
 	@Autowired
-	private CurrencyService currencyService;
+	@Qualifier("ExchangeRateBYService")
+	private ExchangeRateBYServiceBean exchangeService;
 	@Autowired
 	@Qualifier("TransactionValidationService")
 	private ValidationService<Transaction> validationService;
@@ -105,7 +105,7 @@ public class TransactionServiceBean implements TransactionService {
 		transaction.setExchangeRate(to.getExchangeRate());
 		transaction.setExecutionDate(to.getExecutionDate());
 		
-		Double exchangeRate = currencyService.getExchangeRate(Currency.USD, to.getExecutionDate());
+		Double exchangeRate = exchangeService.getExchangeRate(Currency.USD, Currency.BYN, to.getExecutionDate());
 		if (exchangeRate == null) {
 			transaction.setStatus(TransactionStatus.PROCESSING);
 		} else {
@@ -160,7 +160,6 @@ public class TransactionServiceBean implements TransactionService {
 		List<Transaction> list = transactionDao.fetchList(query);
 		
 		TransactionSummaryTO summary = new TransactionSummaryTO();
-		Set<IssueTO> issue = new HashSet<>();
 		
 		list.forEach(tnx -> {
 			BigDecimal amount = calcuateAmount(tnx, query.getDisplayCurrency());
@@ -185,7 +184,7 @@ public class TransactionServiceBean implements TransactionService {
 	}
 	
 	private BigDecimal calcuateAmount(Transaction tnx, Currency displayCurrency) {
-		Double exRate = currencyService.getExchangeRate(displayCurrency, tnx.getCurrency(), tnx.getExecutionDate());
+		Double exRate = exchangeService.getExchangeRate(displayCurrency, tnx.getCurrency(), tnx.getExecutionDate());
 		return exRate == null ? null : tnx.getAmount().divide(new BigDecimal(exRate), RoundingMode.HALF_UP);
 	}
 }

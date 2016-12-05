@@ -47,31 +47,42 @@ public class Transaction extends AbstractEntity {
 	@Column(name = "TRANSACTION_KEY")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TRANSACTION_GEN")
 	private Long entityKey;
+	
 	@Column(name = "AMOUNT")
 	private BigDecimal amount;
+	
 	@Column(name = "DESCRIPTION")
 	private String description;
+	
 	@Column(name = "CURRENCY")
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
+	
 	@Column(name = "EXCHANGE_RATE")
 	private Double exchangeRate;
+	
 	@Column(name = "EXECUTION_DATE")
 	private LocalDate executionDate;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TRANSACTION_TYPE_KEY", referencedColumnName = "TRANSACTION_TYPE_KEY")
 	private TransactionType transactionType;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CAR_KEY", referencedColumnName = "CAR_KEY")
 	private Car car;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CUSTOMER_KEY", referencedColumnName = "CUSTOMER_KEY")
 	private Customer customer;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREDITOR_KEY", referencedColumnName = "CUSTOMER_KEY")
 	private Customer creditor;
+	
 	@Embedded
 	private Fuel fuel;
+	
 	@Column(name = "STATUS")
 	@Convert(converter = TransactionStatusConverter.class)
 	private TransactionStatus status;
