@@ -24,6 +24,7 @@ import net.dragberry.carmanager.domain.Customer;
 import net.dragberry.carmanager.domain.Fuel;
 import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
+import net.dragberry.carmanager.service.exrates.ExchangeRateService;
 import net.dragberry.carmanager.service.validation.ValidationIssue;
 import net.dragberry.carmanager.service.validation.ValidationService;
 import net.dragberry.carmanager.to.IssueTO;
@@ -54,8 +55,8 @@ public class TransactionServiceBean implements TransactionService {
 	private TransactionTypeDao transactionTypeDao;
 	
 	@Autowired
-	@Qualifier("ExchangeRateBYService")
-	private ExchangeRateBYServiceBean exchangeService;
+	@Qualifier("BYExchangeRateServiceBean")
+	private ExchangeRateService exchangeService;
 	@Autowired
 	@Qualifier("TransactionValidationService")
 	private ValidationService<Transaction> validationService;
@@ -66,7 +67,6 @@ public class TransactionServiceBean implements TransactionService {
 		ResultList<TransactionTO> result = new ResultList<>();
 		Long count = transactionDao.count(query);
 		result.setTotalCount(count);
-		System.out.println("Count: " + count);
 		if (count > 0L) {
 			List<Transaction> list = transactionDao.fetchList(query);
 			list.forEach(tnx -> {

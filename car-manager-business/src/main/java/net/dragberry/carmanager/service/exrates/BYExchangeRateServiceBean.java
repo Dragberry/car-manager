@@ -1,4 +1,4 @@
-package net.dragberry.carmanager.service;
+package net.dragberry.carmanager.service.exrates;
 
 import java.time.LocalDate;
 
@@ -7,15 +7,15 @@ import org.springframework.stereotype.Service;
 
 import net.dragberry.carmanager.common.Currency;
 import net.dragberry.carmanager.dao.ExchangeRateDao;
-import net.dragberry.carmanager.ws.client.CurrencyService;
+import net.dragberry.carmanager.ws.client.NbrbExchangeRateService;
 
-@Service("ExchangeRateBYService")
-public class ExchangeRateBYServiceBean implements ExchangeRateService {
+@Service("BYExchangeRateServiceBean")
+public class BYExchangeRateServiceBean implements ExchangeRateService {
 	
 	@Autowired
 	private ExchangeRateDao exRateDao;
 	@Autowired
-	private CurrencyService currencyService;
+	private NbrbExchangeRateService nbrbExRateService;
 
 	@Override
 	public Double getExchangeRate(Currency currency, Currency baseCurrency, LocalDate date) {
@@ -41,7 +41,7 @@ public class ExchangeRateBYServiceBean implements ExchangeRateService {
 	private Double getExchangeRateForBYN(Currency currency, LocalDate date) {
 		Double exRate = exRateDao.getExchangeRate(currency, Currency.BYN, date);
 		if (exRate == null) {
-			exRate = currencyService.getExchangeRate(currency, date);
+			exRate = nbrbExRateService.getExchangeRate(currency, date);
 		}
 		return exRate;
 	}

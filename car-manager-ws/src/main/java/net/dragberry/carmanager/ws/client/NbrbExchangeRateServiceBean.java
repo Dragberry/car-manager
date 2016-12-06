@@ -7,6 +7,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,8 +18,10 @@ import net.dragberry.carmanager.common.Currency;
 import net.dragberry.carmanager.util.BYDenominator;
 import net.dragberry.carmanager.ws.json.CurrencyExRate;
 
-@Service("CurrencyServiceBYBean")
-public class CurrencyServiceBYBean implements CurrencyService {
+@Service("NbrbExchangeRateServiceBean")
+public class NbrbExchangeRateServiceBean implements NbrbExchangeRateService {
+	
+	private static final Logger LOG = LogManager.getLogger(NbrbExchangeRateServiceBean.class);
 	
 	private static final String EX_RATE_TEMPLATE_URL = "http://www.nbrb.by/API/ExRates/Rates/{0}?onDate={1}&ParamMode=2";
 	private static final String EX_RATE_DYNAMICS_TEMPLATE_URL = "http://www.nbrb.by/API/ExRates/Rates/Dynamics/{0}?startDate={1}&endDate={2}";
@@ -24,7 +29,7 @@ public class CurrencyServiceBYBean implements CurrencyService {
 	private static final long RUB_BEFORE_DENOMINATION = 190L;
 	private static final long RUB_AFTER_DENOMINATION = 298L;
 	private static final long EUR_BEFORE_DENOMINATION = 19L;
-	private static final long EUR_AFTER_DENOMINATION = 192L;
+	private static final long EUR_AFTER_DENOMINATION = 292L;
 	
 	private static final Map<Currency, Long> BY_CURRENCY_CODES = new HashMap<>();
 	static {
@@ -60,14 +65,13 @@ public class CurrencyServiceBYBean implements CurrencyService {
 			uri = new URI(MessageFormat.format(EX_RATE_TEMPLATE_URL, currency, formattedDate));
 		    CurrencyExRate result = restTemplate.getForObject(uri, CurrencyExRate.class);
 		    double exRate = denominate(result);
-		    System.out.println(MessageFormat.format("{0}: [{1}] BYN/{2}={3}", CurrencyServiceBYBean.class.getName(), formattedDate, currency, exRate));
+		    LOG.info(MessageFormat.format("Get exRate: [{0}] BYN/{1}={2}", formattedDate, currency, exRate));
 		    return exRate;
 		} catch (Exception exc) {
-			System.out.println("An exception has been occured during CurrencyService#getExchangeRate invoking!");
+			LOG.error("An exception has been occured during CurrencyService#getExchangeRate invoking!", exc);
 			if (uri != null) {
-				System.out.println(uri);
+				LOG.error(uri);
 			}
-			exc.printStackTrace();
 		}
 		return null;
 	}
@@ -87,17 +91,17 @@ public class CurrencyServiceBYBean implements CurrencyService {
 			String formattedEndDate = DateTimeFormatter.ISO_LOCAL_DATE.format(endDate);
 			uri = new URI(MessageFormat.format(EX_RATE_DYNAMICS_TEMPLATE_URL, getInternalCurrecnyCode(currency, startDate), formattedStartDate, formattedEndDate));
 			CurrencyExRate[] result = restTemplate.getForObject(uri, CurrencyExRate[].class);
-		    Map<LocalDate, Double> exRateMap = new TreeMap<>();
+			LOG.info(MessageFormat.format("Get exRates BYN/{2} for period {0}/{1}", startDate, endDate, currency));
+			Map<LocalDate, Double> exRateMap = new TreeMap<>();
 			for (CurrencyExRate exRate : result) {
 				exRateMap.put(exRate.getDate().toLocalDate(), denominate(exRate));
 		    }
 		    return exRateMap;
 		} catch (Exception exc) {
-			System.out.println("An exception has been occured during CurrencyService#getExchangeRate invoking!");
+			LOG.error("An exception has been occured during CurrencyService#getExchangeRates invoking!", exc);
 			if (uri != null) {
-				System.out.println(uri);
+				LOG.error(uri);
 			}
-			exc.printStackTrace();
 		}
 		return new HashMap<>();
 	}

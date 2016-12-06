@@ -1,4 +1,4 @@
-package net.dragberry.carmanager.service;
+package net.dragberry.carmanager.service.exrates;
 
 import java.time.LocalDate;
 

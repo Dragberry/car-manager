@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,41 +20,43 @@ import net.dragberry.carmanager.common.Currency;
 import net.dragberry.carmanager.dao.ExchangeRateDao;
 import net.dragberry.carmanager.domain.ExchangeRate;
 import net.dragberry.carmanager.util.BYDenominator;
-import net.dragberry.carmanager.ws.client.CurrencyService;
+import net.dragberry.carmanager.ws.client.NbrbExchangeRateService;
 
 @Service
 public class ExchangeRateRefresher {
 	
+	private static final Logger LOG = LogManager.getLogger(ExchangeRateRefresher.class);
+	
 	@Autowired
-	private CurrencyService currencyService;
+	private NbrbExchangeRateService nbrbExRateService;
 	@Autowired
 	private ExchangeRateDao exRateDao;
 	
 	@Scheduled(cron = "0 * * * * *")
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public void updateExRates() {
-		for (Currency currency : Currency.values()) {
-			if (Currency.BYN == currency) {
-				continue;
-			}
-			processCurrency(currency);
-		}
-		
+		LOG.info("Updating exchange rates started...");
+		Stream.of(Currency.values())
+			.filter(currency -> Currency.BYN != currency)
+			.parallel()
+			.forEach(this::processCurrency);
+		LOG.info("Updating exchange rates finished...");
 	}
 	
 	private void processCurrency(Currency currency) {
 		LocalDate dateToProcess = exRateDao.findLastProcessedDate(currency, Currency.BYN);
+		LOG.info(MessageFormat.format("Last processed date {0} for currency {1}", dateToProcess, currency));
 		LocalDate today = LocalDate.now();
 		int dayDifference = today.getDayOfYear() - dateToProcess.getDayOfYear();
 		if (dayDifference == 1) {
-			Double exRate = currencyService.getExchangeRate(currency, dateToProcess);
+			Double exRate = nbrbExRateService.getExchangeRate(currency, dateToProcess);
 			createExRateEntity(currency, dateToProcess, exRate);
 		} else if (dayDifference > 1) {
-			periods(dateToProcess).forEach(period -> {
+			periods(dateToProcess.plusDays(1)).forEach(period -> {
 				try {
 					processCurrencyPeriod(currency, period);
 				} catch (Exception e) {
-					System.out.println(MessageFormat.format("An error has been occured during processing periof {0} for currency {1}", period, currency));
+					LOG.info(MessageFormat.format("An error has been occured during processing periof {0} for currency {1}", period, currency), e);
 					e.printStackTrace();
 					return;
 				}
@@ -63,12 +67,12 @@ public class ExchangeRateRefresher {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	private void processCurrencyPeriod(Currency currency, Period period) throws Exception {
 		long startTime = System.currentTimeMillis();
-		Map<LocalDate, Double> exRateMap = currencyService.getExchangeRateDynamics(currency, period.from(), period.to());
+		Map<LocalDate, Double> exRateMap = nbrbExRateService.getExchangeRateDynamics(currency, period.from(), period.to());
 		exRateMap.entrySet().forEach(exRate -> {
 			createExRateEntity(currency, exRate.getKey(), exRate.getValue());
 		});
 		long time = System.currentTimeMillis() - startTime;
-		System.out.println(MessageFormat.format("Time elapsed: {0} for Currency {1} for period {2}", time, currency, period));
+		LOG.info(MessageFormat.format("Time elapsed: {0} for Currency {1} for period {2}", time, currency, period));
 	}
 
 	private void createExRateEntity(Currency currency, LocalDate dateToProcess, Double exRate) {
@@ -95,7 +99,7 @@ public class ExchangeRateRefresher {
 			if (dateTo.isAfter(today)) {
 				dateTo = today;
 			}
-			builder.accept(Period.create(dateFrom, dateTo));
+			builder.add(Period.create(dateFrom, dateTo));
 			dateFrom = dateTo.plusDays(1);
 		} while (dateTo.isBefore(today));
 		return builder.build();
@@ -126,7 +130,7 @@ public class ExchangeRateRefresher {
 		public String toString() {
 			String formattedStartDate = DateTimeFormatter.ISO_LOCAL_DATE.format(from);
 			String formattedEndDate = DateTimeFormatter.ISO_LOCAL_DATE.format(to);
-			return MessageFormat.format("[{0}--{1}]", formattedStartDate, formattedEndDate);
+			return MessageFormat.format("[{0}/{1}]", formattedStartDate, formattedEndDate);
 		}
 	}
 

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import net.dragberry.carmanager.common.Currency;
 
-public interface CurrencyService {
+public interface NbrbExchangeRateService {
 	
 	Map<LocalDate, Double> getExchangeRateDynamics(Currency currency, LocalDate startDate, LocalDate endDate);
 
