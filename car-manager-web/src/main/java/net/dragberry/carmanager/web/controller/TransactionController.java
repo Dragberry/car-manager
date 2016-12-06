@@ -30,6 +30,7 @@ import net.dragberry.carmanager.to.TransactionTO;
 import net.dragberry.carmanager.to.TransactionTypeTO;
 import net.dragberry.carmanager.to.UploadTransactionResult;
 import net.dragberry.carmanager.web.security.CMSecurityContext;
+import net.dragberry.carmanager.web.security.AccessDeniedException;
 
 @Controller
 @RequestMapping("/service/transaction")
@@ -51,7 +52,12 @@ public class TransactionController {
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public List<TransactionTO> fetchTransactionList(@RequestParam Long selectedCar) {
+	public List<TransactionTO> fetchTransactionList(
+			@RequestParam Long customerKey,
+			@RequestParam Long selectedCar) {
+		if (!CMSecurityContext.getLoggedCustomerKey().equals(customerKey)) {
+			throw new AccessDeniedException();
+		}
 		TransactionQueryListTO query = new TransactionQueryListTO();
 		query.setCarOwnerKey(CMSecurityContext.getLoggedCustomerKey());
 		query.setCarKey(selectedCar);
@@ -61,7 +67,13 @@ public class TransactionController {
 
 	@RequestMapping(value ="/summary", method = RequestMethod.GET)
 	@ResponseBody
-	public TransactionSummaryTO fetchTransactionSummary(@RequestParam Long selectedCar, @RequestParam String displayCurrency) {
+	public TransactionSummaryTO fetchTransactionSummary(
+			@RequestParam Long customerKey,
+			@RequestParam Long selectedCar, 
+			@RequestParam String displayCurrency) {
+		if (!CMSecurityContext.getLoggedCustomerKey().equals(customerKey)) {
+			throw new AccessDeniedException();
+		}
 		TransactionQueryListTO query = new TransactionQueryListTO();
 		query.setCarOwnerKey(CMSecurityContext.getLoggedCustomerKey());
 		query.setCarKey(selectedCar);

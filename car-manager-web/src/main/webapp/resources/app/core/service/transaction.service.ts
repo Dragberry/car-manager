@@ -6,6 +6,8 @@ import {
 
 import 'rxjs/add/operator/toPromise';
 
+import { CustomerContext } from '../authentication/customer-context';
+
 import {
     Issue,
     Result,
@@ -29,7 +31,9 @@ export class TransactionService {
 
     private headers = new Headers({'Content-Type': 'application/json'});
 
-    constructor(private http: Http) {}
+    constructor(
+        private customerContext: CustomerContext,
+        private http: Http) {}
 
     submitTransaction(transaction: Transaction): Promise<Result<Transaction>> {
         return this.http
@@ -42,6 +46,7 @@ export class TransactionService {
         return this.http.get(
             this.fetchTnxListUrl, 
             createOptions([
+                this.customerContext.getCustomerKeyParam(),
                 { name: SELECTED_CAR_PARAM, value: selectedCar }
             ]))
             .toPromise()
@@ -52,6 +57,7 @@ export class TransactionService {
         return this.http.get(
             this.fetchTnxSummaryUrl,
             createOptions([
+                this.customerContext.getCustomerKeyParam(),
                 { name: SELECTED_CAR_PARAM, value: selectedCar },
                 { name: DISPLAY_CURRENCY_PARAM, value: displayCurrency }
             ]))

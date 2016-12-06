@@ -14,8 +14,6 @@ public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherSe
 	
 	private static final String THROW_EXCEPTION_IF_NO_HANDLER_FOUND = "throwExceptionIfNoHandlerFound";
 	
-//	private static final Logger LOG = LogManager.getLogger(ApplicationInitializer.class.getName());
-	
 	@Override
 	protected String[] getServletMappings() {
 		return new String[] { "/" };
