@@ -4,13 +4,9 @@ import java.net.URI;
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.Stream;
-import java.util.stream.Stream.Builder;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -81,11 +77,7 @@ public class CurrencyServiceBYBean implements CurrencyService {
 		if (startDate.isAfter(endDate)) {
 			throw new IllegalArgumentException("Start date cannot be after end date!");
 		}
-		Map<LocalDate, Double> exRates = new TreeMap<>();
-		periods().forEach(period -> {
-			exRates.putAll(getExchangeRates(currency, period.from(), period.to()));
-		});
-		return exRates;
+		return getExchangeRates(currency, startDate, endDate);
 	}
 	
 	private Map<LocalDate, Double> getExchangeRates(Currency currency, LocalDate startDate, LocalDate endDate) {
@@ -112,49 +104,6 @@ public class CurrencyServiceBYBean implements CurrencyService {
 
 	private double denominate(CurrencyExRate curExRate) {
 		return curExRate.getDate().toLocalDate().isBefore(BYDenominator.DATE) ? BYDenominator.denominate(curExRate.getRate()) : curExRate.getRate();
-	}
-	
-	private static Stream<Period> periods() {
-		Builder<Period> builder = Stream.builder();
-		LocalDate dateFrom = LocalDate.of(2014, 1, 1);
-		LocalDate today = LocalDate.now();
-		LocalDate dateTo = null;
-		do {
-			dateTo = dateFrom.with(TemporalAdjusters.lastDayOfYear());
-			if (dateFrom.isBefore(BYDenominator.DATE)) {
-				if (dateTo.isAfter(BYDenominator.DATE)) {
-					dateTo = BYDenominator.DATE.minusDays(1);
-				}
-			}
-			if (dateTo.isAfter(today)) {
-				dateTo = today;
-			}
-			builder.accept(Period.create(dateFrom, dateTo));
-			dateFrom = dateTo.plusDays(1);
-		} while (dateTo.isBefore(today));
-		return builder.build();
-	}
-
-	private static class Period {
-		private LocalDate from;
-		private LocalDate to;
-		
-		public static final Period create(LocalDate from, LocalDate to) {
-			return new Period(from, to);
-		}
-		
-		public Period(LocalDate from, LocalDate to) {
-			this.from = from;
-			this.to= to;
-		}
-
-		public LocalDate from() {
-			return from;
-		}
-
-		public LocalDate to() {
-			return to;
-		}
 	}
 
 }

@@ -33,7 +33,6 @@ import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
 import net.dragberry.carmanager.to.Record;
 import net.dragberry.carmanager.util.BYDenominator;
-import net.dragberry.carmanager.ws.client.CurrencyService;
 
 @Component
 @Scope(value = "prototype")
@@ -52,9 +51,6 @@ public class Consumer implements Callable<Integer>{
 	@Autowired
 	private TransactionDao transactionDao;
 	
-	@Autowired
-	private CurrencyService currencyService;
-
 	private Context context = new Context();
 	
 	@Override
