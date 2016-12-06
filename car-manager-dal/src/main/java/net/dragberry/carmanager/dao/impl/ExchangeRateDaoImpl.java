@@ -27,7 +27,7 @@ public class ExchangeRateDaoImpl extends AbstractDao<ExchangeRate> implements Ex
 			lastProcessedDate = getEntityManager()
 				.createNamedQuery(ExchangeRate.FIND_LAST_PROCESSED_DATE, LocalDate.class)
 				.setParameter("currency", currency)
-				.setParameter("baseCurrency", currency)
+				.setParameter("baseCurrency", baseCurrency)
 				.getSingleResult();
 			return lastProcessedDate == null ? START_DATE : lastProcessedDate;
 		} catch (NoResultException nre) {

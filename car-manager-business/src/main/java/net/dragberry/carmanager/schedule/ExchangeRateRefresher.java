@@ -28,7 +28,7 @@ public class ExchangeRateRefresher {
 	@Autowired
 	private ExchangeRateDao exRateDao;
 	
-	@Scheduled(cron = "0 28 * * * *")
+	@Scheduled(cron = "0 * * * * *")
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public void updateExRates() {
 		for (Currency currency : Currency.values()) {
@@ -48,11 +48,12 @@ public class ExchangeRateRefresher {
 			Double exRate = currencyService.getExchangeRate(currency, dateToProcess);
 			createExRateEntity(currency, dateToProcess, exRate);
 		} else if (dayDifference > 1) {
-			periods().forEach(period -> {
+			periods(dateToProcess).forEach(period -> {
 				try {
 					processCurrencyPeriod(currency, period);
 				} catch (Exception e) {
 					System.out.println(MessageFormat.format("An error has been occured during processing periof {0} for currency {1}", period, currency));
+					e.printStackTrace();
 					return;
 				}
 			});
@@ -79,9 +80,9 @@ public class ExchangeRateRefresher {
 		exRateDao.create(exRateEntity);
 	}
 	
-	private static Stream<Period> periods() {
+	private static Stream<Period> periods(LocalDate dateToProcess) {
 		Builder<Period> builder = Stream.builder();
-		LocalDate dateFrom = LocalDate.of(2014, 1, 1);
+		LocalDate dateFrom = dateToProcess != null ? dateToProcess : LocalDate.of(2014, 1, 1);
 		LocalDate today = LocalDate.now();
 		LocalDate dateTo = null;
 		do {
