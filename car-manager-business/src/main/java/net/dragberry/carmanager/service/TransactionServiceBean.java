@@ -166,6 +166,7 @@ public class TransactionServiceBean implements TransactionService {
 			Long transactionTypeKey = tnx.getTransactionType().getEntityKey();
 			if (TransactionType.FUEL_KEY.equals(transactionTypeKey)) {
 				summary.addTotalFuelAmount(amount);
+				summary.addTotalFuel(tnx.getFuel().getQuantity());
 			}
 			if (tnx.getCustomer().getEntityKey().equals(query.getCarOwnerKey())) {
 				summary.addTotalAmountByCustomer(amount);
@@ -176,8 +177,10 @@ public class TransactionServiceBean implements TransactionService {
 		});
 		Car car = carDao.findOne(query.getCarKey());
 		LocalDate endDate = car.getSaleDate() != null ? car.getSaleDate() : LocalDate.now();
-		long months = car.getPurchaseDate().until(endDate, ChronoUnit.MONTHS);
-		summary.setAmountPerMounth(summary.getTotalAmount().divide(new BigDecimal(months), 2, RoundingMode.HALF_UP));
+		BigDecimal months = new BigDecimal(car.getPurchaseDate().until(endDate, ChronoUnit.MONTHS));
+		summary.setAmountPerMonth(summary.getTotalAmount().divide(months, 2, RoundingMode.HALF_UP));
+		summary.setFuelPerMonth(summary.getTotalFuel().divide(months, 2, RoundingMode.HALF_UP));
+		summary.setFuelCostPerMonth(summary.getTotalFuelAmount().divide(months, 2, RoundingMode.HALF_UP));
 		
 		summary.setDisplayCurrency(query.getDisplayCurrency());
 		return new ResultTO<TransactionSummaryTO>(summary);

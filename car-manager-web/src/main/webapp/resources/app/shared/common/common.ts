@@ -33,9 +33,12 @@ export class Transaction {
 }
 
 export class TransactionSummary {
-	amountPerMounth: number;
+	amountPerMonth: number;
     totalAmount : number;
 	totalAmountByCustomer: number;
 	totalFuelAmount: number;
+    totalFuel: number;
+    fuelPerMonth: number;
+    fuelCostPerMonth: number;
 	displayCurrency: string;
 }

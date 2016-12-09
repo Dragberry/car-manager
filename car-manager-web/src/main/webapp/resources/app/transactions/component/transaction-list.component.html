@@ -2,29 +2,76 @@
 	<fieldset>
 		<legend>Transaction summary</legend>
 		<div *ngIf="transactionSummary" class="row">
+			
 			<div class="col-lg-3 col-md-3 col-xs-6">
-				<label>
-					Total
-				</label>
-				<div>{{transactionSummary.totalAmount}} {{transactionSummary.displayCurrency}}</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Total</h3>
+					</div>
+					<div class="panel-body">
+						{{transactionSummary.totalAmount}} {{transactionSummary.displayCurrency}}
+					</div>
+				</div>
 			</div>
 			<div class="col-lg-3 col-md-3 col-xs-6">
-				<label>
-					Total by customer
-				</label>
-				<div>{{transactionSummary.totalAmountByCustomer}} {{transactionSummary.displayCurrency}}</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Total by customer</h3>
+					</div>
+					<div class="panel-body">
+						{{transactionSummary.totalAmountByCustomer}} {{transactionSummary.displayCurrency}}
+					</div>
+				</div>
 			</div>
 			<div class="col-lg-3 col-md-3 col-xs-6">
-				<label>
-					Total fuel
-				</label>
-				<div>{{transactionSummary.totalFuelAmount}} {{transactionSummary.displayCurrency}}</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Total fuel</h3>
+					</div>
+					<div class="panel-body">
+						{{transactionSummary.totalFuelAmount}} {{transactionSummary.displayCurrency}}
+					</div>
+				</div>
 			</div>
 			<div class="col-lg-3 col-md-3 col-xs-6">
-				<label>
-					Amount per month
-				</label>
-				<div>{{transactionSummary.amountPerMounth}} {{transactionSummary.displayCurrency}}</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Amount per month</h3>
+					</div>
+					<div class="panel-body">
+						{{transactionSummary.amountPerMonth}} {{transactionSummary.displayCurrency}}
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 col-md-3 col-xs-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Total fuel</h3>
+					</div>
+					<div class="panel-body">
+						{{transactionSummary.totalFuel}}
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 col-md-3 col-xs-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Fuel per month</h3>
+					</div>
+					<div class="panel-body">
+						{{transactionSummary.fuelPerMonth}}
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 col-md-3 col-xs-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Fuel cost per month</h3>
+					</div>
+					<div class="panel-body">
+						{{transactionSummary.fuelCostPerMonth}} {{transactionSummary.displayCurrency}}
+					</div>
+				</div>
 			</div>
 		</div>
 	</fieldset>

@@ -14,9 +14,26 @@ public class TransactionSummaryTO implements TransferObject {
 	
 	private BigDecimal totalFuelAmount = BigDecimal.ZERO;
 	
-	private BigDecimal amountPerMounth = BigDecimal.ZERO;
+	private BigDecimal amountPerMonth = BigDecimal.ZERO;
+	
+	private BigDecimal totalFuel = BigDecimal.ZERO;
+	
+	private BigDecimal fuelPerMonth = BigDecimal.ZERO;
+	
+	private BigDecimal fuelCostPerMonth = BigDecimal.ZERO;
+	
+	private BigDecimal totalRepairAmount = BigDecimal.ZERO;
 	
 	private Currency displayCurrency;
+
+	
+	public BigDecimal getFuelCostPerMonth() {
+		return fuelCostPerMonth;
+	}
+
+	public void setFuelCostPerMonth(BigDecimal fuelCostPerMonth) {
+		this.fuelCostPerMonth = fuelCostPerMonth;
+	}
 
 	public BigDecimal getTotalAmount() {
 		return totalAmount;
@@ -62,12 +79,44 @@ public class TransactionSummaryTO implements TransferObject {
 		this.displayCurrency = displayCurrency;
 	}
 
-	public BigDecimal getAmountPerMounth() {
-		return amountPerMounth;
+	public BigDecimal getAmountPerMonth() {
+		return amountPerMonth;
 	}
 
-	public void setAmountPerMounth(BigDecimal amountPerMounth) {
-		this.amountPerMounth = amountPerMounth;
+	public void setAmountPerMonth(BigDecimal amountPerMounth) {
+		this.amountPerMonth = amountPerMounth;
+	}
+
+	public BigDecimal getTotalFuel() {
+		return totalFuel;
+	}
+	
+	public void addTotalFuel(Double totalFuel) {
+		this.totalFuel = this.totalFuel.add(new BigDecimal(totalFuel));
+	}
+
+	public void setTotalFuel(BigDecimal totalFuel) {
+		this.totalFuel = totalFuel;
+	}
+
+	public BigDecimal getFuelPerMonth() {
+		return fuelPerMonth;
+	}
+	
+	public void setFuelPerMonth(BigDecimal fuelPerMonth) {
+		this.fuelPerMonth = fuelPerMonth;
+	}
+
+	public BigDecimal getTotalRepairAmount() {
+		return totalRepairAmount;
+	}
+	
+	public void addTotalRepairAmount(BigDecimal totalRepairAmount) {
+		this.totalRepairAmount = this.totalRepairAmount.add(totalRepairAmount);
+	}
+
+	public void setTotalRepairAmount(BigDecimal totalRepairAmount) {
+		this.totalRepairAmount = totalRepairAmount;
 	}
 
 	
