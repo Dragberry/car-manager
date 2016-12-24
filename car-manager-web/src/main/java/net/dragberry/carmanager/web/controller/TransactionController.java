@@ -111,7 +111,7 @@ public class TransactionController {
 	public ResultTO<UploadTransactionResult> uploadFile(@RequestParam("file") MultipartFile file) {
 		try {
 			InputStream is = file.getInputStream();
-			dataImporter.doImport(is);
+			return dataImporter.doImport(is);
 		} catch (Exception e) {
 			ResultTO<UploadTransactionResult> result = new ResultTO<>(null);
 			IssueTO issue = new IssueTO();
@@ -119,7 +119,6 @@ public class TransactionController {
 			result.getIssues().add(new IssueTO());
 			return result;
 		}
-		return new ResultTO<UploadTransactionResult>(null);
 	}
 	
 }

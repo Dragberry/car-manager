@@ -42,3 +42,8 @@ export class TransactionSummary {
     fuelCostPerMonth: number;
 	displayCurrency: string;
 }
+
+export class UploadTransactionResult {
+    successfulTransactions: number;
+    failedTransactions: number;
+}

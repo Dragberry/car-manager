@@ -14,7 +14,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -32,11 +35,14 @@ import net.dragberry.carmanager.domain.Fuel;
 import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.domain.TransactionType;
 import net.dragberry.carmanager.to.Record;
+import net.dragberry.carmanager.to.UploadTransactionResult;
 import net.dragberry.carmanager.util.BYDenominator;
 
 @Component
-@Scope(value = "prototype")
-public class Consumer implements Callable<Integer>{
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class Consumer implements Callable<UploadTransactionResult> {
+	
+	private static final Logger LOG = LogManager.getLogger(Consumer.class);
 	
 	private static final String FUEL_REGEXP = "^([0-9]+([,.][0-9]+)*)";
 	
@@ -54,26 +60,23 @@ public class Consumer implements Callable<Integer>{
 	private Context context = new Context();
 	
 	@Override
-	public Integer call() throws Exception {
-		try {
-			context.addCustomer(1002L, customerDao.findOne(1002L));
-			context.addCustomer(1003L, customerDao.findOne(1003L));
-			context.addCustomer(1004L, customerDao.findOne(1004L));
-			context.setCar(carDao.findOne(1000L));
-			
-			Record record= null;
-			while ((record = queue.poll(3, TimeUnit.SECONDS)) != null) {
-				if (isRecordValid(record)) {
-					processRecord(record);
-				} else {
-					System.out.println(MessageFormat.format("Record [{0}] is not valid", record.getIndex()));
-				}
+	public UploadTransactionResult call() throws Exception {
+		context.addCustomer(1002L, customerDao.findOne(1002L));
+		context.addCustomer(1003L, customerDao.findOne(1003L));
+		context.addCustomer(1004L, customerDao.findOne(1004L));
+		context.setCar(carDao.findOne(1000L));
+		
+		UploadTransactionResult result = new UploadTransactionResult();
+		
+		Record record= null;
+		while ((record = queue.poll(3, TimeUnit.SECONDS)) != null) {
+			if (isRecordValid(record)) {
+				processRecord(record, result);
+			} else {
+				LOG.info(MessageFormat.format("Record [{0}] is not valid", record.getIndex()));
 			}
-		} catch (Exception exc) {
-			exc.printStackTrace();
-		}
-		System.out.println(MessageFormat.format("Thread [{0}] has been finished!", Thread.currentThread().getName()));
-		return 1;
+		} 
+		return result;
 	}
 	
 	private boolean isRecordValid(Record record) {
@@ -82,9 +85,16 @@ public class Consumer implements Callable<Integer>{
 				&& record.getDate() != null;
 		return isValid;
 	}
-
+	
+	/**
+	 * Processes a single records
+	 * 
+	 * @param record
+	 * @param result 
+	 * @return {@link UploadTransactionResult}
+	 */
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	private List<Transaction> processRecord(Record record) {
+	private UploadTransactionResult processRecord(Record record, UploadTransactionResult result) {
 		List<Transaction> list = new ArrayList<>();
 		try {
 			resolveTransactionCount(record).forEach(currencyCustomer -> {
@@ -106,19 +116,17 @@ public class Consumer implements Callable<Integer>{
 				
 				if (TransactionType.FUEL.equals(tType.getName())) {
 					transaction.setFuel(createFuel(record, transaction));
-//					System.out.println(fuel);
 				}
 				transactionDao.create(transaction);
-//				System.out.println(transaction);
 				list.add(transaction);
 
 			});
+			result.addSuccessfulTransactions(list.size());
 		} catch (Exception exc) {
-			System.out.println(exc.getMessage());
-			exc.printStackTrace();
+			LOG.error(MessageFormat.format("An error has occured in the consumer task in the record [{0}]!", record.getIndex()), exc);
+			result.addFailedTransactions(1);
 		}
-		
-		return list;
+		return result;
 	}
 	
 	private Customer getCustomer(Record record, CurrencyCustomer currencyCustomer) {
@@ -191,7 +199,6 @@ public class Consumer implements Callable<Integer>{
 
 	private TransactionType resolveType(Record record) {
 		String type = record.getType();
-//		System.out.println(MessageFormat.format("Record [{0}] has type [{1}]", record.getIndex(), type));
 		TransactionType tType = null;
 		if (StringUtils.isNotBlank(type)) {
 			for (;;) {
@@ -205,11 +212,11 @@ public class Consumer implements Callable<Integer>{
 						return tType;
 					}
 				} catch (Exception cve) {
-					System.out.println(MessageFormat.format("Duplicate entry found for record [{0}] with type [{1}]", record.getIndex(), record.getType()));
+					LOG.info(MessageFormat.format("Duplicate entry found for record [{0}] with type [{1}]", record.getIndex(), record.getType()));
 				}
 			}
 		}
-		System.out.println(MessageFormat.format("Transaction type for record [{0}] is not resolved", record.getIndex()));
+		LOG.info(MessageFormat.format("Transaction type for record [{0}] is not resolved", record.getIndex()));
 		return null;
 	}
 

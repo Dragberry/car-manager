@@ -2,29 +2,33 @@ package net.dragberry.carmanager.service.transfer;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.MessageFormat;
 import java.time.ZoneId;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import net.dragberry.carmanager.to.Record;
 
 @Component
-@Scope(scopeName = "prototype")
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class Producer implements Callable<Integer> {
+	
+	private static final String ERR_MSG = "An error has been occured during the Producer task!";
+
+	private static final Logger LOG = LogManager.getLogger(Producer.class);
 	
 	@Autowired
 	private BlockingQueue<Record> queue;
-	
-	private String name = "Producer";
 	
 	private InputStream inputStream;
 	
@@ -32,7 +36,6 @@ public class Producer implements Callable<Integer> {
 	
 	@Override
 	public Integer call() throws Exception {
-		Thread.currentThread().setName(name);
 		try (XSSFWorkbook wb = new XSSFWorkbook(inputStream)) {
 			Sheet sheet = wb.getSheetAt(0);
 			sheet.forEach((row) -> {
@@ -41,16 +44,16 @@ public class Producer implements Callable<Integer> {
 					Record record = getRecord(row);
 					try {
 						queue.put(record);
-					} catch (Exception e) {
-						e.printStackTrace();
+					} catch (Exception exc) {
+						LOG.error(ERR_MSG, exc);
 					}
 				}
-//				System.out.println(sb);
 			});
 		} catch (IOException exc) {
-			throw new RuntimeException("An error has been occured during the Producer task!", exc);
+			LOG.error(ERR_MSG, exc);
+			throw new RuntimeException(ERR_MSG, exc);
 		}
-		System.out.println(MessageFormat.format("Thread [{0}] has been finished!", Thread.currentThread().getName()));
+		LOG.error("Producer task has been finished");
 		return 1;
 	}
 
