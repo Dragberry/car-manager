@@ -13,15 +13,15 @@ import { TransactionService } from '../../core/service/transaction.service';
 import { TransactionTypeService } from '../../core/service/transaction-type.service';
 
 import {
+    Car,
     Fuel,
     Issue,
     Result,
     Transaction
 } from '../../shared/common/common';
-import { Car } from '../../shared/common/car';
 import { Customer } from '../../shared/common/customer';
 import { Message, MessageType } from '../../core/messages/message';
-import { TransactionType } from '../../shared/common/transaction-type';
+import { TransactionType } from '../../shared/common/common';
 
 const DEFAULT_DESCRIPTION = "Топливо";
 const FUEL_KEY = 1000;

@@ -4,8 +4,8 @@ import {
     OnInit 
 } from '@angular/core';
 
-import { Car } from '../../shared/common/car';
 import {
+    Car,
     Transaction,
     TransactionSummary
 } from '../../shared/common/common';

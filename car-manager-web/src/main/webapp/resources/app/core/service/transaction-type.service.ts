@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { TransactionType } from '../../shared/common/transaction-type';
+import { TransactionType } from '../../shared/common/common';
 
 @Injectable()
 export class TransactionTypeService {

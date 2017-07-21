@@ -49,7 +49,7 @@
 						<h3 class="panel-title">Total fuel</h3>
 					</div>
 					<div class="panel-body">
-						{{transactionSummary.totalFuel}}
+						{{transactionSummary.totalFuel}} liters
 					</div>
 				</div>
 			</div>
@@ -59,7 +59,7 @@
 						<h3 class="panel-title">Fuel per month</h3>
 					</div>
 					<div class="panel-body">
-						{{transactionSummary.fuelPerMonth}}
+						{{transactionSummary.fuelPerMonth}} liters
 					</div>
 				</div>
 			</div>
@@ -70,6 +70,16 @@
 					</div>
 					<div class="panel-body">
 						{{transactionSummary.fuelCostPerMonth}} {{transactionSummary.displayCurrency}}
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 col-md-3 col-xs-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Repair</h3>
+					</div>
+					<div class="panel-body">
+						{{transactionSummary.totalRepairAmount}} {{transactionSummary.displayCurrency}}
 					</div>
 				</div>
 			</div>

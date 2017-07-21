@@ -1,0 +1,19 @@
+<div class="row">
+    <fieldset>
+		<legend>Car list</legend>
+		<div class="row">
+            <table class="table table-striped">
+                <tr>
+                    <th>Car</th>
+                    <th>Purchase date</th>
+                    <th>Sale date</th>
+                </tr>
+                <tr *ngFor="let car of carList">
+                    <td>{{car.brand}} {{car.model}}</td>
+                    <td>{{car.purchaseDate}}</td>
+                    <td>{{car.saleDate ? car.saleDate : 'Car is owned'}}</td>
+                </tr>
+            </table>
+		</div>
+    </fieldset>
+</div>

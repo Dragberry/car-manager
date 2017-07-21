@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { Car } from '../../shared/common/car';
+import { Car } from '../../shared/common/common';
 
 @Injectable()
 export class CarService {

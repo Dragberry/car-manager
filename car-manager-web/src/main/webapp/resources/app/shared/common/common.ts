@@ -1,3 +1,11 @@
+export class Car {
+    carKey: number;
+    brand: string;
+    model: string;
+    purchaseDate: string;
+    saleDate: string;
+}
+
 export class Fuel {
     quantity: string;
     type: string;
@@ -41,6 +49,12 @@ export class TransactionSummary {
     fuelPerMonth: number;
     fuelCostPerMonth: number;
 	displayCurrency: string;
+    totalRepairCost: number;
+}
+
+export class TransactionType {
+    transactionTypeKey: number;
+    name: string;
 }
 
 export class UploadTransactionResult {

@@ -25,9 +25,16 @@ public class CarServiceBean implements CarService {
 			carTO.setCarKey(car.getEntityKey());
 			carTO.setModel(car.getModel());
 			carTO.setBrand(car.getBrand());
+			carTO.setPurchaseDate(car.getPurchaseDate());
+			carTO.setSaleDate(car.getSaleDate());
 			carList.addItem(carTO);
 		});
 		return carList;
+	}
+
+	@Override
+	public ResultList<CarTO> fetchCarList(Long customerKey) {
+		return null;
 	}
 
 }

@@ -14,12 +14,19 @@ import net.dragberry.carmanager.web.security.CMSecurityContext;
 @Controller
 public class CarController {
 	
+	public static final String SERVICE_URL = "/service/car";
+	public static final String LIST_URL = SERVICE_URL + "/list";
+	
+	
 	@Autowired
 	private CarService carService;
 
-	@RequestMapping("/service/car/list")
+	
+	@RequestMapping(CarController.LIST_URL)
 	@ResponseBody
 	public List<CarTO> fetchCarList() {
 		return carService.fetchCarsForCustomer(CMSecurityContext.getLoggedCustomerKey()).getResult();
 	}
+	
+	
 }

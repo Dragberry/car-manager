@@ -1,5 +1,15 @@
 package net.dragberry.carmanager.to;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+
 public class CarTO implements TransferObject {
 
 	private static final long serialVersionUID = 8083636806543699481L;
@@ -9,6 +19,16 @@ public class CarTO implements TransferObject {
 	private String brand;
 	
 	private String model;
+	
+	@DateTimeFormat(iso = ISO.DATE)
+	@JsonDeserialize(using = LocalDateDeserializer.class)  
+	@JsonSerialize(using = LocalDateSerializer.class)  
+	private LocalDate purchaseDate;
+	
+	@DateTimeFormat(iso = ISO.DATE)
+	@JsonDeserialize(using = LocalDateDeserializer.class)  
+	@JsonSerialize(using = LocalDateSerializer.class)  
+	private LocalDate saleDate;
 
 	public Long getCarKey() {
 		return carKey;
@@ -33,5 +53,23 @@ public class CarTO implements TransferObject {
 	public void setModel(String model) {
 		this.model = model;
 	}
+
+	public LocalDate getPurchaseDate() {
+		return purchaseDate;
+	}
+
+	public void setPurchaseDate(LocalDate purchaseDate) {
+		this.purchaseDate = purchaseDate;
+	}
+
+	public LocalDate getSaleDate() {
+		return saleDate;
+	}
+
+	public void setSaleDate(LocalDate saleDate) {
+		this.saleDate = saleDate;
+	}
+	
+	
 	
 }

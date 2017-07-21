@@ -37,6 +37,9 @@ public class TransactionType extends AbstractEntity {
 	public static final String LOAN_PAYMENT = "LoanPayment";
 	public static final Long LOAN_PAYMENT_KEY = 1001L;
 	
+	public static final String REPAIR = "Repair";
+	public static final Long REPAIR_KEY = 1002L;
+
 	@Id
 	@Column(name = "TRANSACTION_TYPE_KEY")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TRANSACTION_TYPE_GEN")

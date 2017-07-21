@@ -174,6 +174,9 @@ public class TransactionServiceBean implements TransactionService {
 			if (!TransactionType.LOAN_PAYMENT_KEY.equals(transactionTypeKey)) {
 				summary.addTotalAmount(amount);
 			}
+			if (TransactionType.REPAIR_KEY.equals(transactionTypeKey)) {
+				summary.addTotalRepairAmount(amount);
+			}
 		});
 		Car car = carDao.findOne(query.getCarKey());
 		LocalDate endDate = car.getSaleDate() != null ? car.getSaleDate() : LocalDate.now();

@@ -32,7 +32,7 @@ public class ExchangeRateRefresher {
 	@Autowired
 	private ExchangeRateDao exRateDao;
 	
-	@Scheduled(cron = "0 0 2 * * *")
+	@Scheduled(cron = "0 09 15 ? * *")
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
 	public void updateExRates() {
 		LOG.info("Updating exchange rates started...");

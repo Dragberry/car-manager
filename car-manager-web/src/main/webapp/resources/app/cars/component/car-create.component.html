@@ -1,0 +1,8 @@
+<div class="row">
+    <form (ngSubmit)="submitCar()" #carForm="ngForm">
+        <div class="col-md-6" >
+            <label>Model</label>
+            <input [(ngModel)]="car.model" name="model" type="text" class="form-control"/>
+        </div>
+    </form>
+</div>

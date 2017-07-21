@@ -33,8 +33,15 @@ import net.dragberry.carmanager.web.security.CMSecurityContext;
 import net.dragberry.carmanager.web.security.AccessDeniedException;
 
 @Controller
-@RequestMapping("/service/transaction")
+@RequestMapping(TransactionController.SERVICE_URL)
 public class TransactionController {
+	
+	public static final String SERVICE_URL = "/service/transaction";
+	public static final String LIST_URL = "/list";
+	public static final String SUMMARY_URL = "/summary";
+	public static final String TYPE_LIST_URL = "/type/list";
+	public static final String SUBMIT_URL = "/summary";
+	public static final String UPLOAD_URL = "/upload";
 	
 	@Autowired
 	private HttpServletRequest request;
@@ -50,7 +57,7 @@ public class TransactionController {
 	@Autowired
     private MessageSource messageSource;
 	
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@RequestMapping(value = LIST_URL, method = RequestMethod.GET)
 	@ResponseBody
 	public List<TransactionTO> fetchTransactionList(
 			@RequestParam Long customerKey,
@@ -65,7 +72,7 @@ public class TransactionController {
 		return transactionService.fetchList(query).getResult();
 	}
 
-	@RequestMapping(value ="/summary", method = RequestMethod.GET)
+	@RequestMapping(value = SUMMARY_URL, method = RequestMethod.GET)
 	@ResponseBody
 	public TransactionSummaryTO fetchTransactionSummary(
 			@RequestParam Long customerKey,
@@ -82,7 +89,7 @@ public class TransactionController {
 		return transactionService.fetchSummary(query).getObject();
 	}
 	
-	@RequestMapping(value ="/type/list", method = RequestMethod.GET)
+	@RequestMapping(value = TYPE_LIST_URL, method = RequestMethod.GET)
 	@ResponseBody
 	public List<TransactionTypeTO> fetchTransactionTypeList() {
 		List<TransactionTypeTO> list = transactionTypeService.fetchTypeListForCustomer(CMSecurityContext.getLoggedCustomerKey()).getResult();
@@ -92,7 +99,7 @@ public class TransactionController {
 		return list;
 	}
 	
-	@RequestMapping(value = "/submit", method = RequestMethod.POST)
+	@RequestMapping(value = SUBMIT_URL, method = RequestMethod.POST)
 	@ResponseBody
 	public ResultTO<TransactionTO> submitTransaction(@RequestBody TransactionTO transactionTO) {
 		transactionTO.setCustomerKey(CMSecurityContext.getLoggedCustomerKey());
@@ -106,7 +113,7 @@ public class TransactionController {
 		return tnx;
 	}
 	
-	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	@RequestMapping(value = UPLOAD_URL, method = RequestMethod.POST)
 	@ResponseBody
 	public ResultTO<UploadTransactionResult> uploadFile(@RequestParam("file") MultipartFile file) {
 		try {
