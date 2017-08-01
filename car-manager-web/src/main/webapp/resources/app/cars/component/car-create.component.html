@@ -1,8 +1,38 @@
 <div class="row">
-    <form (ngSubmit)="submitCar()" #carForm="ngForm">
-        <div class="col-md-6" >
-            <label>Model</label>
-            <input [(ngModel)]="car.model" name="model" type="text" class="form-control"/>
-        </div>
-    </form>
+    <fieldset>
+        <legend>Add new car</legend>
+        <form (ngSubmit)="submitCar()" #carForm="ngForm">
+            <div class="col-md-6" >
+                <div class="form-group col-md-8">
+                    <label>Brand</label>
+                    <input [(ngModel)]="car.brand" name="brand" type="text" class="form-control"/>
+                 </div>
+                 <div class="form-group col-md-8">
+                    <label>Model</label>
+                    <input [(ngModel)]="car.model" name="model" type="text" class="form-control"/>
+                 </div>
+                <div class="form-group col-md-8">
+                    <label>Purchase date</label>
+                    <div class="input-group date">
+                        <input [(ngModel)]="car.purchaseDate" name="purchaseDate" value={{car.purchaseDate}} type="text" class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                 <div class="form-group col-md-8">
+                    <label>Sale date</label>
+                    <div class="input-group date">
+                        <input [(ngModel)]="car.saleDate" name="saleDate" value={{car.saleDate}} type="text" class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <button type="submit" class="btn btn-primary">Add car</button>
+            </div>
+        </form>
+    </fieldset>
 </div>

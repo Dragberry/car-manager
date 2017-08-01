@@ -6,15 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.dragberry.carmanager.dao.CarDao;
+import net.dragberry.carmanager.dao.CustomerDao;
 import net.dragberry.carmanager.domain.Car;
+import net.dragberry.carmanager.domain.Customer;
 import net.dragberry.carmanager.to.CarTO;
 import net.dragberry.carmanager.to.ResultList;
+import net.dragberry.carmanager.to.ResultTO;
 
 @Service
 public class CarServiceBean implements CarService {
 	
 	@Autowired
 	private CarDao carDao;
+	@Autowired
+	private CustomerDao customerDao;
 
 	@Override
 	public ResultList<CarTO> fetchCarsForCustomer(Long customerKey) {
@@ -37,4 +42,21 @@ public class CarServiceBean implements CarService {
 		return null;
 	}
 
+	@Override
+	public ResultTO<CarTO> createCar(CarTO carTO) {
+		Car car = new Car();
+		car.setBrand(carTO.getBrand());
+		car.setModel(carTO.getModel());
+		car.setPurchaseDate(carTO.getPurchaseDate());
+		car.setSaleDate(carTO.getSaleDate());
+		if (carTO.getCustomerKey() != null) {
+			Customer customer = customerDao.findOne(carTO.getCustomerKey());
+			car.setOwner(customer);
+		}
+		carDao.create(car);
+		carTO.setCarKey(car.getEntityKey());
+		return new ResultTO<CarTO>(carTO);
+	}
+
+	
 }

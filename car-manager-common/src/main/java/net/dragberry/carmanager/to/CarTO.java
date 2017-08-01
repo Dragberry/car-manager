@@ -20,6 +20,8 @@ public class CarTO implements TransferObject {
 	
 	private String model;
 	
+	private Long customerKey;
+	
 	@DateTimeFormat(iso = ISO.DATE)
 	@JsonDeserialize(using = LocalDateDeserializer.class)  
 	@JsonSerialize(using = LocalDateSerializer.class)  
@@ -69,7 +71,13 @@ public class CarTO implements TransferObject {
 	public void setSaleDate(LocalDate saleDate) {
 		this.saleDate = saleDate;
 	}
-	
-	
+
+	public Long getCustomerKey() {
+		return customerKey;
+	}
+
+	public void setCustomerKey(Long customerKey) {
+		this.customerKey = customerKey;
+	}
 	
 }

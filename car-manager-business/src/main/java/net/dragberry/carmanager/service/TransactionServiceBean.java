@@ -180,7 +180,8 @@ public class TransactionServiceBean implements TransactionService {
 		});
 		Car car = carDao.findOne(query.getCarKey());
 		LocalDate endDate = car.getSaleDate() != null ? car.getSaleDate() : LocalDate.now();
-		BigDecimal months = new BigDecimal(car.getPurchaseDate().until(endDate, ChronoUnit.MONTHS));
+		long monthsLong = car.getPurchaseDate().until(endDate, ChronoUnit.MONTHS);
+		BigDecimal months = new BigDecimal(monthsLong == 0 ? 1 : monthsLong);
 		summary.setAmountPerMonth(summary.getTotalAmount().divide(months, 2, RoundingMode.HALF_UP));
 		summary.setFuelPerMonth(summary.getTotalFuel().divide(months, 2, RoundingMode.HALF_UP));
 		summary.setFuelCostPerMonth(summary.getTotalFuelAmount().divide(months, 2, RoundingMode.HALF_UP));

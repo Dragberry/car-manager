@@ -44,7 +44,8 @@ export class TransactionListComponent implements OnInit {
         this.fetchCurrencyList();
     }
 
-    onCarChange(): void {
+    onCarChange(carKey: number): void {
+        this.selectedCar = carKey;
         this.doSearch();
     }
 

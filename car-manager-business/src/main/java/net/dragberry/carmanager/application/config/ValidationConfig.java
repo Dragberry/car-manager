@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import net.dragberry.carmanager.domain.Car;
 import net.dragberry.carmanager.domain.Transaction;
 import net.dragberry.carmanager.service.validation.TransactionValidationGroup;
 import net.dragberry.carmanager.service.validation.ValidationGroup;
@@ -18,6 +19,11 @@ import net.dragberry.carmanager.service.validation.validator.FuelValidator;
 @Configuration
 @ComponentScan(basePackageClasses = { ValidationService.class })
 public class ValidationConfig {
+	
+	@Bean
+	public ValidationGroup<Car> carValidationGroup() {
+		CarValidationGroup
+	}
 
 	@Bean
 	public ValidationGroup<Transaction> transactionValidationGroup() {
