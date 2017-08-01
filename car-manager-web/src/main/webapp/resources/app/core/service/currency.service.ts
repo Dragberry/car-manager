@@ -10,7 +10,8 @@ import 'rxjs/add/operator/toPromise';
 export class CurrencyService {
 
     private fetchCurrencyListUrl = "service/currency/list";
-
+    private refreshCurrenciesUrl = "service/currency/refresh";
+  
     constructor(private http: Http) {}
 
     fetchCurrencyList(): Promise<string[]> {
@@ -21,4 +22,13 @@ export class CurrencyService {
                 return currencyList;
             });
     }
+  
+  refreshCurrencies(): Promise<string> {
+    return this.http.get(this.refreshCurrenciesUrl)
+            .toPromise()
+            .then(response => {
+                let currencyList: string = response.json() as string;
+                return currencyList;
+            });
+  }
 }

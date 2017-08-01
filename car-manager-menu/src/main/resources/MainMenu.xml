@@ -40,4 +40,8 @@
 		<Role>CUSTOMER</Role>
 	</MenuItemXML>
 	
+	<MenuItemXML id="admin" key="Administration" action="/admin">
+		<Role>ADMIN</Role>
+	</MenuItemXML>
+	
 </MainMenuXML>
