@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
@@ -25,6 +26,8 @@ import net.dragberry.carmanager.ws.client.NbrbExchangeRateService;
 public class BYExchangeRateServiceBean implements ExchangeRateService {
 	
 	private static final Logger LOG = LogManager.getLogger(BYExchangeRateServiceBean.class);
+	
+	private AtomicBoolean isRefreshing = new AtomicBoolean(false);
 	
 	@Autowired
 	private ExchangeRateDao exRateDao;
@@ -61,13 +64,20 @@ public class BYExchangeRateServiceBean implements ExchangeRateService {
 	}
 	
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public void updateExRates() {
-		LOG.info("Updating exchange rates started...");
-		Stream.of(Currency.values())
-			.filter(currency -> Currency.BYN != currency)
-			.parallel()
-			.forEach(this::processCurrency);
-		LOG.info("Updating exchange rates finished...");
+	public Boolean updateExRates() {
+		if (isRefreshing.compareAndSet(false, true)) {
+			new Thread(() -> {
+				LOG.info("Updating exchange rates started...");
+				Stream.of(Currency.values())
+					.filter(currency -> Currency.BYN != currency)
+					.parallel()
+					.forEach(this::processCurrency);
+				isRefreshing.set(false);
+				LOG.info("Updating exchange rates finished...");
+			});
+			return Boolean.TRUE;
+		} 
+		return Boolean.FALSE;
 	}
 	
 	private void processCurrency(Currency currency) {

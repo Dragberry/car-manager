@@ -20,10 +20,6 @@ import net.dragberry.carmanager.service.validation.validator.FuelValidator;
 @ComponentScan(basePackageClasses = { ValidationService.class })
 public class ValidationConfig {
 	
-	@Bean
-	public ValidationGroup<Car> carValidationGroup() {
-		CarValidationGroup
-	}
 
 	@Bean
 	public ValidationGroup<Transaction> transactionValidationGroup() {

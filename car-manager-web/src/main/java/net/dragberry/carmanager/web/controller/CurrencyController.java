@@ -22,7 +22,7 @@ public class CurrencyController {
 	
 	@RequestMapping("/service/currency/refresh")
 	@ResponseBody
-	public void refreshCurrencies() {
-		exRateService.updateExRates();
+	public Boolean refreshCurrencies() {
+		return exRateService.updateExRates();
 	}
 }

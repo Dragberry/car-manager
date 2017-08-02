@@ -1,11 +1,12 @@
 package net.dragberry.carmanager.to;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-public class ResultTO<T extends TransferObject> implements TransferObject {
+public class ResultTO<T extends Serializable> implements TransferObject {
 
 	private static final long serialVersionUID = -7018780169278859998L;
 	

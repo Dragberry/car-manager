@@ -23,12 +23,12 @@ export class CurrencyService {
             });
     }
   
-  refreshCurrencies(): Promise<string> {
+  refreshCurrencies(): Promise<boolean> {
     return this.http.get(this.refreshCurrenciesUrl)
             .toPromise()
             .then(response => {
-                let currencyList: string = response.json() as string;
-                return currencyList;
+                let result: boolean = response.json() as boolean;
+                return result;
             });
   }
 }
