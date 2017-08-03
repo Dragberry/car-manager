@@ -25,4 +25,5 @@ public class CurrencyController {
 	public Boolean refreshCurrencies() {
 		return exRateService.updateExRates();
 	}
+	
 }
