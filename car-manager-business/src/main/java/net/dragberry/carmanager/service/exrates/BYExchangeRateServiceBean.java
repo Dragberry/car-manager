@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
@@ -74,7 +75,7 @@ public class BYExchangeRateServiceBean implements ExchangeRateService {
 					.forEach(this::processCurrency);
 				isRefreshing.set(false);
 				LOG.info("Updating exchange rates finished...");
-			}).run();
+			}).start();
 			return Boolean.TRUE;
 		} 
 		return Boolean.FALSE;
@@ -89,15 +90,14 @@ public class BYExchangeRateServiceBean implements ExchangeRateService {
 			Double exRate = nbrbExRateService.getExchangeRate(currency, dateToProcess);
 			createExRateEntity(currency, dateToProcess, exRate);
 		} else if (dayDifference > 1 || dayDifference < 0) {
-			periods(dateToProcess.plusDays(1)).forEach(period -> {
+			for (Period period : periods(dateToProcess.plusDays(1)).collect(Collectors.toList())) {
 				try {
 					processCurrencyPeriod(currency, period);
-				} catch (Exception e) {
-					LOG.info(MessageFormat.format("An error has been occured during processing periof {0} for currency {1}", period, currency), e);
-					e.printStackTrace();
+				} catch (Exception exc) {
+					LOG.info(MessageFormat.format("An error has been occured during processing periof {0} for currency {1}", period, currency), exc);
 					return;
 				}
-			});
+			}
 		}
 	}
 

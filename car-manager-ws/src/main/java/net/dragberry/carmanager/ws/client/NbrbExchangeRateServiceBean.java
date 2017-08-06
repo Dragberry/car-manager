@@ -77,14 +77,14 @@ public class NbrbExchangeRateServiceBean implements NbrbExchangeRateService {
 	}
 	
 	@Override
-	public Map<LocalDate, Double> getExchangeRateDynamics(Currency currency, LocalDate startDate, LocalDate endDate) {
+	public Map<LocalDate, Double> getExchangeRateDynamics(Currency currency, LocalDate startDate, LocalDate endDate) throws Exception {
 		if (startDate.isAfter(endDate)) {
 			throw new IllegalArgumentException("Start date cannot be after end date!");
 		}
 		return getExchangeRates(currency, startDate, endDate);
 	}
 	
-	private Map<LocalDate, Double> getExchangeRates(Currency currency, LocalDate startDate, LocalDate endDate) {
+	private Map<LocalDate, Double> getExchangeRates(Currency currency, LocalDate startDate, LocalDate endDate) throws Exception {
 		URI uri = null;
 		try {
 			String formattedStartDate = DateTimeFormatter.ISO_LOCAL_DATE.format(startDate);
@@ -102,8 +102,8 @@ public class NbrbExchangeRateServiceBean implements NbrbExchangeRateService {
 			if (uri != null) {
 				LOG.error(uri);
 			}
+			throw exc;
 		}
-		return new HashMap<>();
 	}
 
 	private double denominate(CurrencyExRate curExRate) {
