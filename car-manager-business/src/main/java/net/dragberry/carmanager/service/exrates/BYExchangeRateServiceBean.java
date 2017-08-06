@@ -74,7 +74,7 @@ public class BYExchangeRateServiceBean implements ExchangeRateService {
 					.forEach(this::processCurrency);
 				isRefreshing.set(false);
 				LOG.info("Updating exchange rates finished...");
-			});
+			}).run();
 			return Boolean.TRUE;
 		} 
 		return Boolean.FALSE;
@@ -170,5 +170,9 @@ public class BYExchangeRateServiceBean implements ExchangeRateService {
 			return MessageFormat.format("[{0}/{1}]", formattedStartDate, formattedEndDate);
 		}
 	}
-		
+	
+	@Override
+	public Boolean isRefreshing() {
+		return isRefreshing.get();
+	}
 }

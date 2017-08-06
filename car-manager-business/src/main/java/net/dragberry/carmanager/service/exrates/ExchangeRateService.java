@@ -15,4 +15,8 @@ public interface ExchangeRateService {
 	 *         if process hasn't been started (process is already run)
 	 */
 	Boolean updateExRates();
+
+	Boolean isRefreshing();
+	
+	
 }

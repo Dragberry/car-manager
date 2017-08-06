@@ -1,12 +1,12 @@
 <div class="row">
     <fieldset>
-		<legend>Currencies</legend>
+		<legend>Exchange rates</legend>
 		<button type="button"
 			class="btn btn-primary"
-			(click)="refreshCurrencies()"
-			[disabled]="isRefreshButtonEnabled()">
-			<span>Refresh</span>span>
+			(click)="refreshExRates()"
+			[disabled]="refreshExRatesState">
+			<span>Refresh</span>
 		</button>
-		<span class='label label-info'>{{currenciesRefreshMessage}}</span>
+		<span class='label label-info'>{{exRatesRefreshingMessage}}</span>
     </fieldset>
 </div>

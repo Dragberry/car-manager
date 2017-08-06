@@ -20,10 +20,16 @@ public class CurrencyController {
 		return Currency.values();
 	}
 	
-	@RequestMapping("/service/currency/refresh")
+	@RequestMapping("/service/ex-rate/refresh")
 	@ResponseBody
 	public Boolean refreshCurrencies() {
 		return exRateService.updateExRates();
+	}
+	
+	@RequestMapping("/service/ex-rate/refresh/check-state")
+	@ResponseBody
+	public Boolean checkRefreshingState() {
+		return exRateService.isRefreshing();
 	}
 	
 }

@@ -10,7 +10,8 @@ import 'rxjs/add/operator/toPromise';
 export class CurrencyService {
 
     private fetchCurrencyListUrl = "service/currency/list";
-    private refreshCurrenciesUrl = "service/currency/refresh";
+    private refreshExRatesUrl = "service/ex-rate/refresh";
+    private refreshExRatesCheckUrl = "service/ex-rate/refresh/check-state";
   
     constructor(private http: Http) {}
 
@@ -23,12 +24,15 @@ export class CurrencyService {
             });
     }
   
-  refreshCurrencies(): Promise<boolean> {
-    return this.http.get(this.refreshCurrenciesUrl)
-            .toPromise()
-            .then(response => {
-                let result: boolean = response.json() as boolean;
-                return result;
-            });
-  }
+    refreshExRates(): Promise<boolean> {
+      return this.http.get(this.refreshExRatesUrl)
+              .toPromise()
+              .then(response => response.json() as boolean);
+    }
+  
+    checkRefreshExRatesState(): Promise<boolean> {
+      return this.http.get(this.refreshExRatesCheckUrl)
+              .toPromise()
+              .then(response => response.json() as boolean);
+    }
 }
